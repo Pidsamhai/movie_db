@@ -1,0 +1,28 @@
+object Dependencies {
+    const val CoreKtx = "androidx.core:core-ktx:${Versions.CoreKtx}"
+    const val AppCompat = "androidx.appcompat:appcompat:${Versions.AppCompat}"
+    const val Material = "com.google.android.material:material:${Versions.Material}"
+    const val ComposeUi = "androidx.compose.ui:ui:${Versions.Compose}"
+    const val ComposeMaterial = "androidx.compose.material:material:${Versions.Compose}"
+    const val ComposeUiTool = "androidx.compose.ui:ui-tooling:${Versions.Compose}"
+    const val LifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LifecycleKtx}"
+    const val ActivityCompose = "androidx.activity:activity-compose:${Versions.ActivityCompose}"
+
+    object Test {
+        const val Junit = "junit:junit:${Versions.Junit}"
+        const val AndroidxJunit = "androidx.test.ext:${Versions.AndroidxJunit}"
+        const val Espresso = "androidx.test.espresso:espresso-core:${Versions.Espresso}"
+        const val ComposeJunit = "androidx.compose.ui:ui-test-junit4:${Versions.Compose}"
+    }
+
+    const val NavigationCompose = "androidx.navigation:navigation-compose:${Versions.NavigationCompose}"
+    const val AccompanistCoil = "com.google.accompanist:accompanist-coil:${Versions.AccompanistCoil}"
+    const val KtorClient = "io.ktor:ktor-client-okhttp:${Versions.Ktor}"
+    const val KtorSerialization = "io.ktor:ktor-client-serialization:${Versions.Ktor}"
+    const val KotlinxSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinxSerialization}"
+    const val OkhttpInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.Okhttp}"
+
+    const val HiltAndroid = "com.google.dagger:hilt-android:${Versions.Hilt}"
+    const val HiltCompiler = "com.google.dagger:hilt-compiler:${Versions.Hilt}"
+    const val HiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:${Versions.HiltNavigationCompose}"
+}

@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.psm.movie.review.ui.theme.MovieBlue
-import com.github.psm.movie.review.ui.theme.MovieSmoke
 
 @Composable
 fun CategoryItem(text: String) {

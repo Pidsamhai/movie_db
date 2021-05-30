@@ -1,6 +1,5 @@
 package com.github.psm.movie.review.repository
 
-import com.github.psm.movie.review.BuildConfig
 import com.github.psm.movie.review.db.model.Popular
 import com.github.psm.movie.review.utils.Keys
 import io.ktor.client.*

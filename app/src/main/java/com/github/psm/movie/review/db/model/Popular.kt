@@ -1,11 +1,11 @@
 package com.github.psm.movie.review.db.model
 
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import android.os.Parcelable
 import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
-import android.os.Parcelable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
