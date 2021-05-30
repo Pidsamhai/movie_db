@@ -22,8 +22,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        def TMDB_API_KEY =  '\"' + (System.getenv("TMDB_API_KEY") ?: "")+ '\"'
-        buildConfigField "String", "TMDB_API_KEY", TMDB_API_KEY
     }
 
     buildTypes {
@@ -46,6 +44,12 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
         kotlinCompilerVersion '1.4.32'
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
     }
 }
 

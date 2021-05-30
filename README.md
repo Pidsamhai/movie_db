@@ -1,0 +1,15 @@
+
+
+* Native Lib app/src/main/cpp/native-lib.cpp
+
+```c++
+#include <jni.h>
+#include <string>
+
+extern "C" JNIEXPORT jstring
+JNICALL
+Java_com_github_psm_movie_review_utils_Keys_TMDBApiKey(JNIEnv *env) {
+    std::string tmdb_api_key = "Your Api Key";
+    return env->NewStringUTF(tmdb_api_key.c_str());
+}
+```

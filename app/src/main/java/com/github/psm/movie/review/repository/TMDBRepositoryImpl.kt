@@ -2,6 +2,7 @@ package com.github.psm.movie.review.repository
 
 import com.github.psm.movie.review.BuildConfig
 import com.github.psm.movie.review.db.model.Popular
+import com.github.psm.movie.review.utils.Keys
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
@@ -24,7 +25,7 @@ class TMDBRepositoryImpl : TMDBRepository {
             url {
                 protocol = URLProtocol.HTTPS
             }
-            parameter("api_key", BuildConfig.TMDB_API_KEY)
+            parameter("api_key", Keys.TMDBApiKey())
             contentType(ContentType.Application.Json)
         }
         engine {
