@@ -3,20 +3,17 @@ package com.github.psm.movie.review.ui.home
 import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.psm.movie.review.ui.category.CategoryItem
 import com.github.psm.movie.review.ui.movie.MovieItem
+import com.github.psm.movie.review.ui.widget.CustomAppBar
+import com.github.psm.movie.review.ui.widget.Loader
 
 @Composable
 fun Home(
@@ -35,18 +34,23 @@ fun Home(
 ) {
     val searchValue = remember { mutableStateOf(TextFieldValue("")) }
     val listSate = rememberLazyListState()
-    val scrollState = rememberLazyListState()
-    val categoryScrollState = rememberScrollState()
-    val popular = homeViewModel.popular.collectAsState(initial = null)
+    val mainScrollState = rememberScrollState()
+    val genresScrollState = rememberScrollState()
+    val popular by homeViewModel.popular.collectAsState(initial = null)
     val context = LocalContext.current
+    val genres by homeViewModel.genres.collectAsState(initial = listOf())
 
-    LazyColumn(
-        state = scrollState,
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        item {
+    Column {
+        CustomAppBar(
+            scrollState = mainScrollState
+        )
+
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .verticalScroll(mainScrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,10 +72,9 @@ fun Home(
                 onValueChange = { text -> searchValue.value = text },
                 singleLine = true
             )
-        }
-        // Category
 
-        item {
+            // Category
+
             HeaderItem(
                 header = "Categories",
                 modifier = Modifier
@@ -80,72 +83,77 @@ fun Home(
                     Toast.makeText(context, "See more", Toast.LENGTH_SHORT).show()
                 }
             )
-        }
 
-        // Categories Items
+            // Categories Items
 
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 24.dp,
-                        end = 24.dp,
-                        top = 16.dp,
-                        bottom = 16.dp
-                    )
-                    .horizontalScroll(state = categoryScrollState),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+            if (genres?.size ?: 0 == 0)
+                Loader(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .padding(
+                            start = 24.dp,
+                            end = 24.dp,
+                            top = 16.dp,
+                            bottom = 16.dp
+                        ),
+                    size = 50.dp
+                )
+            else
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 24.dp,
+                            end = 24.dp,
+                            top = 16.dp,
+                            bottom = 16.dp
+                        )
+                        .horizontalScroll(state = genresScrollState),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    repeat(genres?.take(5)?.size ?: 0) {
+                        CategoryItem(text = genres?.get(it)?.name!!)
+                    }
 
-                repeat(4) {
-                    CategoryItem(text = "Horror $it")
                 }
 
-            }
-        }
-
-        item {
             HeaderItem(header = "Popular", modifier = Modifier.padding(start = 24.dp, end = 24.dp))
-        }
 
-
-        item {
-            LazyRow(
-                Modifier
-                    .fillMaxWidth(),
-                state = listSate,
-                contentPadding = PaddingValues(24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(popular.value?.results?.size ?: 0) {
-                    MovieItem(result = popular.value?.results?.get(it)!!)
+            if (popular?.results?.size ?: 0 == 0)
+                Loader(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .padding(
+                            start = 24.dp,
+                            end = 24.dp,
+                            top = 16.dp,
+                            bottom = 16.dp
+                        ),
+                    size = 50.dp
+                )
+            else
+                LazyRow(
+                    Modifier
+                        .fillMaxWidth(),
+                    state = listSate,
+                    contentPadding = PaddingValues(24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(popular?.results?.size ?: 0) {
+                        MovieItem(result = popular?.results?.get(it)!!) { movieId ->
+                            selectMovie.invoke(movieId)
+                        }
+                    }
                 }
-            }
         }
-
-//        item {
-//            LazyRow(
-//                Modifier
-//                    .fillMaxWidth(),
-//                contentPadding = PaddingValues(24.dp),
-//                horizontalArrangement = Arrangement.spacedBy(16.dp)
-//            ) {
-//                items(10) {
-//                    MovieItem(
-//                        url = "https://image.tmdb.org/t/p/original/z8CExJekGrEThbpMXAmCFvvgoJR.jpg",
-//                        description = "Descriptions $it"
-//                    )
-//                }
-//            }
-//        }
-
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun HomePreView() {
+private fun HomePreView() {
     Home(selectMovie = { })
 }

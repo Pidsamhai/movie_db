@@ -13,3 +13,4 @@ Java_com_github_psm_movie_review_utils_Keys_TMDBApiKey(JNIEnv *env) {
     return env->NewStringUTF(tmdb_api_key.c_str());
 }
 ```
+* lottie Loading https://lottiefiles.com/890-loading-animation#

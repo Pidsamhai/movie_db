@@ -5,6 +5,7 @@ plugins {
     id(Plugins.Parcelize)
     kotlin(Plugins.Kapt)
     id(Plugins.Hilt)
+    id(Plugins.GitVersion) version Versions.GitVersion
 }
 
 android {
@@ -15,8 +16,11 @@ android {
         applicationId = DefaultConfig.applicationId
         minSdk = DefaultConfig.minSdk
         targetSdk = DefaultConfig.targetSdk
-        versionCode = DefaultConfig.versionCode
-        versionName = DefaultConfig.versionName
+        versionCode = when (val code = androidGitVersion.code()) {
+            0 -> 1
+            else -> code
+        }
+        versionName = androidGitVersion.name()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -24,10 +28,25 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+            storePassword = System.getenv("STORE_PASSWORD")
+            storeFile = file("keystore.jks")
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+    }
+
     buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        getByName("release") {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -47,7 +66,16 @@ android {
 
     externalNativeBuild {
         cmake {
-            path ("CMakeLists.txt")
+            path("CMakeLists.txt")
+        }
+    }
+
+
+
+    kapt {
+        javacOptions {
+            option("--source", "8")
+            option("--target", "8")
         }
     }
 }
@@ -60,6 +88,7 @@ dependencies {
     implementation(Dependencies.ComposeMaterial)
     implementation(Dependencies.ComposeUiTool)
     implementation(Dependencies.LifecycleKtx)
+    implementation(Dependencies.ComposeLiveData)
     implementation(Dependencies.ActivityCompose)
 
     testImplementation(Dependencies.Test.Junit)
@@ -77,4 +106,10 @@ dependencies {
     implementation(Dependencies.HiltAndroid)
     kapt(Dependencies.HiltCompiler)
     implementation(Dependencies.HiltNavigationCompose)
+
+    /**
+     * Fix JDK 11 Compile Error
+     */
+    compileOnly("javax.annotation:javax.annotation-api:1.3.2")
+    compileOnly("com.github.pengrad:jdk9-deps:22e725c32e")
 }

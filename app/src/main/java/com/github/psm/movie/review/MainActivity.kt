@@ -3,19 +3,18 @@ package com.github.psm.movie.review
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.github.psm.movie.review.ui.theme.MovieGrey
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.github.psm.movie.review.ui.theme.MovieReviewTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,33 +30,45 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun MovieAppBody() {
+    val navController = rememberNavController()
+    val topLevelNavigationRoutes = listOf<NavigationRoutes>(
+        NavigationRoutes.Home,
+        NavigationRoutes.About
+    )
     Scaffold(
-        topBar = {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+        bottomBar = {
+            BottomNavigation(
+                backgroundColor = Color.White
             ) {
-                Text(
-                    text = "Hi Edward",
-                    style = MaterialTheme.typography.h4
-                )
-                Surface(
-                    Modifier
-                        .size(58.dp),
-                    shape = CircleShape,
-                ) {
-                    Box(modifier = Modifier.background(MovieGrey))
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+                topLevelNavigationRoutes.forEach { route ->
+                    BottomNavigationItem(
+                        selected = currentRoute == route.route,
+                        onClick = {
+                            navController.navigate(route.route) {
+                                popUpTo(
+                                    navController.graph.startDestinationRoute
+                                        ?: NavigationRoutes.Home.route
+                                ) { saveState = true }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+
+                            }
+                        },
+                        label = { Text(text = route.label) },
+                        icon = route.icon!!
+                    )
                 }
             }
         }
     ) { innerPadding ->
-        NavGraph(Modifier.padding(innerPadding))
+        NavGraph(Modifier.padding(innerPadding), navController)
     }
 }
 
