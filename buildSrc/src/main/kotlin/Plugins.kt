@@ -5,4 +5,5 @@ object Plugins {
     const val Parcelize = "kotlin-parcelize"
     const val Kapt = "kapt"
     const val Hilt = "dagger.hilt.android.plugin"
+    const val GitVersion = "com.gladed.androidgitversion"
 }

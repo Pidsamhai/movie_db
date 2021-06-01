@@ -18,4 +18,5 @@ object Versions {
     const val KotlinxSerialization = "1.2.1"
     const val Okhttp = "4.7.2"
 
+    const val GitVersion = "0.4.13"
 }

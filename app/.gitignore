@@ -1,2 +1,4 @@
 /build
-/**/native-lib.cpp
+/*.jks
+/*.out
+/release/

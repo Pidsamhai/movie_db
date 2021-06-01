@@ -41,6 +41,6 @@ fun CategoryItem(text: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun CategoryItemPreview() {
+private fun CategoryItemPreview() {
     CategoryItem("Horror")
 }

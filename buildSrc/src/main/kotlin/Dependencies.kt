@@ -10,7 +10,7 @@ object Dependencies {
 
     object Test {
         const val Junit = "junit:junit:${Versions.Junit}"
-        const val AndroidxJunit = "androidx.test.ext:${Versions.AndroidxJunit}"
+        const val AndroidxJunit = "androidx.test.ext:junit:${Versions.AndroidxJunit}"
         const val Espresso = "androidx.test.espresso:espresso-core:${Versions.Espresso}"
         const val ComposeJunit = "androidx.compose.ui:ui-test-junit4:${Versions.Compose}"
     }
@@ -25,4 +25,6 @@ object Dependencies {
     const val HiltAndroid = "com.google.dagger:hilt-android:${Versions.Hilt}"
     const val HiltCompiler = "com.google.dagger:hilt-compiler:${Versions.Hilt}"
     const val HiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:${Versions.HiltNavigationCompose}"
+
+    const val ComposeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.Compose}"
 }

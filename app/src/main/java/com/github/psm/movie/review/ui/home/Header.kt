@@ -44,6 +44,6 @@ fun HeaderItem(
 
 @Preview(showBackground = true)
 @Composable
-fun HeaderPreview() {
+private fun HeaderPreview() {
     HeaderItem(header = "Categories")
 }
