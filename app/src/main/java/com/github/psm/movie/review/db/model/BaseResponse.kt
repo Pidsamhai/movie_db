@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 @Keep
 @Serializable
 @Parcelize
-data class Popular(
+data class BaseResponse(
     @SerialName("page")
     val page: Int? = 0,
     @SerialName("results")
-    val results: List<Result>? = listOf(),
+    val movies: List<Movie>? = listOf(),
     @SerialName("total_pages")
     val totalPages: Int? = 0,
     @SerialName("total_results")

@@ -6,4 +6,5 @@ object Plugins {
     const val Kapt = "kapt"
     const val Hilt = "dagger.hilt.android.plugin"
     const val GitVersion = "com.gladed.androidgitversion"
+    const val ObjectBox = "io.objectbox"
 }

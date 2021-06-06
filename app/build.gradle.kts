@@ -6,6 +6,7 @@ plugins {
     kotlin(Plugins.Kapt)
     id(Plugins.Hilt)
     id(Plugins.GitVersion) version Versions.GitVersion
+    id(Plugins.ObjectBox)
 }
 
 android {
@@ -88,6 +89,7 @@ dependencies {
     implementation(Dependencies.ComposeMaterial)
     implementation(Dependencies.ComposeUiTool)
     implementation(Dependencies.LifecycleKtx)
+    implementation(Dependencies.LiveDataKtx)
     implementation(Dependencies.ComposeLiveData)
     implementation(Dependencies.ActivityCompose)
 
@@ -106,6 +108,10 @@ dependencies {
     implementation(Dependencies.HiltAndroid)
     kapt(Dependencies.HiltCompiler)
     implementation(Dependencies.HiltNavigationCompose)
+
+    implementation(Dependencies.ObjectBoxKotlin)
+
+    implementation(Dependencies.Timber)
 
     /**
      * Fix JDK 11 Compile Error

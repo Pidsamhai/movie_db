@@ -1,47 +1,45 @@
 package com.github.psm.movie.review.ui.detail
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.psm.movie.review.R
 import com.github.psm.movie.review.ui.theme.Stared
-import com.github.psm.movie.review.ui.widget.Chip
-import com.github.psm.movie.review.ui.widget.DetailAppBar
-import com.github.psm.movie.review.ui.widget.Guard
+import com.github.psm.movie.review.ui.widget.*
 import com.github.psm.movie.review.utils.toImgUrl
-import com.google.accompanist.coil.rememberCoilPainter
 
 @Composable
 fun Detail(
-    movieId: String,
+    movieId: Int,
     navigateBack: (() -> Unit)? = null,
     detailViewModel: DetailViewModel = viewModel()
 ) {
     detailViewModel.getMovieDetail(movieId)
-    val movieDetail by detailViewModel.movieDetail.collectAsState(initial = null)
+    val movieDetail by detailViewModel.movieDetail.observeAsState()
     val scrollState = rememberScrollState()
     var expandedOverView by remember { mutableStateOf(false) }
     val genreScrollState = rememberScrollState()
@@ -64,21 +62,33 @@ fun Detail(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Surface(
-                Modifier
-                    .padding(top = 8.dp)
-                    .clip(RoundedCornerShape(8.dp))
+            Card(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                elevation = 8.dp,
+                shape = RoundedCornerShape(16.dp)
             ) {
                 Image(
                     modifier = Modifier
                         .width(250.dp)
                         .height(350.dp),
-                    painter = rememberCoilPainter(
-                        request = movieDetail?.posterPath?.toImgUrl(),
-                        fadeIn = true
-                    ),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds
+                    request = movieDetail?.posterPath?.toImgUrl(),
+                    contentScale = ContentScale.FillBounds,
+                    fadeIn = true,
+                    fadeInDurationMs = 2000,
+                    error = {
+                        Icon(
+                            modifier = Modifier.size(50.dp),
+                            painter = painterResource(id = R.drawable.ic_round_broken_image),
+                            contentDescription = null,
+                            tint = LocalContentColor.current.copy(alpha = 0.5f)
+                        )
+                    },
+                    loading = {
+                        Loader(
+                            size = 30.dp
+                        )
+                    }
                 )
             }
 
@@ -115,7 +125,7 @@ fun Detail(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "${movieDetail?.voteAverage}",
+                            text = "${movieDetail?.voteAverage ?: ""}",
                             modifier = Modifier.alpha(0.8f),
                             color = MaterialTheme.colors.onSurface
                         )
@@ -159,5 +169,5 @@ fun Detail(
 @Preview(showBackground = true)
 @Composable
 private fun DetailPreview() {
-    Detail("9999")
+    Detail(9999)
 }

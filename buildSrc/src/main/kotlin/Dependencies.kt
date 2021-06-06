@@ -5,7 +5,8 @@ object Dependencies {
     const val ComposeUi = "androidx.compose.ui:ui:${Versions.Compose}"
     const val ComposeMaterial = "androidx.compose.material:material:${Versions.Compose}"
     const val ComposeUiTool = "androidx.compose.ui:ui-tooling:${Versions.Compose}"
-    const val LifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LifecycleKtx}"
+    const val LifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.Lifecycle}"
+    const val LiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.Lifecycle}"
     const val ActivityCompose = "androidx.activity:activity-compose:${Versions.ActivityCompose}"
 
     object Test {
@@ -27,4 +28,7 @@ object Dependencies {
     const val HiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:${Versions.HiltNavigationCompose}"
 
     const val ComposeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.Compose}"
+
+    const val ObjectBoxKotlin = "io.objectbox:objectbox-kotlin:${Versions.ObjectBox}"
+    const val Timber = "com.jakewharton.timber:timber:${Versions.Timber}"
 }

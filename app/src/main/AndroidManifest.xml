@@ -4,6 +4,7 @@
     package="com.github.psm.movie.review">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:usesCleartextTraffic="true"
@@ -26,6 +27,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="io.objectbox.android"
+            tools:node="remove" />
+        <service
+            android:name="io.objectbox.android.AndroidObjectBrowserService"
+            tools:node="remove" />
+
     </application>
 
 </manifest>

@@ -1,6 +1,5 @@
 package com.github.psm.movie.review
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -15,7 +14,9 @@ import com.github.psm.movie.review.ui.detail.Detail
 import com.github.psm.movie.review.ui.detail.DetailViewModel
 import com.github.psm.movie.review.ui.home.Home
 import com.github.psm.movie.review.ui.home.HomeViewModel
+import com.github.psm.movie.review.ui.search.SearchPage
 import com.github.psm.movie.review.utils.rawRoute
+import timber.log.Timber
 
 @Composable
 fun NavGraph(
@@ -26,7 +27,7 @@ fun NavGraph(
 ) {
     navController.addOnDestinationChangedListener { _, destination, _ ->
         onTopLevelDestination?.invoke(destination.route == NavigationRoutes.Home.route)
-        Log.i("TAG", "NavGraph: ${destination.rawRoute}")
+        Timber.i("Destination: ${destination.rawRoute}")
     }
     NavHost(
         modifier = modifier,
@@ -35,23 +36,40 @@ fun NavGraph(
     ) {
         composable(NavigationRoutes.Home.route) {
             val homeViewModel = hiltViewModel<HomeViewModel>()
-            Home(homeViewModel = homeViewModel) { movieId ->
+            Home(
+                homeViewModel = homeViewModel,
+                navigateToSearchPage = {
+                    navController.navigate(NavigationRoutes.SearchPage.route)
+                }
+            ) { movieId ->
                 navController.navigate("${NavigationRoutes.Detail.route}/$movieId")
             }
         }
 
         composable(
             route = "${NavigationRoutes.Detail.route}/{movieId}",
-            arguments = listOf(navArgument("movieId") { type = NavType.StringType }),
+            arguments = listOf(navArgument("movieId") { type = NavType.IntType }),
         ) { backStack ->
             val viewModel = hiltViewModel<DetailViewModel>()
             Detail(
-                movieId = backStack.arguments?.getString("movieId")!!,
+                movieId = backStack.arguments?.getInt("movieId")!!,
                 detailViewModel = viewModel,
                 navigateBack = { navController.navigateUp() }
             )
         }
 
         composable(route = NavigationRoutes.About.route) { About() }
+
+        composable(route = NavigationRoutes.SearchPage.route) {
+
+            SearchPage(
+                onBackPress = { navController.navigateUp() },
+                onItemClick = { movieId ->
+                    navController.navigate("${NavigationRoutes.Detail.route}/$movieId") {
+                        popUpTo(NavigationRoutes.Home.route)
+                    }
+                }
+            )
+        }
     }
 }

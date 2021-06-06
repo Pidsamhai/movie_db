@@ -17,3 +17,5 @@ val MovieDarkBlue = Color(0XFF2F3FBB)
 val MovieSmoke = Color(0XFFBBB7B2)
 
 val Stared = Color(0XFFFFA235)
+
+val TripleE = Color(0xFFEEEEEE)

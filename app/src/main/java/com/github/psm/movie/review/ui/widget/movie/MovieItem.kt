@@ -1,0 +1,165 @@
+package com.github.psm.movie.review.ui.widget.movie
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.github.psm.movie.review.R
+import com.github.psm.movie.review.db.model.Movie
+import com.github.psm.movie.review.ui.theme.Stared
+import com.github.psm.movie.review.ui.widget.Guard
+import com.github.psm.movie.review.ui.widget.Image
+import com.github.psm.movie.review.ui.widget.Loader
+import com.github.psm.movie.review.utils.toImgUrl
+import timber.log.Timber
+
+@Composable
+fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
+    Timber.i("Star ${movie.voteStar}")
+
+    Card(
+        modifier = Modifier
+            .clickable { onClick?.invoke((movie.id ?: return@clickable)) },
+        elevation = 8.dp,
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(Modifier.width(150.dp)) {
+            /**
+             * Image With Gauge
+             */
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(16.dp))
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        request = movie.posterPath?.toImgUrl(),
+                        contentScale = ContentScale.FillBounds,
+                        fadeIn = true,
+                        fadeInDurationMs = 2000,
+                        error = {
+                            Icon(
+                                modifier = Modifier.size(50.dp),
+                                painter = painterResource(id = R.drawable.ic_round_broken_image),
+                                contentDescription = null,
+                                tint = LocalContentColor.current.copy(alpha = 0.5f)
+                            )
+                        },
+                        loading = {
+                            Loader(
+                                size = 30.dp
+                            )
+                        }
+                    )
+                }
+                Box(modifier = Modifier
+                    .width(150.dp)
+                    .height(200.dp),
+                    contentAlignment = Alignment.BottomStart
+                ) {
+                    Guard(
+                        Modifier
+                            .size(60.dp)
+                            .padding(4.dp)
+                            .clip(CircleShape),
+                        value = ((movie.voteAverage ?: 0.0) * 0.1).toFloat(),
+                        bgColor = Color.Black,
+                        strokeSize = 8f,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+
+            /**
+             * Title
+             */
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            Text(
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp),
+                text = movie.title ?: "",
+                style = MaterialTheme.typography.body1,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            /**
+             * Star
+             */
+
+            Row(
+                modifier = Modifier
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        bottom = 8.dp
+                    ),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                repeat(movie.voteStar.starCount) {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_star),
+                        contentDescription = null,
+                        tint = Stared
+                    )
+                }
+                if (movie.voteStar.hasHalf) {
+                    Box {
+                        Icon(
+                            modifier = Modifier.size(16.dp),
+                            painter = painterResource(id = R.drawable.ic_left_half_star),
+                            contentDescription = null,
+                            tint = Stared
+                        )
+                        Icon(
+                            modifier = Modifier.size(16.dp),
+                            painter = painterResource(id = R.drawable.ic_right_half_star),
+                            contentDescription = null,
+                            tint = LocalContentColor.current.copy(alpha = 0.17f)
+                        )
+                    }
+                }
+                repeat(movie.voteStar.emptyStar) {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_star),
+                        contentDescription = null,
+                        tint = LocalContentColor.current.copy(alpha = 0.17f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MovieItemPreview() {
+    MovieItem(Movie(
+        title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        voteAverage = 5.0
+    ))
+}
