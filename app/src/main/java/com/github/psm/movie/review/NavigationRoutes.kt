@@ -34,4 +34,5 @@ sealed class NavigationRoutes(
         },
         label = "About"
     )
+    object SearchPage: NavigationRoutes(route = "search", label = "Search")
 }

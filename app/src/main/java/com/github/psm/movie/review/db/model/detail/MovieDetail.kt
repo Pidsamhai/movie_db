@@ -4,14 +4,21 @@ package com.github.psm.movie.review.db.model.detail
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.github.psm.movie.review.db.model.genre.Genre
+import io.objectbox.annotation.Entity
+import io.objectbox.annotation.Id
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+@Entity
 @Keep
 @Serializable
 @Parcelize
 data class MovieDetail(
+    @Id
+    @Transient
+    var objId: Long = 0,
     @SerialName("adult")
     val adult: Boolean? = false,
     @SerialName("backdrop_path")

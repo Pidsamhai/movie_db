@@ -6,7 +6,7 @@ object Versions {
     const val CoreKtx = "1.5.0"
     const val AppCompat = "1.3.0"
     const val Material = "1.3.0"
-    const val LifecycleKtx = "2.3.1"
+    const val Lifecycle = "2.3.1"
     const val ActivityCompose = "1.3.0-alpha08"
     const val Junit = "4.13.2"
     const val AndroidxJunit = "1.1.2"
@@ -19,4 +19,6 @@ object Versions {
     const val Okhttp = "4.7.2"
 
     const val GitVersion = "0.4.13"
+    const val ObjectBox = "2.9.2-RC"
+    const val Timber = "4.7.1"
 }
