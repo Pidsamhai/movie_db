@@ -8,6 +8,7 @@ import com.github.psm.movie.review.db.ObjectBox
 import com.github.psm.movie.review.db.model.Movie
 import com.github.psm.movie.review.db.model.Movie_
 import com.github.psm.movie.review.db.model.genre.Genre
+import com.github.psm.movie.review.db.model.upcoming.UpComingResponse
 import com.github.psm.movie.review.repository.TMDBRepository
 import com.github.psm.movie.review.utils.ObjectBoxLiveData
 import com.github.psm.movie.review.utils.asLiveData
@@ -15,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(repository: TMDBRepository) : ViewModel() {
     private val genreBox: Box<Genre> = ObjectBox.store.boxFor()
     private val movieBox: Box<Movie> = ObjectBox.store.boxFor()
+    val upComings:Flow<UpComingResponse> = repository.getUpComing()
 
     val movieResponse: LiveData<List<Movie>>
     get() =  movieBox

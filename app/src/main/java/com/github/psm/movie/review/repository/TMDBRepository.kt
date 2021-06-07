@@ -2,6 +2,7 @@ package com.github.psm.movie.review.repository
 
 import com.github.psm.movie.review.db.model.BaseResponse
 import com.github.psm.movie.review.db.model.genre.GenreResponse
+import com.github.psm.movie.review.db.model.upcoming.UpComingResponse
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Singleton
 
@@ -12,4 +13,5 @@ interface TMDBRepository {
     suspend fun getGenreNormal()
     fun getGenres(): Flow<GenreResponse>
     fun search(keyWord: String, page: Int = 1): Flow<BaseResponse>
+    fun getUpComing(): Flow<UpComingResponse>
 }

@@ -5,6 +5,7 @@ import com.github.psm.movie.review.db.BoxStore
 import com.github.psm.movie.review.db.model.BaseResponse
 import com.github.psm.movie.review.db.model.detail.MovieDetail
 import com.github.psm.movie.review.db.model.genre.GenreResponse
+import com.github.psm.movie.review.db.model.upcoming.UpComingResponse
 import com.github.psm.movie.review.utils.Keys
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
@@ -114,11 +115,24 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getUpComing(): Flow<UpComingResponse> = flow {
+        try {
+            val result = client.get<UpComingResponse>(path = UPCOMING_ROUTE) {
+                parameter("page", 1)
+                parameter("region","US")
+            }
+            emit(result)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
     companion object {
         private const val BASE_API_HOST = "api.themoviedb.org/3"
         private const val POPULAR_ROUTE = "/movie/popular"
         private const val MOVIE_DETAIL_ROUTE = "/movie"
         private const val GENRES_ROUTE = "/genre/movie/list"
         private const val SEARCH_ROUTE = "/search/movie"
+        private const val UPCOMING_ROUTE = "/movie/upcoming"
     }
 }
