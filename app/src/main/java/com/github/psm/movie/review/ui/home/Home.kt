@@ -66,23 +66,8 @@ fun Home(
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
                     .onFocusChanged { focusState ->
-                        when (focusState) {
-                            FocusState.Active -> {
-                                Timber.i("Active")
-                                navigateToSearchPage.invoke()
-                            }
-                            FocusState.ActiveParent -> {
-                                Timber.i("ActiveParent")
-                            }
-                            FocusState.Captured -> {
-                                Timber.i("Captured")
-                            }
-                            FocusState.Disabled -> {
-                                Timber.i("Disabled")
-                            }
-                            FocusState.Inactive -> {
-                                Timber.i("Inactive")
-                            }
+                        if (focusState.isFocused) {
+                            navigateToSearchPage.invoke()
                         }
                     }
                     .clickable { navigateToSearchPage.invoke() },

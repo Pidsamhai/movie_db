@@ -56,7 +56,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
+        freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
     }
     buildFeatures {
         compose = true
@@ -70,8 +70,6 @@ android {
             path("CMakeLists.txt")
         }
     }
-
-
 
     kapt {
         javacOptions {

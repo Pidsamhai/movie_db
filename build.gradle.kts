@@ -6,8 +6,8 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.1.0-alpha01")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Kotlin}")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:${Versions.Kotlin}")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt}")
         classpath("io.objectbox:objectbox-gradle-plugin:${Versions.ObjectBox}")
 

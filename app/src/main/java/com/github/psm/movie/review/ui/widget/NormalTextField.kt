@@ -64,7 +64,7 @@ fun NormalTextField(
             BasicTextField(
                 modifier = modifier
                     .onFocusChanged { focusState ->
-                        underLineAlpha = if (focusState == FocusState.Active) 1f
+                        underLineAlpha = if (focusState.isFocused) 1f
                         else 0.5f
                     },
                 value = value,
