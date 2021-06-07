@@ -17,24 +17,19 @@
         android:theme="@style/Theme.MovieReview"
         tools:targetApi="m">
         <activity
-            android:name="com.github.psm.movie.review.MainActivity"
+            android:name=".MainActivity"
+            android:theme="@style/Theme.MovieReview.NoActionBar"/>
+        <activity
+            android:name="com.github.psm.movie.review.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MovieReview.NoActionBar">
+            android:theme="@style/Theme.MovieReview.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver
-            android:name="io.objectbox.android"
-            tools:node="remove" />
-        <service
-            android:name="io.objectbox.android.AndroidObjectBrowserService"
-            tools:node="remove" />
-
     </application>
 
 </manifest>
