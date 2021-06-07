@@ -26,25 +26,32 @@ import com.github.psm.movie.review.ui.widget.Loader
 import com.github.psm.movie.review.utils.toImgUrl
 import timber.log.Timber
 
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
     Timber.i("Star ${movie.voteStar}")
 
     Card(
-        modifier = Modifier
-            .clickable { onClick?.invoke((movie.id ?: return@clickable)) },
         elevation = 8.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
-        Column(Modifier.width(150.dp)) {
+        Column(
+            modifier = Modifier
+                .width(150.dp)
+                .clickable {
+                    onClick?.invoke((movie.id ?: return@clickable))
+                }
+        ) {
             /**
              * Image With Gauge
              */
-            Surface(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(220.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(16.dp)),
+                contentAlignment = Alignment.Center
             ) {
                 Box(
                     contentAlignment = Alignment.Center
@@ -69,9 +76,10 @@ fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
                         }
                     )
                 }
-                Box(modifier = Modifier
-                    .width(150.dp)
-                    .height(200.dp),
+                Box(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(200.dp),
                     contentAlignment = Alignment.BottomStart
                 ) {
                     Guard(
@@ -158,8 +166,10 @@ fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
 @Preview(showBackground = true)
 @Composable
 private fun MovieItemPreview() {
-    MovieItem(Movie(
-        title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        voteAverage = 5.0
-    ))
+    MovieItem(
+        Movie(
+            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            voteAverage = 5.0
+        )
+    )
 }

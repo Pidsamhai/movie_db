@@ -27,14 +27,15 @@ fun MovieSearchItem(
     Card(
         modifier = Modifier
             .background(TripleE)
-            .height(150.dp)
-            .clickable {
-                onClick.invoke(movie.id ?: return@clickable)
-            },
+            .height(150.dp),
         elevation = 4.dp
     ) {
         Row(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    onClick.invoke(movie.id ?: return@clickable)
+                }
         ) {
             Image(
                 modifier = Modifier
