@@ -24,14 +24,9 @@ import com.github.psm.movie.review.ui.widget.Guard
 import com.github.psm.movie.review.ui.widget.Image
 import com.github.psm.movie.review.ui.widget.Loader
 import com.github.psm.movie.review.utils.toImgUrl
-import timber.log.Timber
 
-
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
-    Timber.i("Star ${movie.voteStar}")
-
     Card(
         elevation = 8.dp,
         shape = RoundedCornerShape(16.dp)
