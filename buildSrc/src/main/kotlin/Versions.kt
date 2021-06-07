@@ -1,5 +1,5 @@
 object Versions {
-    const val Compose = "1.0.0-beta07"
+    const val Compose = "1.0.0-beta08"
     const val Hilt = "2.36"
     const val HiltNavigationCompose = "1.0.0-alpha02"
 
@@ -21,4 +21,5 @@ object Versions {
     const val GitVersion = "0.4.13"
     const val ObjectBox = "2.9.2-RC"
     const val Timber = "4.7.1"
+    const val Kotlin = "1.5.10"
 }
