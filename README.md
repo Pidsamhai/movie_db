@@ -1,4 +1,7 @@
 
+<p align="center">
+<img src="./art/screen.gif" />
+</p>
 
 * Native Lib app/src/main/cpp/native-lib.cpp
 
