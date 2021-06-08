@@ -1,21 +1,17 @@
 package com.github.psm.movie.review.ui.about
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.github.psm.movie.review.utils.getStringLiveData
+import com.github.psm.movie.review.repository.SettingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AboutViewModel @Inject constructor(
-    private val pref: SharedPreferences
+    private val settingRepository: SettingRepository
 ): ViewModel() {
-    val language:LiveData<String> = pref.getStringLiveData("language", "en-US")
-
-    fun saveLanguage(language: String) {
-        pref.edit()
-            .putString("language", language)
-            .apply()
-    }
+    val language:LiveData<String> = settingRepository.languageCodeLiveData
+    val region:LiveData<String> = settingRepository.regionCodeLiveData
+    fun saveLanguage(language: String) = settingRepository.saveLanguageCode(language)
+    fun saveRegion(region: String) = settingRepository.saveRegionCode(region)
 }

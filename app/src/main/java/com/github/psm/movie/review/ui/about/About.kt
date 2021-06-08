@@ -19,11 +19,20 @@ fun About(
 ) {
 
     val language by aboutViewModel.language.observeAsState()
-    var showDialog by remember { mutableStateOf(false) }
+    val region by aboutViewModel.region.observeAsState()
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    var showRegionDialog by remember { mutableStateOf(false) }
+    var languageCode by remember { mutableStateOf("") }
     var regionCode by remember { mutableStateOf("") }
 
-    if (regionCode.isNotEmpty() && language != null) {
-        aboutViewModel.saveLanguage(regionCode)
+    if (languageCode.isNotEmpty() && language != null) {
+        aboutViewModel.saveLanguage(languageCode)
+        languageCode = ""
+    }
+
+    if (regionCode.isNotEmpty() && region != null) {
+        val _languageCode = regionCode.split("-")
+        aboutViewModel.saveRegion(_languageCode.last().uppercase())
         regionCode = ""
     }
 
@@ -32,17 +41,29 @@ fun About(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "language :${language}")
-        if (showDialog) {
+        Text(text = "language :${language} region: $region")
+        if (showLanguageDialog) {
             LanguagePickerDialog(
-                onClose = { showDialog = false },
+                onClose = { showLanguageDialog = false },
+                onSelected = { languageCode = it }
+            )
+        }
+        if (showRegionDialog) {
+            LanguagePickerDialog(
+                onClose = { showRegionDialog = false },
                 onSelected = { regionCode = it }
             )
         }
         Button(
-            onClick = { showDialog = !showDialog }
+            onClick = { showLanguageDialog = !showLanguageDialog }
         ) {
             Text(text = "Change Language")
+        }
+
+        Button(
+            onClick = { showRegionDialog = !showRegionDialog }
+        ) {
+            Text(text = "Change Region")
         }
     }
 }
