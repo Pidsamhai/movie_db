@@ -22,4 +22,5 @@ object Versions {
     const val ObjectBox = "2.9.2-RC"
     const val Timber = "4.7.1"
     const val Kotlin = "1.5.10"
+    const val AGT = "7.1.0-alpha01"
 }

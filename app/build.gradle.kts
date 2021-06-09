@@ -55,8 +55,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     buildFeatures {
         compose = true
@@ -70,46 +69,39 @@ android {
             path("CMakeLists.txt")
         }
     }
-
-    kapt {
-        javacOptions {
-            option("--source", "8")
-            option("--target", "8")
-        }
-    }
 }
 
 dependencies {
-    implementation(Dependencies.CoreKtx)
-    implementation(Dependencies.AppCompat)
-    implementation(Dependencies.Material)
-    implementation(Dependencies.ComposeUi)
-    implementation(Dependencies.ComposeMaterial)
-    implementation(Dependencies.ComposeUiTool)
-    implementation(Dependencies.LifecycleKtx)
-    implementation(Dependencies.LiveDataKtx)
-    implementation(Dependencies.ComposeLiveData)
-    implementation(Dependencies.ActivityCompose)
+    implementation(Libs.CoreKtx)
+    implementation(Libs.AppCompat)
+    implementation(Libs.Material)
+    implementation(Libs.ComposeUi)
+    implementation(Libs.ComposeMaterial)
+    implementation(Libs.ComposeUiTool)
+    implementation(Libs.LifecycleKtx)
+    implementation(Libs.LiveDataKtx)
+    implementation(Libs.ComposeLiveData)
+    implementation(Libs.ActivityCompose)
 
-    testImplementation(Dependencies.Test.Junit)
-    androidTestImplementation(Dependencies.Test.AndroidxJunit)
-    androidTestImplementation(Dependencies.Test.Espresso)
-    androidTestImplementation(Dependencies.Test.ComposeJunit)
+    testImplementation(Libs.Test.Junit)
+    androidTestImplementation(Libs.Test.AndroidxJunit)
+    androidTestImplementation(Libs.Test.Espresso)
+    androidTestImplementation(Libs.Test.ComposeJunit)
 
-    implementation(Dependencies.NavigationCompose)
-    implementation(Dependencies.AccompanistCoil)
-    implementation(Dependencies.KtorClient)
-    implementation(Dependencies.KtorSerialization)
-    implementation(Dependencies.KotlinxSerialization)
-    implementation(Dependencies.OkhttpInterceptor)
+    implementation(Libs.NavigationCompose)
+    implementation(Libs.AccompanistCoil)
+    implementation(Libs.KtorClient)
+    implementation(Libs.KtorSerialization)
+    implementation(Libs.KotlinxSerialization)
+    implementation(Libs.OkhttpInterceptor)
 
-    implementation(Dependencies.HiltAndroid)
-    kapt(Dependencies.HiltCompiler)
-    implementation(Dependencies.HiltNavigationCompose)
+    implementation(Libs.HiltAndroid)
+    kapt(Libs.HiltCompiler)
+    implementation(Libs.HiltNavigationCompose)
 
-    implementation(Dependencies.ObjectBoxKotlin)
+    implementation(Libs.ObjectBoxKotlin)
 
-    implementation(Dependencies.Timber)
+    implementation(Libs.Timber)
 
     /**
      * Fix JDK 11 Compile Error
