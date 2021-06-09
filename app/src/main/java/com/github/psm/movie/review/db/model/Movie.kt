@@ -59,10 +59,11 @@ data class Movie(
         val realVote = (voteAverage ?: 0.0) / 2.0
         val starCount = floor(realVote).toInt()
         val hasHalf = (realVote - starCount) >= 0.5 && realVote != VoteStar.MAX_STAR.toDouble()
+        val emptyStar = VoteStar.MAX_STAR - starCount
         return VoteStar(
             starCount = starCount,
             hasHalf = hasHalf,
-            emptyStar = VoteStar.MAX_STAR - starCount
+            emptyStar = if (emptyStar == 1 && hasHalf) 0 else emptyStar
         )
     }
 }
