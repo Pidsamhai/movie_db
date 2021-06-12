@@ -1,5 +1,6 @@
 package com.github.psm.movie.review.ui.widget.movie
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -84,19 +85,50 @@ fun MovieItem(
                 Box(
                     modifier = Modifier
                         .width(150.dp)
-                        .height(200.dp),
-                    contentAlignment = Alignment.BottomStart
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.BottomEnd
                 ) {
-                    Guard(
-                        Modifier
-                            .size(60.dp)
-                            .padding(4.dp)
-                            .clip(CircleShape),
-                        value = ((movie.voteAverage ?: 0.0) * 0.1).toFloat(),
-                        bgColor = Color.Black,
-                        strokeSize = 8f,
-                        fontSize = 12.sp
-                    )
+                    Row(
+                        modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(
+                                    topStart = 50.dp,
+                                    bottomStart = 50.dp
+                                )
+                            )
+                            .background(
+                                Color.Black.copy(alpha = 0.6f)
+                            ),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Guard(
+                            Modifier
+                                .size(50.dp)
+                                .clip(CircleShape),
+                            value = ((movie.voteAverage ?: 0.0) * 0.1).toFloat(),
+                            bgColor = Color.Black,
+                            strokeSize = 8f,
+                            fontSize = 12.sp
+                        )
+                        Column(
+                            modifier = Modifier.padding(
+                                start = 8.dp,
+                                end = 8.dp
+                            )
+                        ) {
+                            Text(
+                                text = "Release Date",
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 12.sp
+                            )
+                            Text(
+                                text = movie.releaseDate ?: "",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
 
