@@ -35,7 +35,9 @@ fun Home(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel(),
     navigateToSearchPage: () -> Unit = { },
-    selectMovie: (movieId: Int) -> Unit
+    selectMovie: (movieId: Int) -> Unit,
+    navigateToPopular: () -> Unit = { },
+    navigateToUpComing: () -> Unit = { }
 ) {
     val searchValue = remember { mutableStateOf(TextFieldValue("")) }
     val listSate = rememberLazyListState()
@@ -125,10 +127,13 @@ fun Home(
                     repeat(genres?.take(5)?.size ?: 0) {
                         CategoryItem(text = genres?.get(it)?.name!!)
                     }
-
                 }
 
-            HeaderItem(header = "Popular", modifier = Modifier.padding(start = 24.dp, end = 24.dp))
+            HeaderItem(
+                header = "Popular",
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                onEndTextClick = navigateToPopular
+            )
 
             if (populars?.size ?: 0 == 0)
                 Loader(
@@ -161,7 +166,11 @@ fun Home(
 
             // UpComing
 
-            HeaderItem(header = "UpComing", modifier = Modifier.padding(start = 24.dp, end = 24.dp))
+            HeaderItem(
+                header = "UpComing",
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                onEndTextClick = navigateToUpComing
+            )
 
             LazyRow(
                 Modifier

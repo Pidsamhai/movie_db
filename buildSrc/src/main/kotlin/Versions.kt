@@ -23,4 +23,6 @@ object Versions {
     const val Timber = "4.7.1"
     const val Kotlin = "1.5.10"
     const val AGT = "7.1.0-alpha01"
+    const val ComposePaging = "1.0.0-alpha10"
+    const val LottieCompose = "1.0.0-beta07-1"
 }

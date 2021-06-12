@@ -14,7 +14,10 @@ import com.github.psm.movie.review.ui.detail.Detail
 import com.github.psm.movie.review.ui.detail.DetailViewModel
 import com.github.psm.movie.review.ui.home.Home
 import com.github.psm.movie.review.ui.home.HomeViewModel
+import com.github.psm.movie.review.ui.movielist.MovieListPage
+import com.github.psm.movie.review.ui.popular.PopularVM
 import com.github.psm.movie.review.ui.search.SearchPage
+import com.github.psm.movie.review.ui.upcoming.UpComingVM
 import com.github.psm.movie.review.utils.rawRoute
 import timber.log.Timber
 
@@ -40,10 +43,17 @@ fun NavGraph(
                 homeViewModel = homeViewModel,
                 navigateToSearchPage = {
                     navController.navigate(NavigationRoutes.SearchPage.route)
+                },
+                selectMovie = { movieId ->
+                    navController.navigate("${NavigationRoutes.Detail.route}/$movieId")
+                },
+                navigateToPopular = {
+                    navController.navigate(NavigationRoutes.Popular.route)
+                },
+                navigateToUpComing = {
+                    navController.navigate(NavigationRoutes.UpComing.route)
                 }
-            ) { movieId ->
-                navController.navigate("${NavigationRoutes.Detail.route}/$movieId")
-            }
+            )
         }
 
         composable(
@@ -71,5 +81,25 @@ fun NavGraph(
                 }
             )
         }
+
+        composable(route = NavigationRoutes.Popular.route) {
+            MovieListPage(
+                title = NavigationRoutes.Popular.label,
+                viewModel = hiltViewModel<PopularVM>(),
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+
+        composable(route = NavigationRoutes.UpComing.route) {
+            MovieListPage(
+                title = NavigationRoutes.UpComing.label,
+                viewModel = hiltViewModel<UpComingVM>(),
+                onBackClick = { navController.navigateUp() },
+                selectedMovie = { movieId ->
+                    navController.navigate("${NavigationRoutes.Detail.route}/$movieId")
+                }
+            )
+        }
+
     }
 }

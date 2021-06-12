@@ -24,7 +24,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(repository: TMDBRepository) : ViewModel() {
     private val genreBox: Box<Genre> = ObjectBox.store.boxFor()
     private val movieBox: Box<Movie> = ObjectBox.store.boxFor()
-    val upComings:Flow<UpComingResponse> = repository.getUpComing()
+    val upComings:Flow<UpComingResponse> = repository.getUpComingFlow()
 
     val movieResponse: LiveData<List<Movie>>
     get() =  movieBox
@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(repository: TMDBRepository) : ViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getGenreNormal()
-            repository.getPopular()
+            repository.getPopular(1)
         }
     }
 }

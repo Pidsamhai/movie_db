@@ -102,6 +102,8 @@ dependencies {
     implementation(Libs.ObjectBoxKotlin)
 
     implementation(Libs.Timber)
+    implementation(Libs.ComposePaging)
+    implementation(Libs.LottieCompose)
 
     /**
      * Fix JDK 11 Compile Error

@@ -31,4 +31,6 @@ object Libs {
 
     const val ObjectBoxKotlin = "io.objectbox:objectbox-kotlin:${Versions.ObjectBox}"
     const val Timber = "com.jakewharton.timber:timber:${Versions.Timber}"
+    const val ComposePaging = "androidx.paging:paging-compose:${Versions.ComposePaging}"
+    const val LottieCompose = "com.airbnb.android:lottie-compose:${Versions.LottieCompose}"
 }

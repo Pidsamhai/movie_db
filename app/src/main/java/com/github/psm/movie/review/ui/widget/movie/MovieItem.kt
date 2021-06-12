@@ -26,8 +26,13 @@ import com.github.psm.movie.review.ui.widget.Loader
 import com.github.psm.movie.review.utils.toImgUrl
 
 @Composable
-fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
+fun MovieItem(
+    modifier: Modifier = Modifier,
+    movie: Movie,
+    onClick: ((movieId: Int) -> Unit)? = null
+) {
     Card(
+        modifier = modifier,
         elevation = 8.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -45,7 +50,12 @@ fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(220.dp)
-                    .clip(RoundedCornerShape(16.dp)),
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = 16.dp,
+                            topEnd = 16.dp
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Box(
@@ -162,7 +172,7 @@ fun MovieItem(movie: Movie, onClick: ((movieId: Int) -> Unit)? = null) {
 @Composable
 private fun MovieItemPreview() {
     MovieItem(
-        Movie(
+        movie = Movie(
             title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
             voteAverage = 5.0
         )

@@ -35,4 +35,6 @@ sealed class NavigationRoutes(
         label = "About"
     )
     object SearchPage: NavigationRoutes(route = "search", label = "Search")
+    object Popular: NavigationRoutes(route = "popular", label = "Popular")
+    object UpComing: NavigationRoutes(route = "upcoming", label = "Up Coming")
 }

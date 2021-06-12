@@ -1,6 +1,7 @@
 package com.github.psm.movie.review.repository
 
 import com.github.psm.movie.review.db.BoxStore
+import com.github.psm.movie.review.db.Response
 import com.github.psm.movie.review.db.model.BaseResponse
 import com.github.psm.movie.review.db.model.detail.MovieDetail
 import com.github.psm.movie.review.db.model.genre.GenreResponse
@@ -17,14 +18,16 @@ class TMDBRepositoryImpl @Inject constructor(
     private val apiServices: HttpClient
 ) : TMDBRepository {
 
-    override suspend fun getPopular() {
-        try {
+    override suspend fun getPopular(page: Int): Response<BaseResponse> {
+        return try {
             val result = apiServices.get<BaseResponse>(path = POPULAR_ROUTE) {
-                parameter("page", 1)
+                parameter("page", page)
             }
             result.movies?.let { boxStore.movie.put(it) }
+            Response.Success(result)
         } catch (e: Exception) {
             Timber.e(e)
+            Response.Error(e)
         }
     }
 
@@ -64,15 +67,25 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUpComing(): Flow<UpComingResponse> = flow {
+    override fun getUpComingFlow(): Flow<UpComingResponse> = flow {
         try {
-            val result = apiServices.get<UpComingResponse>(path = UPCOMING_ROUTE) {
-                parameter("page", 1)
-                parameter("region", "US")
-            }
-            emit(result)
+            val result = getUpComing(1)
+            if (result is Response.Success) emit(result.value)
         } catch (e: Exception) {
             Timber.e(e)
+        }
+    }
+
+    override suspend fun getUpComing(page: Int): Response<UpComingResponse> {
+        return try {
+            val result = apiServices.get<UpComingResponse>(path = UPCOMING_ROUTE) {
+                parameter("page", page)
+                parameter("region", "US")
+            }
+            Response.Success(result)
+        } catch (e: Exception) {
+            Timber.e(e)
+            Response.Error(e)
         }
     }
 
