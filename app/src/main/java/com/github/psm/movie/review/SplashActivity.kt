@@ -6,7 +6,11 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -14,18 +18,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.psm.movie.review.ui.widget.Loader
+import com.github.psm.movie.review.ui.theme.MovieReviewTheme
 
 class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SplashContent()
+            MovieReviewTheme {
+                SplashContent()
+            }
         }
     }
 }
@@ -34,6 +43,15 @@ class SplashActivity : ComponentActivity() {
 @Composable
 fun SplashContent() {
     val activity = (LocalContext.current as ComponentActivity)
+    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteAnimateFloat = infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0.1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(800, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
     LaunchedEffect(key1 = null) {
         Handler(Looper.myLooper()!!).postDelayed({
             activity.startActivity(Intent(activity, MainActivity::class.java))
@@ -50,11 +68,14 @@ fun SplashContent() {
                     .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
-                Loader(size = 50.dp)
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = "Loading...",
-                    style = MaterialTheme.typography.body2
+                Image(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .alpha(infiniteAnimateFloat.value)
+                        .background(Color(0XFF86CECB)),
+                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    contentDescription = null
                 )
             }
             Text(
