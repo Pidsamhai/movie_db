@@ -26,7 +26,7 @@ import com.github.psm.moviedb.ui.widget.movie.MovieSearchItem
 fun SearchPage(
     viewModel: SearchPageViewModel = hiltViewModel(),
     onBackPress: () -> Unit = { },
-    onItemClick: (movieId: Int) -> Unit = { }
+    onItemClick: (movieId: Long) -> Unit = { }
 ) {
 
     var searchValue by rememberSaveable { mutableStateOf("") }

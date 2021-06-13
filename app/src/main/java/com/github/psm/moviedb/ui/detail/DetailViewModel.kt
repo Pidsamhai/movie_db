@@ -15,17 +15,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val repository: TMDBRepository
+    private val repository: TMDBRepository,
 ): ViewModel() {
-    private val movieId = MutableLiveData<Int?>(null)
+    private val movieId = MutableLiveData<Long?>(null)
     private val movieDetailBox:Box<MovieDetail> = ObjectBox.store.boxFor()
     val movieDetail: LiveData<MovieDetail?> = movieId.switchMap { movieID ->
-        movieDetailBox.query().equal(MovieDetail_.id, movieID?.toLong() ?: 0).asFilerLiveData {
+        movieDetailBox.query().equal(MovieDetail_.id, movieID ?: 0).asFilerLiveData {
             it.firstOrNull()
         }
     }
 
-    fun getMovieDetail(movieId: Int) {
+    fun getMovieDetail(movieId: Long) {
         this.movieId.value = movieId
         viewModelScope.launch(Dispatchers.IO) {
             repository.getMovieDetail(movieId)

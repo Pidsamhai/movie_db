@@ -22,7 +22,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 @Composable
 fun MovieSearchItem(
     movie: Movie,
-    onClick: (movieId: Int) -> Unit = { }
+    onClick: (movieId: Long) -> Unit = { }
 ) {
     Card(
         modifier = Modifier

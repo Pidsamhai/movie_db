@@ -35,7 +35,7 @@ fun Home(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel(),
     navigateToSearchPage: () -> Unit = { },
-    selectMovie: (movieId: Int) -> Unit,
+    selectMovie: (movieId: Long) -> Unit,
     navigateToPopular: () -> Unit = { },
     navigateToUpComing: () -> Unit = { }
 ) {

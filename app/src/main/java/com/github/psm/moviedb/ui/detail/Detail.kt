@@ -26,23 +26,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.psm.moviedb.R
+import com.github.psm.moviedb.ui.bookmark.BookmarkVM
 import com.github.psm.moviedb.ui.theme.Stared
 import com.github.psm.moviedb.ui.widget.*
 import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
 fun Detail(
-    movieId: Int,
+    movieId: Long,
     navigateBack: (() -> Unit)? = null,
-    detailViewModel: DetailViewModel = viewModel()
+    detailViewModel: DetailViewModel = viewModel(),
+    bookmarkViewModel: BookmarkVM = hiltViewModel()
 ) {
     detailViewModel.getMovieDetail(movieId)
     val movieDetail by detailViewModel.movieDetail.observeAsState()
     val scrollState = rememberScrollState()
     var expandedOverView by remember { mutableStateOf(false) }
     val genreScrollState = rememberScrollState()
+    val bookmarkState by bookmarkViewModel.bookState(movieId).observeAsState(false)
 
     Column(
         modifier = Modifier
@@ -53,7 +57,12 @@ fun Detail(
 
         DetailAppBar(
             onBackClick = { navigateBack?.invoke() },
-            scrollState = scrollState
+            scrollState = scrollState,
+            onBookMarkClick = { booked ->
+                if (booked) bookmarkViewModel.booking(movieId)
+                else bookmarkViewModel.unBook(movieId)
+            },
+            bookmarkState = bookmarkState
         )
 
         Column(

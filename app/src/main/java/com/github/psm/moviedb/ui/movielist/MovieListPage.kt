@@ -27,7 +27,7 @@ import timber.log.Timber
 fun MovieListPage(
     title: String,
     onBackClick: () -> Unit = { },
-    selectedMovie: (movieId: Int) -> Unit = {},
+    selectedMovie: (movieId: Long) -> Unit = {},
     viewModel: BaseMovieListViewModel
 ) {
     val movies = viewModel.movies.collectAsLazyPagingItems()

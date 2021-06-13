@@ -31,7 +31,7 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMovieDetail(movieId: Int) {
+    override suspend fun getMovieDetail(movieId: Long) {
         try {
             val result = apiServices.get<MovieDetail>(path = "$MOVIE_DETAIL_ROUTE/$movieId")
             boxStore.movieDetail.put(result)

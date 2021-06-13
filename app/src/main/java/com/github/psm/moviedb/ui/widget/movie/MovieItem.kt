@@ -30,7 +30,7 @@ import com.github.psm.moviedb.utils.toImgUrl
 fun MovieItem(
     modifier: Modifier = Modifier,
     movie: Movie,
-    onClick: ((movieId: Int) -> Unit)? = null
+    onClick: ((movieId: Long) -> Unit)? = null
 ) {
     Card(
         modifier = modifier,

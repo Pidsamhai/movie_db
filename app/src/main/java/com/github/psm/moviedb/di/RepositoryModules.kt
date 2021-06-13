@@ -1,9 +1,6 @@
 package com.github.psm.moviedb.di
 
-import com.github.psm.moviedb.repository.SettingRepository
-import com.github.psm.moviedb.repository.SettingRepositoryImpl
-import com.github.psm.moviedb.repository.TMDBRepository
-import com.github.psm.moviedb.repository.TMDBRepositoryImpl
+import com.github.psm.moviedb.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -20,4 +17,8 @@ abstract class RepositoryModules {
     @Binds
     @Singleton
     abstract fun bindSettingRepository(repository: SettingRepositoryImpl): SettingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBookmarkRepository(repository: BookmarkRepositoryImpl): BookmarkRepository
 }

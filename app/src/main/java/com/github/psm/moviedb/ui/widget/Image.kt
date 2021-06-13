@@ -1,10 +1,16 @@
 package com.github.psm.moviedb.ui.widget
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.github.psm.moviedb.R
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainterDefaults
@@ -44,4 +50,19 @@ fun Image(
             }
         }
     }
+}
+
+@Composable
+fun DefaultLoader() {
+    Loader(size = 50.dp)
+}
+
+@Composable
+fun DefaultError() {
+    Icon(
+        modifier = Modifier.size(50.dp),
+        painter = painterResource(id = R.drawable.ic_round_broken_image),
+        contentDescription = null,
+        tint = LocalContentColor.current.copy(alpha = 0.5f)
+    )
 }

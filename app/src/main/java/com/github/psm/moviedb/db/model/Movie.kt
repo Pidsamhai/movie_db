@@ -3,10 +3,7 @@ package com.github.psm.moviedb.db.model
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import io.objectbox.annotation.ConflictStrategy
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
-import io.objectbox.annotation.Unique
+import io.objectbox.annotation.*
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
@@ -28,9 +25,10 @@ data class Movie(
     val backdropPath: String? = "",
 //    @SerialName("genre_ids")
 //    val genreIds: List<Int>? = listOf(),
+    @Uid(5582483785819779724L)
     @Unique(onConflict = ConflictStrategy.REPLACE)
     @SerialName("id")
-    val id: Int? = 0,
+    val id: Long = 0,
     @SerialName("original_language")
     val originalLanguage: String? = "",
     @SerialName("original_title")

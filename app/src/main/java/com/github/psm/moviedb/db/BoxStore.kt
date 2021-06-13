@@ -1,5 +1,6 @@
 package com.github.psm.moviedb.db
 
+import com.github.psm.moviedb.db.model.Bookmark
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.genre.Genre
@@ -9,4 +10,5 @@ interface BoxStore {
     val movie: Box<Movie>
     val movieDetail: Box<MovieDetail>
     val genre: Box<Genre>
+    val bookmark: Box<Bookmark>
 }

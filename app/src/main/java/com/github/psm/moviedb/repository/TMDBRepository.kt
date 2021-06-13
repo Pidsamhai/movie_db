@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 interface TMDBRepository {
     suspend fun getPopular(page: Int): Response<BaseResponse>
-    suspend fun getMovieDetail(movieId: Int)
+    suspend fun getMovieDetail(movieId: Long)
     suspend fun getGenreNormal()
     fun getGenres(): Flow<GenreResponse>
     fun search(keyWord: String, page: Int = 1): Flow<BaseResponse>

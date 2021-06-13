@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.github.psm.moviedb.ui.about.About
+import com.github.psm.moviedb.ui.bookmark.BookmarkPage
 import com.github.psm.moviedb.ui.detail.Detail
 import com.github.psm.moviedb.ui.detail.DetailViewModel
 import com.github.psm.moviedb.ui.home.Home
@@ -58,11 +59,11 @@ fun NavGraph(
 
         composable(
             route = "${NavigationRoutes.Detail.route}/{movieId}",
-            arguments = listOf(navArgument("movieId") { type = NavType.IntType }),
+            arguments = listOf(navArgument("movieId") { type = NavType.LongType }),
         ) { backStack ->
             val viewModel = hiltViewModel<DetailViewModel>()
             Detail(
-                movieId = backStack.arguments?.getInt("movieId")!!,
+                movieId = backStack.arguments?.getLong("movieId")!!,
                 detailViewModel = viewModel,
                 navigateBack = { navController.navigateUp() }
             )
@@ -101,5 +102,10 @@ fun NavGraph(
             )
         }
 
+        composable(route = NavigationRoutes.BookmarkPage.route) {
+            BookmarkPage(
+                title = NavigationRoutes.BookmarkPage.label
+            )
+        }
     }
 }

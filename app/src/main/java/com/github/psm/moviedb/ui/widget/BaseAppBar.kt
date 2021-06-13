@@ -31,7 +31,9 @@ fun BaseAppBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
+            Row(
+                modifier = Modifier.defaultMinSize(48.dp)
+            ) {
                 startContent.invoke(this)
             }
             Row(
@@ -43,7 +45,7 @@ fun BaseAppBar(
                 centerContent.invoke(this)
             }
             Row(
-                Modifier.defaultMinSize(48.dp)
+                modifier = Modifier.defaultMinSize(48.dp)
             ) {
                 endContent.invoke(this)
             }

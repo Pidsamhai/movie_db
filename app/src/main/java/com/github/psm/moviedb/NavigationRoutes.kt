@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 
 sealed class NavigationRoutes(
     val route: String,
@@ -37,4 +38,14 @@ sealed class NavigationRoutes(
     object SearchPage: NavigationRoutes(route = "search", label = "Search")
     object Popular: NavigationRoutes(route = "popular", label = "Popular")
     object UpComing: NavigationRoutes(route = "upcoming", label = "Up Coming")
+    object BookmarkPage: NavigationRoutes(
+        route = "bookmark",
+        label = "Bookmark",
+        icon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_outline_bookmark_24),
+                contentDescription = "about"
+            )
+        }
+    )
 }

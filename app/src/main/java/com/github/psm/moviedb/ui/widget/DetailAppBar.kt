@@ -11,7 +11,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,9 +24,10 @@ import com.github.psm.moviedb.R
 fun DetailAppBar(
     onBackClick: () -> Unit = {  },
     onBookMarkClick: (booked:Boolean) -> Unit = {  },
-    scrollState: ScrollState? = null
+    scrollState: ScrollState? = null,
+    bookmarkState: Boolean = false
 ) {
-    var bookmarkState by remember { mutableStateOf(false) }
+//    var bookmarkState by remember { mutableStateOf(initBookmarkState) }
 
     Surface(
         elevation = if (scrollState?.value ?: 0 > 10) 8.dp else 0.dp
@@ -49,8 +50,7 @@ fun DetailAppBar(
 
             IconButton(
                 onClick = {
-                    bookmarkState = !bookmarkState
-                    onBookMarkClick.invoke(bookmarkState)
+                    onBookMarkClick(!bookmarkState)
                 }
             ) {
                 Icon(

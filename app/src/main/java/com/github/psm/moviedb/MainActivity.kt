@@ -33,8 +33,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MovieAppBody() {
     val navController = rememberNavController()
-    val topLevelNavigationRoutes = listOf<NavigationRoutes>(
+    val topLevelNavigationRoutes = listOf(
         NavigationRoutes.Home,
+        NavigationRoutes.BookmarkPage,
         NavigationRoutes.About
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
