@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.github.psm.movie.review">
+    package="com.github.psm.moviedb">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:usesCleartextTraffic="true"
-        android:name=".MovieReviewApp"
+        android:name="com.github.psm.moviedb.MovieReviewApp"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -17,10 +18,10 @@
         android:theme="@style/Theme.MovieReview"
         tools:targetApi="m">
         <activity
-            android:name=".MainActivity"
+            android:name="com.github.psm.moviedb.MainActivity"
             android:theme="@style/Theme.MovieReview.NoActionBar"/>
         <activity
-            android:name="com.github.psm.movie.review.SplashActivity"
+            android:name="com.github.psm.moviedb.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MovieReview.FullScreen">
