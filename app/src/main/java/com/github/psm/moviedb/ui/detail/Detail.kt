@@ -41,7 +41,9 @@ fun Detail(
     detailViewModel: DetailViewModel = viewModel(),
     bookmarkViewModel: BookmarkVM = hiltViewModel()
 ) {
-    detailViewModel.getMovieDetail(movieId)
+    LaunchedEffect(key1 = movieId) {
+        detailViewModel.getMovieDetail(movieId)
+    }
     val movieDetail by detailViewModel.movieDetail.observeAsState()
     val scrollState = rememberScrollState()
     var expandedOverView by remember { mutableStateOf(false) }
