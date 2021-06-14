@@ -24,8 +24,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.psm.moviedb.ui.category.CategoryItem
 import com.github.psm.moviedb.ui.widget.CustomAppBar
+import com.github.psm.moviedb.ui.widget.GenreItem
 import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.movie.MovieItem
 import timber.log.Timber
@@ -125,7 +125,7 @@ fun Home(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     repeat(genres?.take(5)?.size ?: 0) {
-                        CategoryItem(text = genres?.get(it)?.name!!)
+                        GenreItem(text = genres?.get(it)?.name!!)
                     }
                 }
 

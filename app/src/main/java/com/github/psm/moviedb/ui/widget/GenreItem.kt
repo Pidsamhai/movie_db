@@ -1,4 +1,4 @@
-package com.github.psm.moviedb.ui.category
+package com.github.psm.moviedb.ui.widget
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.github.psm.moviedb.ui.theme.MovieBlue
 
 @Composable
-fun CategoryItem(text: String) {
+fun GenreItem(text: String) {
     Surface(
         color = MovieBlue.copy(alpha = 0.2f),
         modifier = Modifier
@@ -41,6 +41,6 @@ fun CategoryItem(text: String) {
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryItemPreview() {
-    CategoryItem("Horror")
+private fun GenreItemPreview() {
+    GenreItem("Horror")
 }
