@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -26,6 +27,8 @@ fun BookmarkPage(
 ) {
     val bookmarks by viewModel.bookmarks.observeAsState()
     val scrollState = rememberScrollState()
+    val listState = rememberLazyListState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,14 +37,16 @@ fun BookmarkPage(
         BaseAppBar(
             centerContent = {
                 Text(text = title, fontWeight = FontWeight.Bold)
-            }
+            },
+            listState = listState
         )
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = listState
         ) {
             items(bookmarks ?: listOf()) {
                 MovieBookmarkItem(movieDetail = it)

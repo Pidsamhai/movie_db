@@ -20,7 +20,6 @@ import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.LoaderStyle
 import com.github.psm.moviedb.ui.widget.movie.MovieItem
 import com.github.psm.moviedb.utils.items
-import timber.log.Timber
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -33,7 +32,7 @@ fun MovieListPage(
     val movies = viewModel.movies.collectAsLazyPagingItems()
     val ifRetry = movies.loadState.source.refresh is LoadState.Loading
     val ifFail = movies.loadState.source.refresh is LoadState.Error
-    Timber.i(movies.loadState.toString())
+    val listState = rememberLazyListState()
 
     Column {
         BaseAppBar(
@@ -47,7 +46,8 @@ fun MovieListPage(
             },
             centerContent = {
                 Text(text = title, fontWeight = FontWeight.Bold)
-            }
+            },
+            listState = listState
         )
 
         Box(
@@ -62,6 +62,7 @@ fun MovieListPage(
             ) {
                 LazyVerticalGrid(
                     cells = GridCells.Fixed(2),
+                    state = listState
                 ) {
                     items(movies) {
                         MovieItem(
