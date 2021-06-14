@@ -3,9 +3,11 @@ package com.github.psm.moviedb.db.model.detail
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.github.psm.moviedb.db.model.VoteStar
 import com.github.psm.moviedb.db.model.genre.Genre
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -69,4 +71,8 @@ data class MovieDetail(
     val voteAverage: Double? = 0.0,
     @SerialName("vote_count")
     val voteCount: Int? = 0
-) : Parcelable
+) : Parcelable {
+    @IgnoredOnParcel
+    val voteStar: VoteStar
+        get() = VoteStar(voteAverage)
+}

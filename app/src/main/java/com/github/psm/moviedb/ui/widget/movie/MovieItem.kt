@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.psm.moviedb.R
 import com.github.psm.moviedb.db.model.Movie
-import com.github.psm.moviedb.ui.theme.Stared
 import com.github.psm.moviedb.ui.widget.Guard
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Loader
+import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
@@ -153,49 +153,15 @@ fun MovieItem(
             /**
              * Star
              */
-
-            Row(
+            Rating(
                 modifier = Modifier
                     .padding(
                         start = 8.dp,
                         end = 8.dp,
                         bottom = 8.dp
                     ),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                repeat(movie.voteStar.starCount) {
-                    Icon(
-                        modifier = Modifier.size(16.dp),
-                        painter = painterResource(id = R.drawable.ic_star),
-                        contentDescription = null,
-                        tint = Stared
-                    )
-                }
-                if (movie.voteStar.hasHalf) {
-                    Box {
-                        Icon(
-                            modifier = Modifier.size(16.dp),
-                            painter = painterResource(id = R.drawable.ic_left_half_star),
-                            contentDescription = null,
-                            tint = Stared
-                        )
-                        Icon(
-                            modifier = Modifier.size(16.dp),
-                            painter = painterResource(id = R.drawable.ic_right_half_star),
-                            contentDescription = null,
-                            tint = LocalContentColor.current.copy(alpha = 0.17f)
-                        )
-                    }
-                }
-                repeat(movie.voteStar.emptyStar) {
-                    Icon(
-                        modifier = Modifier.size(16.dp),
-                        painter = painterResource(id = R.drawable.ic_star),
-                        contentDescription = null,
-                        tint = LocalContentColor.current.copy(alpha = 0.17f)
-                    )
-                }
-            }
+                voteStar = movie.voteStar
+            )
         }
     }
 }

@@ -8,12 +8,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.ui.widget.DefaultError
 import com.github.psm.moviedb.ui.widget.DefaultLoader
 import com.github.psm.moviedb.ui.widget.Image
+import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
@@ -39,6 +44,7 @@ fun MovieBookmarkItem(
                     .fillMaxHeight()
                     .width(60.dp),
                 request = movieDetail.posterPath?.toImgUrl(),
+                contentScale = ContentScale.FillBounds,
                 loading = { DefaultLoader() },
                 error = { DefaultError() }
             )
@@ -48,11 +54,27 @@ fun MovieBookmarkItem(
                     .weight(1f)
                     .padding(8.dp)
             ) {
-                Text(text = movieDetail.title ?: "")
+                Text(
+                    text = movieDetail.title ?: "",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Row {
+                    Rating(voteStar = movieDetail.voteStar)
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(
+                        text = movieDetail.voteAverage?.toString() ?: "",
+                        fontSize = 12.sp
+                    )
+                }
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     text = movieDetail.overview ?: "",
-                    maxLines = 3
+                    fontSize = 12.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -65,7 +87,11 @@ fun MovieBookmarkItem(
 private fun MovieBookmarkItemPreview() {
     MovieBookmarkItem(
         MovieDetail(
-            title = "Command me scallywag, ye wet anchor!"
+            voteAverage = 8.9,
+            title = "Command me scallywag, ye wet anchor!",
+            overview = "Nunquam desiderium ignigena.Trabem sed mire ducunt ad rusticus axona." +
+                    "Mash up the avocado with ripe butter, jasmine, oregano, and szechuan pepper making sure to cover all of it." +
+                    "Try shredding tuna salad rubed with vinaigrette."
         )
     )
 }
