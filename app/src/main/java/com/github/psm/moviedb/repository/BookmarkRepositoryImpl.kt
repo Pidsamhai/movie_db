@@ -7,7 +7,6 @@ import com.github.psm.moviedb.db.model.Bookmark
 import com.github.psm.moviedb.db.model.Bookmark_
 import com.github.psm.moviedb.db.model.detail.MovieDetail_
 import com.github.psm.moviedb.utils.asLiveData
-import timber.log.Timber
 import javax.inject.Inject
 
 class BookmarkRepositoryImpl @Inject constructor(
@@ -22,8 +21,7 @@ class BookmarkRepositoryImpl @Inject constructor(
             .equal(MovieDetail_.id, movieId)
             .build()
             .findFirst()
-        Timber.i(movie.toString())
-        bookmark.movieDetail.target = movie
+        bookmark.movieDetail.target = movie ?: return
         boxStore.bookmark.put(bookmark)
     }
 
