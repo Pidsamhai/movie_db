@@ -1,17 +1,21 @@
 package com.github.psm.moviedb.ui.about
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.ui.LanguagePickerDialog
+import com.github.psm.moviedb.ui.widget.BaseAppBar
+import com.github.psm.moviedb.ui.widget.SettingItem
 
 @Composable
 fun About(
@@ -24,6 +28,7 @@ fun About(
     var showRegionDialog by remember { mutableStateOf(false) }
     var languageCode by remember { mutableStateOf("") }
     var regionCode by remember { mutableStateOf("") }
+    val scrollState = rememberScrollState()
 
     if (languageCode.isNotEmpty() && language != null) {
         aboutViewModel.saveLanguage(languageCode)
@@ -36,34 +41,51 @@ fun About(
         regionCode = ""
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "language :${language} region: $region")
-        if (showLanguageDialog) {
-            LanguagePickerDialog(
-                onClose = { showLanguageDialog = false },
-                onSelected = { languageCode = it }
-            )
-        }
-        if (showRegionDialog) {
-            LanguagePickerDialog(
-                onClose = { showRegionDialog = false },
-                onSelected = { regionCode = it }
-            )
-        }
-        Button(
-            onClick = { showLanguageDialog = !showLanguageDialog }
-        ) {
-            Text(text = "Change Language")
-        }
+    if (showLanguageDialog) {
+        LanguagePickerDialog(
+            onClose = { showLanguageDialog = false },
+            onSelected = { languageCode = it }
+        )
+    }
+    if (showRegionDialog) {
+        LanguagePickerDialog(
+            onClose = { showRegionDialog = false },
+            onSelected = { regionCode = it }
+        )
+    }
 
-        Button(
-            onClick = { showRegionDialog = !showRegionDialog }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        BaseAppBar(
+            centerContent = {
+                Text(text = "About", fontWeight = FontWeight.Bold)
+            },
+            scrollState = scrollState
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(text = "Change Region")
+            SettingItem(
+                modifier = Modifier
+                    .clickable { showLanguageDialog = !showLanguageDialog }
+                    .size(100.dp),
+                title = "Language",
+                value = language
+            )
+
+            SettingItem(
+                modifier = Modifier
+                    .clickable { showRegionDialog = !showRegionDialog }
+                    .size(100.dp),
+                title = "Region",
+                value = region
+            )
         }
     }
 }
