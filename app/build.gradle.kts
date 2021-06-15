@@ -27,6 +27,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "REPOSITORY", "\"https://github.com/Pidsamhai/movie_db\"")
     }
 
     signingConfigs {

@@ -22,15 +22,32 @@ import com.github.psm.moviedb.db.model.Country
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
+sealed class LanguagePickerMode {
+    object LANGUAGE : LanguagePickerMode()
+    object REGION : LanguagePickerMode()
+}
+
 @Preview(showBackground = true)
 @Composable
 fun LanguagePickerDialog(
     onClose: () -> Unit = { },
-    onSelected: (country: String) -> Unit = {}
+    onSelected: (country: String) -> Unit = {},
+    languagePickerMode: LanguagePickerMode = LanguagePickerMode.LANGUAGE
 ) {
     val resource = LocalContext.current.resources
     val str: String = resource.openRawResource(R.raw.languages).bufferedReader().readText()
     val languages = Json.decodeFromString<List<Country>>(str)
+    val tile = if (languagePickerMode is LanguagePickerMode.LANGUAGE) "Language"
+    else "Region"
+
+    val _onSelected: (language: String) -> Unit = {
+        when (languagePickerMode) {
+            LanguagePickerMode.LANGUAGE -> onSelected(it)
+            LanguagePickerMode.REGION -> {
+                onSelected(it.split("-").last().uppercase())
+            }
+        }
+    }
 
     Dialog(
         onDismissRequest = onClose
@@ -54,7 +71,7 @@ fun LanguagePickerDialog(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Select Language",
+                        text = "Select $tile",
                         style = MaterialTheme.typography.h6.copy(
                             fontSize = 21.sp,
                             fontWeight = FontWeight.Bold
@@ -76,8 +93,8 @@ fun LanguagePickerDialog(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        onSelected.invoke(it.code)
-                                        onClose.invoke()
+                                        _onSelected(it.code)
+                                        onClose()
                                     }
                                     .padding(8.dp),
                                 text = "${it.name} (${it.code})",
