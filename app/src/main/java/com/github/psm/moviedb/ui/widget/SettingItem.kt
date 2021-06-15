@@ -1,10 +1,7 @@
 package com.github.psm.moviedb.ui.widget
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.LocalTextStyle
@@ -15,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -23,6 +21,38 @@ fun SettingItem(
     modifier: Modifier = Modifier,
     value: String? = null,
     title: String,
+) {
+    SettingContent(
+        modifier = modifier
+    ) {
+        Text(
+            text = title
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        value?.let {
+            Text(
+                modifier = Modifier.padding(8.dp),
+                text = it,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+fun SettingItem(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) = SettingContent(
+    modifier = modifier,
+    content = content
+)
+
+@Composable
+private fun SettingContent(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     Card(
         elevation = 8.dp,
@@ -36,15 +66,7 @@ fun SettingItem(
             CompositionLocalProvider(
                 LocalTextStyle provides MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
             ) {
-                Text(
-                    text = title
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                value?.let {
-                    Text(
-                        text = it
-                    )
-                }
+                content()
             }
         }
     }
