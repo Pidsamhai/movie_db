@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,7 +32,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BookmarkPage(
-    title: String,
     viewModel: BookmarkVM = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -52,7 +50,6 @@ fun BookmarkPage(
         contentAlignment = Alignment.BottomCenter
     ) {
         BookmarkPageContent(
-            title = title,
             bookmarks = bookmarks,
             scrollState = scrollState,
             listState = listState,
@@ -86,7 +83,6 @@ fun BookmarkPage(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BookmarkPageContent(
-    title: String = "",
     bookmarks: List<MovieDetail>? = null,
     scrollState: ScrollState = rememberScrollState(),
     listState: LazyListState = rememberLazyListState(),
@@ -96,19 +92,16 @@ fun BookmarkPageContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp),
     ) {
         BaseAppBar(
-            centerContent = {
-                Text(text = title, fontWeight = FontWeight.Bold)
-            },
-            listState = listState
+            title = NavigationRoutes.BookmarkPage.label
         )
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             state = listState
         ) {
@@ -184,7 +177,6 @@ private fun BookmarkPagePreview() {
         )
     )
     BookmarkPageContent(
-        title = NavigationRoutes.BookmarkPage.label,
         bookmarks = items
     )
 }

@@ -15,11 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.BuildConfig
+import com.github.psm.moviedb.NavigationRoutes
 import com.github.psm.moviedb.R
 import com.github.psm.moviedb.ui.LanguagePickerDialog
 import com.github.psm.moviedb.ui.LanguagePickerMode
@@ -75,10 +75,7 @@ fun AboutPageContent(
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
     ) {
         BaseAppBar(
-            centerContent = {
-                Text(text = "About", fontWeight = FontWeight.Bold)
-            },
-            scrollState = scrollState
+            title = NavigationRoutes.About.label
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -161,7 +158,7 @@ fun AboutPageContent(
 @Composable
 private fun AboutPreview() {
     AboutPageContent(
-        "en-Us",
-        "US"
+        region = "en-Us",
+        language = "US"
     )
 }

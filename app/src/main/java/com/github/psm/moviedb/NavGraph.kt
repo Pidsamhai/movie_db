@@ -97,9 +97,7 @@ fun NavGraph(
         }
 
         composable(route = NavigationRoutes.BookmarkPage.route) {
-            BookmarkPage(
-                title = NavigationRoutes.BookmarkPage.label
-            )
+            BookmarkPage()
         }
     }
 }

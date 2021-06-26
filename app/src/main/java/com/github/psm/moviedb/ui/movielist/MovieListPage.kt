@@ -46,8 +46,7 @@ fun MovieListPage(
             },
             centerContent = {
                 Text(text = title, fontWeight = FontWeight.Bold)
-            },
-            listState = listState
+            }
         )
 
         Box(
