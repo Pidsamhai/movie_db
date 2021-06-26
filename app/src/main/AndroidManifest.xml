@@ -19,7 +19,17 @@
         tools:targetApi="m">
         <activity
             android:name="com.github.psm.moviedb.MainActivity"
-            android:theme="@style/Theme.MovieReview.NoActionBar"/>
+            android:theme="@style/Theme.MovieReview.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="*.themoviedb.org"
+                    android:scheme="https"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.github.psm.moviedb.SplashActivity"
             android:exported="true"

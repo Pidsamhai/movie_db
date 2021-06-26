@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import com.github.psm.moviedb.ui.about.About
 import com.github.psm.moviedb.ui.bookmark.BookmarkPage
 import com.github.psm.moviedb.ui.detail.Detail
@@ -21,6 +22,8 @@ import com.github.psm.moviedb.ui.search.SearchPage
 import com.github.psm.moviedb.ui.upcoming.UpComingVM
 import com.github.psm.moviedb.utils.rawRoute
 import timber.log.Timber
+
+private const val BASE_URL = "https://www.themoviedb.org"
 
 @Composable
 fun NavGraph(
@@ -60,6 +63,10 @@ fun NavGraph(
         composable(
             route = "${NavigationRoutes.Detail.route}/{movieId}",
             arguments = listOf(navArgument("movieId") { type = NavType.LongType }),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = "$BASE_URL/movie/{movieId}-.*" },
+//                navDeepLink { uriPattern = "$BASE_URL/tv/{movieId}-.*" },
+            )
         ) { backStack ->
             val viewModel = hiltViewModel<DetailViewModel>()
             Detail(
