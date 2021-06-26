@@ -3,6 +3,11 @@
 <img src="./art/screen.gif" />
 </p>
 
+
+Feature | Preview
+--- | ---
+Deeplink | <img height="400" src="./art/deeplink.gif" />
+
 * Native Lib app/src/main/cpp/native-lib.cpp
 
 ```c++
