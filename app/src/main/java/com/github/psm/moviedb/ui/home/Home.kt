@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.ui.widget.CustomAppBar
 import com.github.psm.moviedb.ui.widget.GenreItem
 import com.github.psm.moviedb.ui.widget.Loader
@@ -33,7 +33,7 @@ import timber.log.Timber
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = viewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
     navigateToSearchPage: () -> Unit = { },
     selectMovie: (movieId: Long) -> Unit,
     navigateToPopular: () -> Unit = { },
@@ -54,7 +54,6 @@ fun Home(
         CustomAppBar(
             scrollState = mainScrollState
         )
-
         Column(
             modifier = modifier
                 .fillMaxWidth()

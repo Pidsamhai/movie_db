@@ -18,6 +18,7 @@ import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,6 +42,7 @@ class HomeViewModel @Inject constructor(repository: TMDBRepository) : ViewModel(
     val genres: ObjectBoxLiveData<Genre> = genreBox.query().asLiveData()
 
     init {
+        Timber.i("Feed Data")
         viewModelScope.launch(Dispatchers.IO) {
             repository.getGenreNormal()
             repository.getPopular(1)

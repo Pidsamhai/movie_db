@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.psm.moviedb.R
 import com.github.psm.moviedb.ui.bookmark.BookmarkVM
 import com.github.psm.moviedb.ui.theme.Stared
@@ -38,7 +37,7 @@ import com.github.psm.moviedb.utils.toImgUrl
 fun Detail(
     movieId: Long,
     navigateBack: (() -> Unit)? = null,
-    detailViewModel: DetailViewModel = viewModel(),
+    detailViewModel: DetailViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkVM = hiltViewModel()
 ) {
     LaunchedEffect(key1 = movieId) {

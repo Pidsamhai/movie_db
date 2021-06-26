@@ -27,7 +27,7 @@ fun MovieListPage(
     title: String,
     onBackClick: () -> Unit = { },
     selectedMovie: (movieId: Long) -> Unit = {},
-    viewModel: BaseMovieListViewModel
+    viewModel: BaseMovieListViewModel,
 ) {
     val movies = viewModel.movies.collectAsLazyPagingItems()
     val ifRetry = movies.loadState.source.refresh is LoadState.Loading
@@ -64,11 +64,11 @@ fun MovieListPage(
                     cells = GridCells.Fixed(2),
                     state = listState
                 ) {
-                    items(movies) {
+                    items(movies) { movie ->
                         MovieItem(
                             modifier = Modifier.padding(8.dp),
-                            movie = it ?: return@items,
-                            onClick = { movieId -> selectedMovie(movieId) }
+                            movie = movie ?: return@items,
+                            onClick = selectedMovie
                         )
                     }
                 }

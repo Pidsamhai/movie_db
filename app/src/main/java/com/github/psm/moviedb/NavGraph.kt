@@ -1,6 +1,7 @@
 package com.github.psm.moviedb
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -28,10 +29,10 @@ private const val BASE_URL = "https://www.themoviedb.org"
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,
-//    finishActivity: () -> Unit = {},
     navController: NavHostController = rememberNavController(),
     onTopLevelDestination: ((isTopLevel: Boolean) -> Unit) ? = null
 ) {
+    val actions = remember { NavActions(navController) }
     navController.addOnDestinationChangedListener { _, destination, _ ->
         onTopLevelDestination?.invoke(destination.route == NavigationRoutes.Home.route)
         Timber.i("Destination: ${destination.rawRoute}")
@@ -45,18 +46,10 @@ fun NavGraph(
             val homeViewModel = hiltViewModel<HomeViewModel>()
             Home(
                 homeViewModel = homeViewModel,
-                navigateToSearchPage = {
-                    navController.navigate(NavigationRoutes.SearchPage.route)
-                },
-                selectMovie = { movieId ->
-                    navController.navigate("${NavigationRoutes.Detail.route}/$movieId")
-                },
-                navigateToPopular = {
-                    navController.navigate(NavigationRoutes.Popular.route)
-                },
-                navigateToUpComing = {
-                    navController.navigate(NavigationRoutes.UpComing.route)
-                }
+                navigateToSearchPage = { actions.navigateToSearch() },
+                selectMovie = { movieId -> actions.navigateToDetail(movieId) },
+                navigateToPopular = { actions.navigateToPopular() },
+                navigateToUpComing = { actions.navigateToUpComing() }
             )
         }
 
@@ -72,21 +65,16 @@ fun NavGraph(
             Detail(
                 movieId = backStack.arguments?.getLong("movieId")!!,
                 detailViewModel = viewModel,
-                navigateBack = { navController.navigateUp() }
+                navigateBack = { actions.navigateUp() }
             )
         }
 
         composable(route = NavigationRoutes.About.route) { About() }
 
         composable(route = NavigationRoutes.SearchPage.route) {
-
             SearchPage(
-                onBackPress = { navController.navigateUp() },
-                onItemClick = { movieId ->
-                    navController.navigate("${NavigationRoutes.Detail.route}/$movieId") {
-                        popUpTo(NavigationRoutes.Home.route)
-                    }
-                }
+                onBackPress = { actions.navigateUp() },
+                onItemClick = { movieId -> actions.navigateToDetail(movieId) }
             )
         }
 
@@ -94,7 +82,8 @@ fun NavGraph(
             MovieListPage(
                 title = NavigationRoutes.Popular.label,
                 viewModel = hiltViewModel<PopularVM>(),
-                onBackClick = { navController.navigateUp() }
+                onBackClick = { actions.navigateUp() },
+                selectedMovie = { movieId -> actions.navigateToDetail(movieId) }
             )
         }
 
@@ -102,10 +91,8 @@ fun NavGraph(
             MovieListPage(
                 title = NavigationRoutes.UpComing.label,
                 viewModel = hiltViewModel<UpComingVM>(),
-                onBackClick = { navController.navigateUp() },
-                selectedMovie = { movieId ->
-                    navController.navigate("${NavigationRoutes.Detail.route}/$movieId")
-                }
+                onBackClick = { actions.navigateUp() },
+                selectedMovie = { movieId -> actions.navigateToDetail(movieId) }
             )
         }
 

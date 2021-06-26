@@ -25,6 +25,7 @@ import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
+import timber.log.Timber
 
 @Composable
 fun MovieItem(
@@ -41,7 +42,8 @@ fun MovieItem(
             modifier = Modifier
                 .width(150.dp)
                 .clickable {
-                    onClick?.invoke((movie.id ?: return@clickable))
+                    Timber.d("MovieItem Click: ${movie.id}")
+                    onClick?.invoke(movie.id)
                 }
         ) {
             /**
