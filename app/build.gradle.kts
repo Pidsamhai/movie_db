@@ -109,6 +109,7 @@ dependencies {
     implementation(Libs.Timber)
     implementation(Libs.ComposePaging)
     implementation(Libs.LottieCompose)
+    implementation(Libs.ConstraintLayoutCompose)
 
     /**
      * Fix JDK 11 Compile Error

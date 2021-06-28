@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.github.psm.moviedb.R
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.ui.widget.Guard
@@ -49,7 +50,7 @@ fun MovieItem(
             /**
              * Image With Gauge
              */
-            Box(
+            ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(220.dp)
@@ -58,80 +59,82 @@ fun MovieItem(
                             topStart = 16.dp,
                             topEnd = 16.dp
                         )
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        request = movie.posterPath?.toImgUrl(),
-                        contentScale = ContentScale.FillBounds,
-                        fadeIn = true,
-                        fadeInDurationMs = 2000,
-                        error = {
-                            Icon(
-                                modifier = Modifier.size(50.dp),
-                                painter = painterResource(id = R.drawable.ic_round_broken_image),
-                                contentDescription = null,
-                                tint = LocalContentColor.current.copy(alpha = 0.5f)
-                            )
-                        },
-                        loading = {
-                            Loader(
-                                size = 30.dp
-                            )
-                        }
                     )
-                }
-                Box(
-                    modifier = Modifier
-                        .width(150.dp)
-                        .fillMaxHeight(),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(
-                                    topStart = 50.dp,
-                                    bottomStart = 50.dp
-                                )
-                            )
-                            .background(
-                                Color.Black.copy(alpha = 0.6f)
-                            ),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Guard(
-                            Modifier
-                                .size(50.dp)
-                                .clip(CircleShape),
-                            value = ((movie.voteAverage ?: 0.0) * 0.1).toFloat(),
-                            bgColor = Color.Black,
-                            strokeSize = 8f,
-                            fontSize = 12.sp
+            ) {
+
+                val (imgRef, gaugeRef) = createRefs()
+
+                Image(
+                    modifier = Modifier.constrainAs(imgRef) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    },
+                    request = movie.posterPath?.toImgUrl(),
+                    contentScale = ContentScale.FillBounds,
+                    fadeIn = true,
+                    fadeInDurationMs = 2000,
+                    error = {
+                        Icon(
+                            modifier = Modifier.size(50.dp),
+                            painter = painterResource(id = R.drawable.ic_round_broken_image),
+                            contentDescription = null,
+                            tint = LocalContentColor.current.copy(alpha = 0.5f)
                         )
-                        Column(
-                            modifier = Modifier.padding(
-                                start = 8.dp,
-                                end = 8.dp
+                    },
+                    loading = {
+                        Loader(
+                            size = 30.dp
+                        )
+                    }
+                )
+
+                Row(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = 50.dp,
+                                bottomStart = 50.dp
                             )
-                        ) {
-                            Text(
-                                text = "Release Date",
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colors.surface
-                            )
-                            Text(
-                                text = movie.releaseDate ?: "",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.surface
-                            )
-                        }
+                        )
+                        .background(
+                            Color.Black.copy(alpha = 0.6f)
+                        )
+                        .constrainAs(gaugeRef) {
+                            bottom.linkTo(parent.bottom)
+                            end.linkTo(parent.end)
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Guard(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clip(CircleShape),
+                        value = ((movie.voteAverage ?: 0.0) * 0.1).toFloat(),
+                        bgColor = Color.Black,
+                        strokeSize = 8f,
+                        fontSize = 12.sp
+                    )
+                    Column(
+                        modifier = Modifier.padding(
+                            start = 8.dp,
+                            end = 8.dp
+                        )
+                    ) {
+                        Text(
+                            text = "Release Date",
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colors.surface
+                        )
+                        Text(
+                            text = movie.releaseDate ?: "",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colors.surface
+                        )
                     }
                 }
             }
