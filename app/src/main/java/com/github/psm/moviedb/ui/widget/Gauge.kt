@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
  * 0.0 to 1
  */
 @Composable
-fun Guard(
+fun Gauge(
     modifier: Modifier = Modifier,
     value: Float = 0f,
     bgColor: Color = Color.White,
@@ -105,8 +105,8 @@ fun Guard(
 
 @Preview(showBackground = true)
 @Composable
-private fun GuardPreview() {
-    Guard(
+private fun GaugePreview() {
+    Gauge(
         modifier = Modifier
             .size(200.dp)
             .padding(16.dp)

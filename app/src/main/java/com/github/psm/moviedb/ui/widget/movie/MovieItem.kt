@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.github.psm.moviedb.R
 import com.github.psm.moviedb.db.model.Movie
-import com.github.psm.moviedb.ui.widget.Guard
+import com.github.psm.moviedb.ui.widget.Gauge
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.Rating
@@ -108,7 +108,7 @@ fun MovieItem(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Guard(
+                    Gauge(
                         modifier = Modifier
                             .size(50.dp)
                             .clip(CircleShape),

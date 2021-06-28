@@ -130,7 +130,7 @@ fun DetailContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
-                Guard(
+                Gauge(
                     Modifier
                         .size(60.dp)
                         .padding(4.dp)
