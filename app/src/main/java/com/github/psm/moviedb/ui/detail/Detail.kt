@@ -81,7 +81,7 @@ fun Detail(
                 Image(
                     modifier = Modifier
                         .width(250.dp)
-                        .height(350.dp),
+                        .aspectRatio(2f/3),
                     request = movieDetail?.posterPath?.toImgUrl(),
                     contentScale = ContentScale.FillBounds,
                     fadeIn = true,
