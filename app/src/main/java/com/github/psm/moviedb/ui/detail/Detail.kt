@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.R
+import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.ui.bookmark.BookmarkVM
 import com.github.psm.moviedb.ui.theme.Stared
 import com.github.psm.moviedb.ui.widget.*
@@ -36,18 +37,39 @@ import com.github.psm.moviedb.utils.toImgUrl
 @Composable
 fun Detail(
     movieId: Long,
-    navigateBack: (() -> Unit)? = null,
+    navigateBack: () -> Unit,
     detailViewModel: DetailViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkVM = hiltViewModel()
 ) {
+    val movieDetail by detailViewModel.movieDetail.observeAsState()
+    val bookmarkState by bookmarkViewModel.bookState(movieId).observeAsState(false)
     LaunchedEffect(key1 = movieId) {
         detailViewModel.getMovieDetail(movieId)
     }
-    val movieDetail by detailViewModel.movieDetail.observeAsState()
-    val scrollState = rememberScrollState()
+
+    DetailContent(
+        movieDetail = movieDetail,
+        isBooked = bookmarkState,
+        navigateBack = navigateBack,
+        onBookMarkClick = { booked ->
+            when {
+                booked -> bookmarkViewModel.booking(movieId)
+                else -> bookmarkViewModel.unBook(movieId)
+            }
+        }
+    )
+}
+
+@Composable
+fun DetailContent(
+    movieDetail: MovieDetail?,
+    isBooked: Boolean,
+    navigateBack: () -> Unit = { },
+    onBookMarkClick: (booked: Boolean) -> Unit = { }
+) {
     var expandedOverView by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
     val genreScrollState = rememberScrollState()
-    val bookmarkState by bookmarkViewModel.bookState(movieId).observeAsState(false)
 
     Column(
         modifier = Modifier
@@ -57,13 +79,10 @@ fun Detail(
     ) {
 
         DetailAppBar(
-            onBackClick = { navigateBack?.invoke() },
+            onBackClick = navigateBack,
             scrollState = scrollState,
-            onBookMarkClick = { booked ->
-                if (booked) bookmarkViewModel.booking(movieId)
-                else bookmarkViewModel.unBook(movieId)
-            },
-            bookmarkState = bookmarkState
+            onBookMarkClick = onBookMarkClick,
+            bookmarkState = isBooked
         )
 
         Column(
@@ -81,7 +100,7 @@ fun Detail(
                 Image(
                     modifier = Modifier
                         .width(250.dp)
-                        .aspectRatio(2f/3),
+                        .aspectRatio(2f / 3),
                     request = movieDetail?.posterPath?.toImgUrl(),
                     contentScale = ContentScale.FillBounds,
                     fadeIn = true,
@@ -179,5 +198,10 @@ fun Detail(
 @Preview(showBackground = true)
 @Composable
 private fun DetailPreview() {
-    Detail(9999)
+    Scaffold {
+        DetailContent(
+            movieDetail = null,
+            isBooked = true
+        )
+    }
 }
