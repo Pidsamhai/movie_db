@@ -34,7 +34,7 @@ fun MovieSearchItem(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    onClick.invoke(movie.id ?: return@clickable)
+                    onClick.invoke(movie.id)
                 }
         ) {
             Image(

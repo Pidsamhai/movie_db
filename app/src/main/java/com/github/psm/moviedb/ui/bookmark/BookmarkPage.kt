@@ -108,8 +108,8 @@ fun BookmarkPageContent(
             items(bookmarks ?: listOf()) {
                 var removeItem by remember { mutableStateOf(false) }
                 if (removeItem) {
-                    it.id?.let { movieId ->
-                        unBookCallback(movieId.toLong(), it.title)
+                    it.id.let { movieId ->
+                        unBookCallback(movieId, it.title)
                         removeItem = !removeItem
                     }
                 }

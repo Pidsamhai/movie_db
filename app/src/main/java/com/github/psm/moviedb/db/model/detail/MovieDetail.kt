@@ -7,20 +7,17 @@ import com.github.psm.moviedb.db.model.VoteStar
 import com.github.psm.moviedb.db.model.genre.Genre
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import io.objectbox.annotation.Uid
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Entity
 @Keep
 @Serializable
 @Parcelize
 data class MovieDetail(
-    @Id
-    @Transient
-    var objId: Long = 0,
     @SerialName("adult")
     val adult: Boolean? = false,
     @SerialName("backdrop_path")
@@ -33,8 +30,10 @@ data class MovieDetail(
     val genres: List<Genre>? = listOf(),
     @SerialName("homepage")
     val homepage: String? = "",
+    @Uid(6391953490566953386L)
+    @Id(assignable = true)
     @SerialName("id")
-    val id: Int? = 0,
+    var id: Long = 0,
     @SerialName("imdb_id")
     val imdbId: String? = "",
     @SerialName("original_language")

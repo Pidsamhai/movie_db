@@ -35,12 +35,6 @@
       "name": "MovieDetail",
       "properties": [
         {
-          "id": "1:2214389028417450450",
-          "name": "objId",
-          "type": 6,
-          "flags": 1
-        },
-        {
           "id": "2:1361448345604304967",
           "name": "adult",
           "type": 1,
@@ -65,8 +59,8 @@
         {
           "id": "6:2127422688689984380",
           "name": "id",
-          "type": 5,
-          "flags": 2
+          "type": 6,
+          "flags": 129
         },
         {
           "id": "7:7739036319899274595",
@@ -261,7 +255,7 @@
           "indexId": "6:9081441212362409227",
           "type": 11,
           "flags": 1548,
-          "relationTarget": "Movie"
+          "relationTarget": "MovieDetail"
         }
       ],
       "relations": []
@@ -273,6 +267,9 @@
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
+  "newUidPool": [
+    6391953490566953386
+  ],
   "retiredEntityUids": [
     6963478850476750788,
     9082346317282487321
@@ -300,7 +297,8 @@
     2699380117403914544,
     8803129923460358413,
     4600274714517186578,
-    344423608609793668
+    344423608609793668,
+    2214389028417450450
   ],
   "retiredRelationUids": [],
   "version": 1
