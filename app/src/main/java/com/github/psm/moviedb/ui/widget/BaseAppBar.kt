@@ -1,6 +1,11 @@
 package com.github.psm.moviedb.ui.widget
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,7 +25,8 @@ fun BaseAppBar(
 ) = BaseAppBarContent(
     startContent = startContent,
     centerContent = centerContent,
-    endContent = endContent
+    endContent = endContent,
+    isScrolled = false
 )
 
 @Composable
@@ -28,6 +34,38 @@ fun BaseAppBar(
     startContent: @Composable (scope: RowScope) -> Unit = { },
     title: String,
     endContent: @Composable (scope: RowScope) -> Unit = { },
+    scrollState: ScrollState? = null
+) = BaseAppBarText(
+    title = title,
+    startContent = startContent,
+    endContent = endContent,
+    isScrolled = scrollState?.value ?: 0 > 10
+)
+
+@Composable
+fun BaseAppBar(
+    startContent: @Composable (scope: RowScope) -> Unit = { },
+    title: String,
+    endContent: @Composable (scope: RowScope) -> Unit = { },
+    listState: LazyListState?
+) {
+    val isScrolled = if (listState?.firstVisibleItemIndex == 0)
+        listState.firstVisibleItemScrollOffset > 10
+    else true
+    BaseAppBarText(
+        title = title,
+        startContent = startContent,
+        endContent = endContent,
+        isScrolled = isScrolled
+    )
+}
+
+@Composable
+private fun BaseAppBarText(
+    startContent: @Composable (scope: RowScope) -> Unit = { },
+    title: String,
+    endContent: @Composable (scope: RowScope) -> Unit = { },
+    isScrolled: Boolean
 ) {
     val fontStyle = MaterialTheme
         .typography
@@ -42,7 +80,41 @@ fun BaseAppBar(
                 Text(text = title)
             }
         },
-        endContent = endContent
+        endContent = endContent,
+        isScrolled = isScrolled
+    )
+}
+
+@Composable
+fun BaseAppBar(
+    startContent: @Composable (scope: RowScope) -> Unit = { },
+    centerContent: @Composable (scope: RowScope) -> Unit = { },
+    endContent: @Composable (scope: RowScope) -> Unit = { },
+    scrollState: ScrollState? = null,
+) {
+    BaseAppBarContent(
+        startContent = startContent,
+        centerContent = centerContent,
+        endContent = endContent,
+        isScrolled = scrollState?.value ?: 0 > 10
+    )
+}
+
+@Composable
+fun BaseAppBar(
+    startContent: @Composable (scope: RowScope) -> Unit = { },
+    centerContent: @Composable (scope: RowScope) -> Unit = { },
+    endContent: @Composable (scope: RowScope) -> Unit = { },
+    listState: LazyListState? = null,
+) {
+    val isScrolled = if (listState?.firstVisibleItemIndex == 0)
+        listState.firstVisibleItemScrollOffset > 10
+    else true
+    BaseAppBarContent(
+        startContent = startContent,
+        centerContent = centerContent,
+        endContent = endContent,
+        isScrolled = isScrolled
     )
 }
 
@@ -51,34 +123,29 @@ private fun BaseAppBarContent(
     startContent: @Composable (scope: RowScope) -> Unit = { },
     centerContent: @Composable (scope: RowScope) -> Unit = { },
     endContent: @Composable (scope: RowScope) -> Unit = { },
+    isScrolled: Boolean
 ) {
     TopAppBar(
+        elevation = if (isScrolled) AppBarDefaults.TopAppBarElevation else 0.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.defaultMinSize(48.dp)
         ) {
-            Row(
-                modifier = Modifier.defaultMinSize(48.dp)
-            ) {
-                startContent(this)
-            }
-            Row(
-                modifier = Modifier
-                    .weight(1f, true),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                centerContent(this)
-            }
-            Row(
-                modifier = Modifier.defaultMinSize(48.dp)
-            ) {
-                endContent(this)
-            }
+            startContent(this)
+        }
+        Row(
+            modifier = Modifier
+                .weight(1f, true),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            centerContent(this)
+        }
+        Row(
+            modifier = Modifier.defaultMinSize(48.dp)
+        ) {
+            endContent(this)
         }
     }
 }

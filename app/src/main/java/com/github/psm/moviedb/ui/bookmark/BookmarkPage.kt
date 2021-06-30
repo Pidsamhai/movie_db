@@ -94,7 +94,8 @@ fun BookmarkPageContent(
             .verticalScroll(scrollState)
     ) {
         BaseAppBar(
-            title = NavigationRoutes.BookmarkPage.label
+            title = NavigationRoutes.BookmarkPage.label,
+            listState = listState
         )
 
         LazyColumn(
