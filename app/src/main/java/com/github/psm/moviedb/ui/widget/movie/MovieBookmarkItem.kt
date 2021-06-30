@@ -23,7 +23,8 @@ import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
 fun MovieBookmarkItem(
-    movieDetail: MovieDetail
+    movieDetail: MovieDetail,
+    onClick: (movieId: Long) -> Unit = { }
 ) {
     Card(
         modifier = Modifier
@@ -35,7 +36,7 @@ fun MovieBookmarkItem(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-
+                    onClick(movieDetail.id)
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {

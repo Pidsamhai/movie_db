@@ -97,7 +97,9 @@ fun NavGraph(
         }
 
         composable(route = NavigationRoutes.BookmarkPage.route) {
-            BookmarkPage()
+            BookmarkPage(
+                navigateToDetailPage = { movieId ->  actions.navigateToDetail(movieId) }
+            )
         }
     }
 }
