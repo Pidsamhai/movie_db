@@ -31,7 +31,7 @@
     },
     {
       "id": "3:4074041375191190343",
-      "lastPropertyId": "22:6391953490566953386",
+      "lastPropertyId": "23:5423073176182040960",
       "name": "MovieDetail",
       "properties": [
         {
@@ -142,15 +142,14 @@
           "name": "id",
           "type": 6,
           "flags": 129
+        },
+        {
+          "id": "23:5423073176182040960",
+          "name": "genres",
+          "type": 9
         }
       ],
-      "relations": [
-        {
-          "id": "1:1953269119860202481",
-          "name": "genres",
-          "targetId": "1:4946057199105822800"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "4:2242250392072102406",
@@ -259,9 +258,33 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "7:668817623064133025",
+      "lastPropertyId": "3:8858889827385988711",
+      "name": "MovieCredit",
+      "properties": [
+        {
+          "id": "1:7419123031914913212",
+          "name": "cast",
+          "type": 9
+        },
+        {
+          "id": "2:2311048324914524391",
+          "name": "crew",
+          "type": 9
+        },
+        {
+          "id": "3:8858889827385988711",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "6:3557313817673175365",
+  "lastEntityId": "7:668817623064133025",
   "lastIndexId": "6:9081441212362409227",
   "lastRelationId": "1:1953269119860202481",
   "lastSequenceId": "0:0",
@@ -298,6 +321,8 @@
     2214389028417450450,
     2127422688689984380
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    1953269119860202481
+  ],
   "version": 1
 }

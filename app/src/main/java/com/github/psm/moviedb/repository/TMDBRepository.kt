@@ -16,4 +16,5 @@ interface TMDBRepository {
     fun search(keyWord: String, page: Int = 1): Flow<BaseResponse>
     fun getUpComingFlow(): Flow<UpComingResponse>
     suspend fun getUpComing(page: Int): Response<UpComingResponse>
+    suspend fun getMovieCredit(movieId: Long)
 }

@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,9 +31,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.R
 import com.github.psm.moviedb.db.model.detail.MovieDetail
+import com.github.psm.moviedb.db.model.movie.credit.Cast
+import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
 import com.github.psm.moviedb.ui.bookmark.BookmarkVM
+import com.github.psm.moviedb.ui.home.HeaderItem
 import com.github.psm.moviedb.ui.theme.Stared
 import com.github.psm.moviedb.ui.widget.*
+import com.github.psm.moviedb.ui.widget.movie.CastingItem
 import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
@@ -43,6 +49,8 @@ fun Detail(
 ) {
     val movieDetail by detailViewModel.movieDetail.observeAsState()
     val bookmarkState by bookmarkViewModel.bookState(movieId).observeAsState(false)
+    val movieCredit by detailViewModel.movieCredit.observeAsState()
+
     LaunchedEffect(key1 = movieId) {
         detailViewModel.getMovieDetail(movieId)
     }
@@ -51,6 +59,7 @@ fun Detail(
         movieDetail = movieDetail,
         isBooked = bookmarkState,
         navigateBack = navigateBack,
+        movieCredit = movieCredit,
         onBookMarkClick = { booked ->
             when {
                 booked -> bookmarkViewModel.booking(movieId)
@@ -63,6 +72,7 @@ fun Detail(
 @Composable
 fun DetailContent(
     movieDetail: MovieDetail?,
+    movieCredit: MovieCredit?,
     isBooked: Boolean,
     navigateBack: () -> Unit = { },
     onBookMarkClick: (booked: Boolean) -> Unit = { }
@@ -70,11 +80,21 @@ fun DetailContent(
     var expandedOverView by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val genreScrollState = rememberScrollState()
+//    var color by remember { mutableStateOf(Color.White) }
+//    val colorAnim = animateColorAsState(targetValue = color)
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
+            .fillMaxSize(),
+//            .background(
+//                brush = Brush.verticalGradient(
+//                    colors = listOf(
+//                        colorAnim.value,
+//                        MaterialTheme.colors.background,
+//                        MaterialTheme.colors.background
+//                    ),
+//                )
+//            ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -124,8 +144,7 @@ fun DetailContent(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
-                    .padding(top = 8.dp, bottom = 8.dp)
+                    .padding(8.dp)
                     .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
@@ -142,12 +161,14 @@ fun DetailContent(
                     animated = true
                 )
                 Column(
+                    modifier = Modifier.padding(start = 8.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = movieDetail?.title ?: "",
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.onSurface
+                        color = MaterialTheme.colors.onSurface,
+                        style = MaterialTheme.typography.body1
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -156,7 +177,8 @@ fun DetailContent(
                         Text(
                             text = "${movieDetail?.voteAverage ?: ""}",
                             modifier = Modifier.alpha(0.8f),
-                            color = MaterialTheme.colors.onSurface
+                            color = MaterialTheme.colors.onSurface,
+                            style = MaterialTheme.typography.body2
                         )
                         Icon(
                             imageVector = Icons.Default.Star,
@@ -167,10 +189,69 @@ fun DetailContent(
                 }
             }
 
+            /**
+             * Director And Toime
+             */
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(1f),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    movieCredit?.crew?.find { it.department?.contains("Directing", true) == true }
+                        ?.let {
+                            Text(
+                                text = it.name ?: "",
+                                style = MaterialTheme.typography.body1,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colors.onSurface
+                            )
+
+                            Text(
+                                text = it.job ?: "",
+                                style = MaterialTheme.typography.body2,
+                                color = MaterialTheme.colors.onSurface
+                            )
+                        }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    movieDetail?.runtime?.let {
+                        Icon(
+                            modifier = Modifier.size(14.dp),
+                            painter = painterResource(id = R.drawable.ic_round_access_time),
+                            contentDescription = null
+                        )
+
+                        Spacer(modifier = Modifier.size(8.dp))
+
+                        Text(
+                            text = "${movieDetail.runtime} min",
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.colors.onSurface
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            /**
+             * Genre
+             */
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
+                    .padding(start = 8.dp, end = 8.dp)
                     .horizontalScroll(genreScrollState),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -179,18 +260,48 @@ fun DetailContent(
                 }
             }
 
-            Text(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable(
-                        interactionSource = MutableInteractionSource(),
-                        indication = null
-                    ) { expandedOverView = !expandedOverView }
-                    .animateContentSize(),
-                text = movieDetail?.overview ?: "",
-                maxLines = if (expandedOverView) Int.MAX_VALUE else 5,
-                overflow = TextOverflow.Ellipsis
+            movieDetail?.overview?.let {
+
+                HeaderItem(
+                    modifier = Modifier.padding(8.dp),
+                    header = "Overview",
+                    end = ""
+                )
+
+                Text(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable(
+                            interactionSource = MutableInteractionSource(),
+                            indication = null
+                        ) { expandedOverView = !expandedOverView }
+                        .animateContentSize(),
+                    text = movieDetail.overview,
+                    maxLines = if (expandedOverView) Int.MAX_VALUE else 5,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            HeaderItem(
+                modifier = Modifier.padding(8.dp),
+                header = "Cast", end = ""
             )
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(movieCredit?.cast?.take(10) ?: listOf()) {
+                    CastingItem(
+                        modifier = Modifier.width(150.dp),
+                        cast = it
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
         }
     }
 }
@@ -200,7 +311,21 @@ fun DetailContent(
 private fun DetailPreview() {
     Scaffold {
         DetailContent(
-            movieDetail = null,
+            movieDetail = MovieDetail(
+                overview = "Hardened ramen can be made thin by soaking with peanut sauce."
+            ),
+            movieCredit = MovieCredit(
+                cast = listOf(
+                    Cast(
+                        name = "A",
+                        character = "Z"
+                    ),
+                    Cast(
+                        name = "A",
+                        character = "Z"
+                    )
+                )
+            ),
             isBooked = true
         )
     }

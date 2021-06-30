@@ -13,7 +13,7 @@ object Versions {
     const val Espresso = "3.3.0"
     const val NavigationCompose = "2.4.0-alpha01"
 
-    const val AccompanistCoil = "0.10.0"
+    const val Accompanist = "0.10.0"
     const val Ktor = "1.6.0"
     const val KotlinxSerialization = "1.2.1"
     const val Okhttp = "4.7.2"

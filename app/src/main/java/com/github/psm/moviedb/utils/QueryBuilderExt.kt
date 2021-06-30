@@ -8,6 +8,10 @@ fun <T> QueryBuilder<T>.asLiveData(): ObjectBoxLiveData<T> {
     return ObjectBoxLiveData(this)
 }
 
+fun <T> QueryBuilder<T>.asFirstLiveData(): ObjectBoxFirstLiveData<T> {
+    return ObjectBoxFirstLiveData(this)
+}
+
 fun <T> QueryBuilder<T>.asFilerLiveData(callBack: (list: List<T>) -> T): LiveData<T> {
     return ObjectBoxLiveData(this).map {
         callBack.invoke(it)

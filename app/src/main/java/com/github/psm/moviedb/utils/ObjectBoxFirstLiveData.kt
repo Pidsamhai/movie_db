@@ -7,9 +7,9 @@ import io.objectbox.reactive.DataSubscription
 
 class ObjectBoxFirstLiveData<T>(
     queryBuilder: QueryBuilder<T>
-) : LiveData<List<T>>() {
+) : LiveData<T?>() {
     private var subscription: DataSubscription? = null
-    private val observer = DataObserver<List<T>> { postValue(it) }
+    private val observer = DataObserver<List<T>> { postValue(it.firstOrNull()) }
     private val query = queryBuilder.build()
 
     override fun onActive() {

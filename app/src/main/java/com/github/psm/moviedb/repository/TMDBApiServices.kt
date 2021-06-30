@@ -1,5 +1,6 @@
 package com.github.psm.moviedb.repository
 
+import com.github.psm.moviedb.utils.JsonX
 import com.github.psm.moviedb.utils.Keys
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
@@ -17,14 +18,7 @@ object TMDBApiServices {
 
     fun getInstance(settingRepository: SettingRepository) = HttpClient(OkHttp) {
         install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                kotlinx.serialization.json.Json {
-                    isLenient = false
-                    ignoreUnknownKeys = true
-                    allowSpecialFloatingPointValues = true
-                    useArrayPolymorphism = false
-                }
-            )
+            serializer = KotlinxSerializer(JsonX)
         }
         defaultRequest {
             host = BASE_API_HOST

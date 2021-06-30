@@ -5,6 +5,7 @@ import com.github.psm.moviedb.db.Response
 import com.github.psm.moviedb.db.model.BaseResponse
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.genre.GenreResponse
+import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
 import com.github.psm.moviedb.db.model.upcoming.UpComingResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -89,11 +90,24 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getMovieCredit(movieId: Long) {
+        try {
+            val result = apiServices.get<MovieCredit>(path = MOVIE_CREDIT_ROUTE.format(movieId)) {
+                parameter("region", "US")
+            }
+            Timber.i(result.toString())
+            boxStore.movieCredit.put(result)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
     companion object {
         private const val POPULAR_ROUTE = "/movie/popular"
         private const val MOVIE_DETAIL_ROUTE = "/movie"
         private const val GENRES_ROUTE = "/genre/movie/list"
         private const val SEARCH_ROUTE = "/search/movie"
         private const val UPCOMING_ROUTE = "/movie/upcoming"
+        private const val MOVIE_CREDIT_ROUTE = "/movie/%s/credits"
     }
 }

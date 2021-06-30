@@ -3,8 +3,10 @@ package com.github.psm.moviedb.db.model.detail
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.github.psm.moviedb.db.converter.GenreListConverter
 import com.github.psm.moviedb.db.model.VoteStar
 import com.github.psm.moviedb.db.model.genre.Genre
+import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.annotation.Uid
@@ -26,6 +28,7 @@ data class MovieDetail(
 //    val belongsToCollection: Any? = Any(),
     @SerialName("budget")
     val budget: Int? = 0,
+    @Convert(converter = GenreListConverter::class, dbType = String::class)
     @SerialName("genres")
     val genres: List<Genre>? = listOf(),
     @SerialName("homepage")
@@ -55,7 +58,7 @@ data class MovieDetail(
     @SerialName("revenue")
     val revenue: Int? = 0,
     @SerialName("runtime")
-    val runtime: Int? = 0,
+    val runtime: Int? = null,
 //    @SerialName("spoken_languages")
 //    val spokenLanguages: List<SpokenLanguage>? = listOf(),
     @SerialName("status")
