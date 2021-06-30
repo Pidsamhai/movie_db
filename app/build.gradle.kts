@@ -10,6 +10,11 @@ plugins {
 }
 
 android {
+
+    androidGitVersion {
+        codeFormat = "MNNPPPR"
+    }
+
     compileSdk = Android.compileSdk
     buildToolsVersion = Android.buildToolsVersion
 
