@@ -4,7 +4,9 @@ object Libs {
     const val Material = "com.google.android.material:material:${Versions.Material}"
     const val ComposeUi = "androidx.compose.ui:ui:${Versions.Compose}"
     const val ComposeMaterial = "androidx.compose.material:material:${Versions.Compose}"
-    const val ComposeUiTool = "androidx.compose.ui:ui-tooling:${Versions.Compose}"
+    const val ComposeUiTool = "androidx.compose.ui:ui-tooling:1.0.0-beta09"
+//    const val ComposeUiTool = "androidx.compose.ui:ui-tooling:${Versions.Compose}"
+    const val ComposeUiToolPreView = "androidx.compose.ui:ui-tooling-preview:${Versions.Compose}"
     const val LifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.Lifecycle}"
     const val LiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.Lifecycle}"
     const val ActivityCompose = "androidx.activity:activity-compose:${Versions.ActivityCompose}"
@@ -34,4 +36,5 @@ object Libs {
     const val ComposePaging = "androidx.paging:paging-compose:${Versions.ComposePaging}"
     const val LottieCompose = "com.airbnb.android:lottie-compose:${Versions.LottieCompose}"
     const val ConstraintLayoutCompose = "androidx.constraintlayout:constraintlayout-compose:${Versions.ConstraintLayoutCompose}"
+    const val PlaceHolderMaterial = "com.google.accompanist:accompanist-placeholder-material:${Versions.Accompanist}"
 }

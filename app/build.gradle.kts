@@ -87,7 +87,8 @@ dependencies {
     implementation(Libs.Material)
     implementation(Libs.ComposeUi)
     implementation(Libs.ComposeMaterial)
-    implementation(Libs.ComposeUiTool)
+    debugImplementation(Libs.ComposeUiTool)
+    debugImplementation(Libs.ComposeUiToolPreView)
     implementation(Libs.LifecycleKtx)
     implementation(Libs.LiveDataKtx)
     implementation(Libs.ComposeLiveData)
@@ -115,6 +116,7 @@ dependencies {
     implementation(Libs.ComposePaging)
     implementation(Libs.LottieCompose)
     implementation(Libs.ConstraintLayoutCompose)
+    implementation(Libs.PlaceHolderMaterial)
 
     /**
      * Fix JDK 11 Compile Error
