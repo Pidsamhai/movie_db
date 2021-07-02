@@ -1,5 +1,5 @@
 object Versions {
-    const val Compose = "1.0.0-beta08"
+    const val Compose = "1.0.0-rc01"
     const val Hilt = "2.36"
     const val HiltNavigationCompose = "1.0.0-alpha02"
     const val CoreKtx = "1.5.0"
@@ -13,7 +13,7 @@ object Versions {
     const val Espresso = "3.3.0"
     const val NavigationCompose = "2.4.0-alpha01"
 
-    const val Accompanist = "0.10.0"
+    const val Accompanist = "0.13.0"
     const val Ktor = "1.6.0"
     const val KotlinxSerialization = "1.2.1"
     const val Okhttp = "4.7.2"
