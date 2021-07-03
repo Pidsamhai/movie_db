@@ -12,7 +12,7 @@ plugins {
 android {
 
     androidGitVersion {
-        codeFormat = "MNNPPPR"
+        codeFormat = "MNNPPPRR"
     }
 
     compileSdk = Android.compileSdk
