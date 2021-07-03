@@ -71,7 +71,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          body_path: ${{steps.github_release.outputs.changelog}}
+          body: "${{steps.github_release.outputs.changelog}}"
           files: |
             app/build/outputs/apk/release/app-release.apk
         env:

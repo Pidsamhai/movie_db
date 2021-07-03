@@ -2,23 +2,23 @@
   "categories": [
     {
       "title": "## 🚀 Features",
-      "labels": ["feat"]
+      "labels": ["[feat]"]
     },
     {
       "title": "## 🐛 Fixes",
-      "labels": ["fixed"]
+      "labels": ["[fixed]"]
     },
     {
       "title": "## ⬆ Update",
-      "labels": ["changed"]
+      "labels": ["[changed]"]
     },
     {
       "title": "## ✨ Added",
-      "labels": ["added"]
+      "labels": ["[added]"]
     },
     {
       "title": "## 🧪 Tests",
-      "labels": ["test"]
+      "labels": ["[test]"]
     }
   ],
   "sort": "ASC",
