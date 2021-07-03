@@ -88,7 +88,7 @@ dependencies {
     implementation(Libs.ComposeUi)
     implementation(Libs.ComposeMaterial)
     debugImplementation(Libs.ComposeUiTool)
-    debugImplementation(Libs.ComposeUiToolPreView)
+//    debugImplementation(Libs.ComposeUiToolPreView)
     implementation(Libs.LifecycleKtx)
     implementation(Libs.LiveDataKtx)
     implementation(Libs.ComposeLiveData)
