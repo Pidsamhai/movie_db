@@ -14,6 +14,7 @@ import com.github.psm.moviedb.R
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainterDefaults
+import com.google.accompanist.placeholder.material.placeholder
 import androidx.compose.foundation.Image as BaseImage
 
 
@@ -25,12 +26,14 @@ fun Image(
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
     contentScale: ContentScale = ContentScale.Fit,
-    loading: @Composable () -> Unit = {  },
-    error: @Composable () -> Unit = { }
+    loading: @Composable () -> Unit = { },
+    error: @Composable () -> Unit = { },
+    enablePlaceHolder: Boolean = false
 ) {
-    val painter = rememberCoilPainter(request = request, fadeIn = fadeIn, fadeInDurationMs = fadeInDurationMs)
+    val painter =
+        rememberCoilPainter(request = request, fadeIn = fadeIn, fadeInDurationMs = fadeInDurationMs)
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        when(painter.loadState) {
+        when (painter.loadState) {
             ImageLoadState.Empty -> {
                 error()
             }
@@ -40,15 +43,21 @@ fun Image(
             is ImageLoadState.Error -> {
                 error()
             }
-            is ImageLoadState.Success -> {
-                BaseImage(
-                    modifier = modifier,
-                    painter = painter,
-                    contentDescription = contentDescription,
-                    contentScale = contentScale
-                )
-            }
+            else -> Unit
         }
+        BaseImage(
+            modifier = modifier
+                .apply {
+                    if (enablePlaceHolder) {
+                        placeholder(
+                            visible = painter.loadState is ImageLoadState.Loading
+                        )
+                    }
+                },
+            painter = painter,
+            contentDescription = contentDescription,
+            contentScale = contentScale
+        )
     }
 }
 

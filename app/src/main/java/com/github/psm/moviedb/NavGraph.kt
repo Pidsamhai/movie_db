@@ -18,6 +18,7 @@ import com.github.psm.moviedb.ui.detail.DetailViewModel
 import com.github.psm.moviedb.ui.home.Home
 import com.github.psm.moviedb.ui.home.HomeViewModel
 import com.github.psm.moviedb.ui.movielist.MovieListPage
+import com.github.psm.moviedb.ui.person.PersonPage
 import com.github.psm.moviedb.ui.popular.PopularVM
 import com.github.psm.moviedb.ui.search.SearchPage
 import com.github.psm.moviedb.ui.upcoming.UpComingVM
@@ -65,7 +66,8 @@ fun NavGraph(
             Detail(
                 movieId = backStack.arguments?.getLong("movieId")!!,
                 detailViewModel = viewModel,
-                navigateBack = { actions.navigateUp() }
+                navigateBack = { actions.navigateUp() },
+                navigateToPerson = {  actions.navigateToPerson(it) }
             )
         }
 
@@ -99,6 +101,18 @@ fun NavGraph(
         composable(route = NavigationRoutes.BookmarkPage.route) {
             BookmarkPage(
                 navigateToDetailPage = { movieId ->  actions.navigateToDetail(movieId) }
+            )
+        }
+
+        composable(
+            route = "${NavigationRoutes.Person.route}/{personId}",
+            arguments = listOf(navArgument("personId") { type = NavType.LongType }),
+            deepLinks = listOf(navDeepLink { uriPattern = "$BASE_URL/person/{personId}-.*" })
+        ) { backStack ->
+            PersonPage(
+                viewModel = hiltViewModel(backStackEntry = backStack),
+                navigateBack = { actions.navigateUp() },
+                navigateToMovieDetail = { actions.navigateToDetail(it) }
             )
         }
     }

@@ -5,6 +5,9 @@ import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.genre.Genre
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
+import com.github.psm.moviedb.db.model.person.Person
+import com.github.psm.moviedb.db.model.person.movie.PersonMovieCredit
+import com.github.psm.moviedb.db.model.person.tv.PersonTvCredit
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 
@@ -18,5 +21,11 @@ class BoxStoreImpl : BoxStore {
     override val bookmark: Box<Bookmark>
         get() = ObjectBox.store.boxFor()
     override val movieCredit: Box<MovieCredit>
+        get() = ObjectBox.store.boxFor()
+    override val person: Box<Person>
+        get() = ObjectBox.store.boxFor()
+    override val personTvCredit: Box<PersonTvCredit>
+        get() = ObjectBox.store.boxFor()
+    override val personMovieCredit: Box<PersonMovieCredit>
         get() = ObjectBox.store.boxFor()
 }

@@ -48,4 +48,5 @@ sealed class NavigationRoutes(
             )
         }
     )
+    object Person: NavigationRoutes(route = "person", label = "Person")
 }

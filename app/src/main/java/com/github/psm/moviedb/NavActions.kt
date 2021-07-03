@@ -8,4 +8,5 @@ class NavActions(private val navController: NavHostController) {
     fun navigateToSearch() = navController.navigate(NavigationRoutes.SearchPage.route)
     fun navigateToUpComing() = navController.navigate(NavigationRoutes.UpComing.route)
     fun navigateToPopular() = navController.navigate(NavigationRoutes.Popular.route)
+    fun navigateToPerson(personId: Long) = navController.navigate("${NavigationRoutes.Person.route}/$personId")
 }

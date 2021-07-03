@@ -17,4 +17,7 @@ interface TMDBRepository {
     fun getUpComingFlow(): Flow<UpComingResponse>
     suspend fun getUpComing(page: Int): Response<UpComingResponse>
     suspend fun getMovieCredit(movieId: Long)
+    suspend fun getPersonDetail(personId: Long)
+    suspend fun getPersonTvCredit(personId: Long)
+    suspend fun getPersonMovieCredit(personId: Long)
 }

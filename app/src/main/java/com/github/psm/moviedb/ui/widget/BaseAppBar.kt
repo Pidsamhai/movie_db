@@ -34,6 +34,19 @@ fun BaseAppBar(
     startContent: @Composable (scope: RowScope) -> Unit = { },
     title: String,
     endContent: @Composable (scope: RowScope) -> Unit = { },
+    enableShadow: Boolean = false
+) = BaseAppBarText(
+    title = title,
+    startContent = startContent,
+    endContent = endContent,
+    isScrolled = enableShadow
+)
+
+@Composable
+fun BaseAppBar(
+    startContent: @Composable (scope: RowScope) -> Unit = { },
+    title: String,
+    endContent: @Composable (scope: RowScope) -> Unit = { },
     scrollState: ScrollState? = null
 ) = BaseAppBarText(
     title = title,
@@ -155,6 +168,7 @@ private fun BaseAppBarContent(
 @Composable
 private fun BaseAppBarPreview() {
     BaseAppBar(
+        enableShadow = false,
         startContent = {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)

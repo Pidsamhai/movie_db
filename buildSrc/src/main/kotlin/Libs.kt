@@ -37,4 +37,7 @@ object Libs {
     const val LottieCompose = "com.airbnb.android:lottie-compose:${Versions.LottieCompose}"
     const val ConstraintLayoutCompose = "androidx.constraintlayout:constraintlayout-compose:${Versions.ConstraintLayoutCompose}"
     const val PlaceHolderMaterial = "com.google.accompanist:accompanist-placeholder-material:${Versions.Accompanist}"
+    const val Pager = "com.google.accompanist:accompanist-pager:${Versions.Accompanist}"
+    const val PagerIndicator = "com.google.accompanist:accompanist-pager-indicators:${Versions.Accompanist}"
+    const val KotlinxDatetime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KotlinxDatetime}"
 }

@@ -75,7 +75,8 @@ fun AboutPageContent(
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
     ) {
         BaseAppBar(
-            title = NavigationRoutes.About.label
+            title = NavigationRoutes.About.label,
+            scrollState = scrollState
         )
         Row(
             modifier = Modifier.fillMaxWidth(),

@@ -117,6 +117,9 @@ dependencies {
     implementation(Libs.LottieCompose)
     implementation(Libs.ConstraintLayoutCompose)
     implementation(Libs.PlaceHolderMaterial)
+    implementation(Libs.Pager)
+    implementation(Libs.PagerIndicator)
+    implementation(Libs.KotlinxDatetime)
 
     /**
      * Fix JDK 11 Compile Error

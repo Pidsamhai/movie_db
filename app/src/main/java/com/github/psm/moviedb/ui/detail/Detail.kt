@@ -45,7 +45,8 @@ fun Detail(
     movieId: Long,
     navigateBack: () -> Unit,
     detailViewModel: DetailViewModel = hiltViewModel(),
-    bookmarkViewModel: BookmarkVM = hiltViewModel()
+    bookmarkViewModel: BookmarkVM = hiltViewModel(),
+    navigateToPerson: (personId: Long) -> Unit
 ) {
     val movieDetail by detailViewModel.movieDetail.observeAsState()
     val bookmarkState by bookmarkViewModel.bookState(movieId).observeAsState(false)
@@ -65,7 +66,8 @@ fun Detail(
                 booked -> bookmarkViewModel.booking(movieId)
                 else -> bookmarkViewModel.unBook(movieId)
             }
-        }
+        },
+        navigateToPerson = navigateToPerson
     )
 }
 
@@ -75,7 +77,8 @@ fun DetailContent(
     movieCredit: MovieCredit?,
     isBooked: Boolean,
     navigateBack: () -> Unit = { },
-    onBookMarkClick: (booked: Boolean) -> Unit = { }
+    onBookMarkClick: (booked: Boolean) -> Unit = { },
+    navigateToPerson: (personId: Long) -> Unit = { }
 ) {
     var expandedOverView by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -296,7 +299,8 @@ fun DetailContent(
                 items(movieCredit?.cast?.take(10) ?: listOf()) {
                     CastingItem(
                         modifier = Modifier.width(150.dp),
-                        cast = it
+                        cast = it,
+                        onCastClick = navigateToPerson
                     )
                 }
             }

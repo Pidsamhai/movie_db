@@ -6,6 +6,9 @@ import com.github.psm.moviedb.db.model.BaseResponse
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.genre.GenreResponse
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
+import com.github.psm.moviedb.db.model.person.Person
+import com.github.psm.moviedb.db.model.person.movie.PersonMovieCredit
+import com.github.psm.moviedb.db.model.person.tv.PersonTvCredit
 import com.github.psm.moviedb.db.model.upcoming.UpComingResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -102,6 +105,36 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPersonDetail(personId: Long) {
+        try {
+            val result = apiServices.get<Person>(path = PERSON.format(personId))
+            Timber.i(result.toString())
+            boxStore.person.put(result)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
+    override suspend fun getPersonTvCredit(personId: Long) {
+        try {
+            val result = apiServices.get<PersonTvCredit>(path = PERSON_TV_CREDIT_ROUTE.format(personId))
+            Timber.i(result.toString())
+            boxStore.personTvCredit.put(result)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
+    override suspend fun getPersonMovieCredit(personId: Long) {
+        try {
+            val result = apiServices.get<PersonMovieCredit>(path = PERSON_MOVIE_CREDIT_ROUTE.format(personId))
+            Timber.i(result.toString())
+            boxStore.personMovieCredit.put(result)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
     companion object {
         private const val POPULAR_ROUTE = "/movie/popular"
         private const val MOVIE_DETAIL_ROUTE = "/movie"
@@ -109,5 +142,8 @@ class TMDBRepositoryImpl @Inject constructor(
         private const val SEARCH_ROUTE = "/search/movie"
         private const val UPCOMING_ROUTE = "/movie/upcoming"
         private const val MOVIE_CREDIT_ROUTE = "/movie/%s/credits"
+        private const val PERSON = "/person/%s"
+        private const val PERSON_MOVIE_CREDIT_ROUTE = "/person/%s/movie_credits"
+        private const val PERSON_TV_CREDIT_ROUTE = "/person/%s/tv_credits"
     }
 }
