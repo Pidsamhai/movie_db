@@ -33,7 +33,7 @@
     "ignore"
   ],
   "sort": "DESC",
-  "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>",
+  "template": "${{CHANGELOG}}\n\n<details>",
   "pr_template": "- ${{TITLE}}",
   "empty_template": "- no changes",
   "label_extractor": [
