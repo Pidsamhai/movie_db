@@ -19,12 +19,20 @@
     {
       "title": "## 🧪 Tests",
       "labels": ["[test]"]
+    },
+    {
+      "title": "## \uD83D\uDCE6 Dependencies",
+      "labels": ["[dep]"]
+    },
+    {
+      "title": "## \uD83E\uDD16 CI",
+      "labels": ["[ci]"]
     }
   ],
   "ignore_labels": [
     "ignore"
   ],
-  "sort": "ASC",
+  "sort": "DESC",
   "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>",
   "pr_template": "- ${{TITLE}}",
   "empty_template": "- no changes",
