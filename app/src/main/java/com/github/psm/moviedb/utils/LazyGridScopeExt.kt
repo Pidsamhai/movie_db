@@ -13,6 +13,6 @@ fun <T : Any> LazyGridScope.items(
     itemContent: @Composable LazyItemScope.(value: T?) -> Unit
 ) {
     items(lazyPagingItems.itemCount) { index ->
-        itemContent(lazyPagingItems.getAsState(index).value)
+        itemContent(lazyPagingItems[index])
     }
 }

@@ -1,9 +1,9 @@
 plugins {
     id(Plugins.AndroidApplication)
     id(Plugins.Android)
+    kotlin(Plugins.Kapt)
     id(Plugins.KotlinXSerialization)
     id(Plugins.Parcelize)
-    kotlin(Plugins.Kapt)
     id(Plugins.Hilt)
     id(Plugins.GitVersion) version Versions.GitVersion
     id(Plugins.ObjectBox)
@@ -88,7 +88,7 @@ dependencies {
     implementation(Libs.ComposeUi)
     implementation(Libs.ComposeMaterial)
     implementation(Libs.ComposeUiTool)
-//    debugImplementation(Libs.ComposeUiToolPreView)
+    debugImplementation(Libs.ComposeUiToolPreView)
     implementation(Libs.LifecycleKtx)
     implementation(Libs.LiveDataKtx)
     implementation(Libs.ComposeLiveData)

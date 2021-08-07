@@ -5,15 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieAnimationSpec
-import com.airbnb.lottie.compose.rememberLottieAnimationState
+import com.airbnb.lottie.compose.*
 import com.github.psm.moviedb.R
 
 sealed class LoaderStyle {
@@ -61,11 +59,14 @@ private fun LoaderContent(
         when(loaderStyle) {
             LoaderStyle.Circular -> CircularProgressIndicator(Modifier.size(height))
             LoaderStyle.Dot -> {
-                val animationSpec = remember { LottieAnimationSpec.RawRes(R.raw.loading) }
-                val animationState = rememberLottieAnimationState(autoPlay = true, repeatCount = Integer.MAX_VALUE)
+                val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading))
+                val progress by animateLottieCompositionAsState(
+                    composition = composition,
+                    iterations = LottieConstants.IterateForever
+                )
                 LottieAnimation(
-                    spec = animationSpec,
-                    animationState = animationState,
+                    composition = composition,
+                    progress = progress,
                     modifier = Modifier.size(width = width, height = height)
                 )
             }

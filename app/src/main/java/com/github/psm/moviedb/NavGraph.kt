@@ -108,9 +108,9 @@ fun NavGraph(
             route = "${NavigationRoutes.Person.route}/{personId}",
             arguments = listOf(navArgument("personId") { type = NavType.LongType }),
             deepLinks = listOf(navDeepLink { uriPattern = "$BASE_URL/person/{personId}-.*" })
-        ) { backStack ->
+        ) { _ ->
             PersonPage(
-                viewModel = hiltViewModel(backStackEntry = backStack),
+                viewModel = hiltViewModel(),
                 navigateBack = { actions.navigateUp() },
                 navigateToMovieDetail = { actions.navigateToDetail(it) }
             )
