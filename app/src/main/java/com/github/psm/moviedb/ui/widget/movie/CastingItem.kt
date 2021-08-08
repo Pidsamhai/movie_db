@@ -3,19 +3,18 @@ package com.github.psm.moviedb.ui.widget.movie
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.psm.moviedb.R
 import com.github.psm.moviedb.db.model.movie.credit.Cast
 import com.github.psm.moviedb.ui.widget.Image
-import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
@@ -41,23 +40,11 @@ fun CastingItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(2f / 3),
-                request = cast.profilePath?.toImgUrl(),
+                data = cast.profilePath?.toImgUrl(),
                 contentScale = ContentScale.FillBounds,
                 fadeIn = true,
                 fadeInDurationMs = 2000,
-                error = {
-                    Icon(
-                        modifier = Modifier.size(50.dp),
-                        painter = painterResource(id = R.drawable.ic_round_broken_image),
-                        contentDescription = null,
-                        tint = LocalContentColor.current.copy(alpha = 0.5f)
-                    )
-                },
-                loading = {
-                    Loader(
-                        size = 30.dp
-                    )
-                }
+                enablePlaceHolder = true
             )
 
             Column(

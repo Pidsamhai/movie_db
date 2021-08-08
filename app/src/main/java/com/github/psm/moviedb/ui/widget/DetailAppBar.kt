@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -18,12 +19,13 @@ fun DetailAppBar(
     onBackClick: () -> Unit = {  },
     onBookMarkClick: (booked:Boolean) -> Unit = {  },
     scrollState: ScrollState? = null,
-    bookmarkState: Boolean = false
+    bookmarkState: Boolean = false,
+    backgroundColor: Color? = null
 ) {
 
     TopAppBar(
         elevation = if (scrollState?.value ?: 0 > 10) 8.dp else 0.dp,
-        backgroundColor = MaterialTheme.colors.surface
+        backgroundColor = backgroundColor ?: MaterialTheme.colors.surface
     ) {
         IconButton(onClick = { onBackClick.invoke() }) {
             Icon(

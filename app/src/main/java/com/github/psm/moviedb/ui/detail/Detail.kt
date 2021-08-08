@@ -36,7 +36,10 @@ import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
 import com.github.psm.moviedb.ui.bookmark.BookmarkVM
 import com.github.psm.moviedb.ui.home.HeaderItem
 import com.github.psm.moviedb.ui.theme.Stared
-import com.github.psm.moviedb.ui.widget.*
+import com.github.psm.moviedb.ui.widget.Chip
+import com.github.psm.moviedb.ui.widget.DetailAppBar
+import com.github.psm.moviedb.ui.widget.Gauge
+import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.movie.CastingItem
 import com.github.psm.moviedb.utils.toImgUrl
 
@@ -83,21 +86,10 @@ fun DetailContent(
     var expandedOverView by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val genreScrollState = rememberScrollState()
-//    var color by remember { mutableStateOf(Color.White) }
-//    val colorAnim = animateColorAsState(targetValue = color)
 
     Column(
         modifier = Modifier
             .fillMaxSize(),
-//            .background(
-//                brush = Brush.verticalGradient(
-//                    colors = listOf(
-//                        colorAnim.value,
-//                        MaterialTheme.colors.background,
-//                        MaterialTheme.colors.background
-//                    ),
-//                )
-//            ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -124,23 +116,11 @@ fun DetailContent(
                     modifier = Modifier
                         .width(250.dp)
                         .aspectRatio(2f / 3),
-                    request = movieDetail?.posterPath?.toImgUrl(),
+                    data = movieDetail?.posterPath?.toImgUrl(),
                     contentScale = ContentScale.FillBounds,
                     fadeIn = true,
                     fadeInDurationMs = 2000,
-                    error = {
-                        Icon(
-                            modifier = Modifier.size(50.dp),
-                            painter = painterResource(id = R.drawable.ic_round_broken_image),
-                            contentDescription = null,
-                            tint = LocalContentColor.current.copy(alpha = 0.5f)
-                        )
-                    },
-                    loading = {
-                        Loader(
-                            size = 30.dp
-                        )
-                    }
+                    enablePlaceHolder = true,
                 )
             }
 
@@ -193,7 +173,7 @@ fun DetailContent(
             }
 
             /**
-             * Director And Toime
+             * Director And Time
              */
 
             Row(
@@ -316,6 +296,7 @@ private fun DetailPreview() {
     Scaffold {
         DetailContent(
             movieDetail = MovieDetail(
+                title = "Title",
                 overview = "Hardened ramen can be made thin by soaking with peanut sauce."
             ),
             movieCredit = MovieCredit(

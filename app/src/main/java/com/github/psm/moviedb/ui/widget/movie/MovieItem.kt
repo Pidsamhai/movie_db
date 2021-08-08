@@ -5,25 +5,24 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.github.psm.moviedb.R
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.ui.widget.Gauge
 import com.github.psm.moviedb.ui.widget.Image
-import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
 import timber.log.Timber
@@ -35,13 +34,14 @@ fun MovieItem(
     onClick: ((movieId: Long) -> Unit)? = null
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .width(150.dp),
         elevation = 8.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
             modifier = Modifier
-                .width(150.dp)
+                .fillMaxWidth()
                 .clickable {
                     Timber.d("MovieItem Click: ${movie.id}")
                     onClick?.invoke(movie.id)
@@ -54,40 +54,24 @@ fun MovieItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(220.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = 16.dp,
-                            topEnd = 16.dp
-                        )
-                    )
             ) {
 
                 val (imgRef, gaugeRef) = createRefs()
 
                 Image(
-                    modifier = Modifier.constrainAs(imgRef) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    },
-                    request = movie.posterPath?.toImgUrl(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .constrainAs(imgRef) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                        },
+                    data = movie.posterPath?.toImgUrl(),
                     contentScale = ContentScale.FillBounds,
                     fadeIn = true,
                     fadeInDurationMs = 2000,
-                    error = {
-                        Icon(
-                            modifier = Modifier.size(50.dp),
-                            painter = painterResource(id = R.drawable.ic_round_broken_image),
-                            contentDescription = null,
-                            tint = LocalContentColor.current.copy(alpha = 0.5f)
-                        )
-                    },
-                    loading = {
-                        Loader(
-                            size = 30.dp
-                        )
-                    }
+                    enablePlaceHolder = true
                 )
 
                 Row(

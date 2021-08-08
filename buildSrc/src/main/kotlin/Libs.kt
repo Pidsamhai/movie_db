@@ -18,7 +18,7 @@ object Libs {
     }
 
     const val NavigationCompose = "androidx.navigation:navigation-compose:${Versions.NavigationCompose}"
-    const val AccompanistCoil = "com.google.accompanist:accompanist-coil:${Versions.Accompanist}"
+    const val Coil = "io.coil-kt:coil-compose:${Versions.Coil}"
     const val KtorClient = "io.ktor:ktor-client-okhttp:${Versions.Ktor}"
     const val KtorSerialization = "io.ktor:ktor-client-serialization:${Versions.Ktor}"
     const val KotlinxSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinxSerialization}"

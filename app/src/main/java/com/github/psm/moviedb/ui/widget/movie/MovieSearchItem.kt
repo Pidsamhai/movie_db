@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.ui.theme.MovieGrey
 import com.github.psm.moviedb.ui.theme.TripleE
 import com.github.psm.moviedb.utils.toImgUrl
-import com.google.accompanist.coil.rememberCoilPainter
 
 
 @Composable
@@ -42,7 +42,7 @@ fun MovieSearchItem(
                     .height(150.dp)
                     .width(100.dp)
                     .background(MovieGrey),
-                painter = rememberCoilPainter(request = movie.posterPath?.toImgUrl()),
+                painter = rememberImagePainter(data = movie.posterPath?.toImgUrl()),
                 contentDescription = null
             )
             Column(

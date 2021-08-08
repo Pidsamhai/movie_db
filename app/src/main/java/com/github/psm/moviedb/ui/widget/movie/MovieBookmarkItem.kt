@@ -15,8 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.psm.moviedb.db.model.detail.MovieDetail
-import com.github.psm.moviedb.ui.widget.DefaultError
-import com.github.psm.moviedb.ui.widget.DefaultLoader
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
@@ -44,10 +42,9 @@ fun MovieBookmarkItem(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(60.dp),
-                request = movieDetail.posterPath?.toImgUrl(),
+                data = movieDetail.posterPath?.toImgUrl(),
                 contentScale = ContentScale.FillBounds,
-                loading = { DefaultLoader() },
-                error = { DefaultError() }
+                enablePlaceHolder = true
             )
             Column(
                 modifier = Modifier

@@ -100,7 +100,7 @@ dependencies {
     androidTestImplementation(Libs.Test.ComposeJunit)
 
     implementation(Libs.NavigationCompose)
-    implementation(Libs.AccompanistCoil)
+    implementation(Libs.Coil)
     implementation(Libs.KtorClient)
     implementation(Libs.KtorSerialization)
     implementation(Libs.KotlinxSerialization)

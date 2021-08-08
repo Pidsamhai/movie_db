@@ -12,7 +12,7 @@ object Versions {
     const val AndroidxJunit = "1.1.2"
     const val Espresso = "3.3.0"
     const val NavigationCompose = "2.4.0-alpha06"
-    const val Accompanist = "0.13.0"
+    const val Accompanist = "0.16.0"
 
     const val Ktor = "1.6.0"
     const val KotlinxSerialization = "1.2.1"
@@ -27,4 +27,5 @@ object Versions {
     const val LottieCompose = "4.0.0"
     const val ConstraintLayoutCompose = "1.0.0-beta02"
     const val KotlinxDatetime = "0.2.1"
+    const val Coil = "1.3.2"
 }

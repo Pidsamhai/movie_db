@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -19,17 +21,24 @@ fun HeaderItem(
     modifier: Modifier = Modifier,
     header: String,
     end: String = "See more",
-    onEndTextClick: (() -> Unit)? = null
+    onEndTextClick: (() -> Unit)? = null,
+    color: Color = TextStyle.Default.color
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = header, style = MaterialTheme.typography.h5, fontWeight = FontWeight.Bold)
+        Text(
+            text = header, style =
+            MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold,
+            color = color
+        )
         Text(
             text = end,
             fontWeight = FontWeight.Bold,
+            color = color,
             modifier = Modifier
                 .alpha(0.5f)
                 .clickable(

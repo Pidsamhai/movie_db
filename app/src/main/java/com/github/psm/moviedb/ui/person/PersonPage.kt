@@ -18,7 +18,6 @@ import com.github.psm.moviedb.db.model.person.Person
 import com.github.psm.moviedb.db.model.person.movie.PersonMovieCredit
 import com.github.psm.moviedb.db.model.person.tv.PersonTvCredit
 import com.github.psm.moviedb.ui.widget.BaseAppBar
-import com.github.psm.moviedb.ui.widget.DefaultError
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.InnerScaffold
 import com.github.psm.moviedb.utils.ButtonIcons
@@ -92,9 +91,9 @@ private fun PersonPageContent(
             ) {
                 Image(
                     modifier = Modifier.fillMaxSize(),
-                    request = person?.profilePath?.toImgUrl(),
+                    data = person?.profilePath?.toImgUrl(),
                     enablePlaceHolder = true,
-                    error = { DefaultError() },
+//                    error = { DefaultError() },
                     contentScale = ContentScale.FillBounds
                 )
             }
