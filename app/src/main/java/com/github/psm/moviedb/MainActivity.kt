@@ -10,11 +10,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.github.psm.moviedb.ui.theme.MovieDbTheme
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -38,6 +40,7 @@ fun MovieAppBody() {
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    Timber.d("Destination: $currentRoute")
     Scaffold(
         bottomBar = {
             if (topLevelNavigationRoutes.contain(currentRoute))
@@ -72,8 +75,7 @@ fun MyBottomNavigation(
                 onClick = {
                     navController.navigate(route.route) {
                         popUpTo(
-                            navController.graph.startDestinationRoute
-                                ?: NavigationRoutes.Home.route
+                            navController.graph.findStartDestination().id
                         ) { saveState = true }
                         // Avoid multiple copies of the same destination when
                         // reselecting the same item

@@ -28,7 +28,6 @@ import com.github.psm.moviedb.ui.widget.CustomAppBar
 import com.github.psm.moviedb.ui.widget.GenreItem
 import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.movie.MovieItem
-import timber.log.Timber
 
 @Composable
 fun Home(
@@ -47,8 +46,6 @@ fun Home(
     val context = LocalContext.current
     val genres by homeViewModel.genres.observeAsState()
     val upComings by homeViewModel.upComings.collectAsState(initial = null)
-
-    Timber.i("Genres ${genres?.size}")
 
     Column {
         CustomAppBar(

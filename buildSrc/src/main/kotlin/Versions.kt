@@ -11,7 +11,7 @@ object Versions {
     const val Junit = "4.13.2"
     const val AndroidxJunit = "1.1.2"
     const val Espresso = "3.3.0"
-    const val NavigationCompose = "2.4.0-alpha06"
+    const val NavigationCompose = "2.4.0-alpha04"
     const val Accompanist = "0.16.0"
 
     const val Ktor = "1.6.0"

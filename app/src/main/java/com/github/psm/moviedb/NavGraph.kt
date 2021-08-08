@@ -16,14 +16,11 @@ import com.github.psm.moviedb.ui.bookmark.BookmarkPage
 import com.github.psm.moviedb.ui.detail.Detail
 import com.github.psm.moviedb.ui.detail.DetailViewModel
 import com.github.psm.moviedb.ui.home.Home
-import com.github.psm.moviedb.ui.home.HomeViewModel
 import com.github.psm.moviedb.ui.movielist.MovieListPage
 import com.github.psm.moviedb.ui.person.PersonPage
 import com.github.psm.moviedb.ui.popular.PopularVM
 import com.github.psm.moviedb.ui.search.SearchPage
 import com.github.psm.moviedb.ui.upcoming.UpComingVM
-import com.github.psm.moviedb.utils.rawRoute
-import timber.log.Timber
 
 private const val BASE_URL = "https://www.themoviedb.org"
 
@@ -31,22 +28,15 @@ private const val BASE_URL = "https://www.themoviedb.org"
 fun NavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    onTopLevelDestination: ((isTopLevel: Boolean) -> Unit) ? = null
 ) {
     val actions = remember { NavActions(navController) }
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-        onTopLevelDestination?.invoke(destination.route == NavigationRoutes.Home.route)
-        Timber.i("Destination: ${destination.rawRoute}")
-    }
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = NavigationRoutes.Home.route
     ) {
         composable(NavigationRoutes.Home.route) {
-            val homeViewModel = hiltViewModel<HomeViewModel>()
             Home(
-                homeViewModel = homeViewModel,
                 navigateToSearchPage = { actions.navigateToSearch() },
                 selectMovie = { movieId -> actions.navigateToDetail(movieId) },
                 navigateToPopular = { actions.navigateToPopular() },
@@ -67,7 +57,7 @@ fun NavGraph(
                 movieId = backStack.arguments?.getLong("movieId")!!,
                 detailViewModel = viewModel,
                 navigateBack = { actions.navigateUp() },
-                navigateToPerson = {  actions.navigateToPerson(it) }
+                navigateToPerson = { actions.navigateToPerson(it) }
             )
         }
 
@@ -100,7 +90,7 @@ fun NavGraph(
 
         composable(route = NavigationRoutes.BookmarkPage.route) {
             BookmarkPage(
-                navigateToDetailPage = { movieId ->  actions.navigateToDetail(movieId) }
+                navigateToDetailPage = { movieId -> actions.navigateToDetail(movieId) }
             )
         }
 
