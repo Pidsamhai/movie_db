@@ -117,9 +117,9 @@ dependencies {
     implementation(Libs.ComposePaging)
     implementation(Libs.LottieCompose)
     implementation(Libs.ConstraintLayoutCompose)
-    implementation(Libs.PlaceHolderMaterial)
-    implementation(Libs.Pager)
-    implementation(Libs.PagerIndicator)
+    implementation(Libs.Accompanist.PlaceHolderMaterial)
+    implementation(Libs.Accompanist.Pager)
+    implementation(Libs.Accompanist.PagerIndicator)
     implementation(Libs.KotlinxDatetime)
 
     /**
