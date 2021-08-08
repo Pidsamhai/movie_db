@@ -21,17 +21,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.github.psm.moviedb.db.model.Movie
+import com.github.psm.moviedb.db.model.VoteStar
+import com.github.psm.moviedb.db.model.tv.popular.Tv
 import com.github.psm.moviedb.ui.widget.Gauge
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
-import timber.log.Timber
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 
 @Composable
 fun MovieItem(
     modifier: Modifier = Modifier,
     movie: Movie,
-    onClick: ((movieId: Long) -> Unit)? = null
+    onClick: ((id: Long) -> Unit)? = null,
+) {
+    MovieItemContent(
+        modifier = modifier,
+        posterPath = movie.posterPath,
+        voteAvg = movie.voteAverage,
+        releaseDate = movie.releaseDate,
+        title = movie.title,
+        voteStar = movie.voteStar,
+        onClick = { onClick?.invoke(movie.id) }
+    )
+}
+
+@Composable
+fun TvItem(
+    modifier: Modifier = Modifier,
+    tv: Tv,
+    onClick: ((id: Long) -> Unit)? = null,
+) {
+    MovieItemContent(
+        modifier = modifier,
+        posterPath = tv.posterPath,
+        voteAvg = tv.voteAverage,
+        releaseDate = tv.firstAirDate,
+        title = tv.name,
+        voteStar = tv.voteStar,
+        onClick = { onClick?.invoke(tv.id) }
+    )
+}
+
+@Composable
+fun MovieItemContent(
+    modifier: Modifier,
+    posterPath: String?,
+    voteAvg: Double?,
+    releaseDate: String?,
+    title: String?,
+    voteStar: VoteStar,
+    onClick: () -> Unit = { }
 ) {
     Card(
         modifier = modifier
@@ -43,8 +85,7 @@ fun MovieItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    Timber.d("MovieItem Click: ${movie.id}")
-                    onClick?.invoke(movie.id)
+                    onClick()
                 }
         ) {
             /**
@@ -67,7 +108,7 @@ fun MovieItem(
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
                         },
-                    data = movie.posterPath?.toImgUrl(),
+                    data = posterPath?.toImgUrl(),
                     contentScale = ContentScale.FillBounds,
                     fadeIn = true,
                     fadeInDurationMs = 2000,
@@ -96,7 +137,7 @@ fun MovieItem(
                         modifier = Modifier
                             .size(50.dp)
                             .clip(CircleShape),
-                        value = ((movie.voteAverage ?: 0.0) * 0.1).toFloat(),
+                        value = ((voteAvg ?: 0.0) * 0.1).toFloat(),
                         bgColor = Color.Black,
                         strokeSize = 8f,
                         fontSize = 12.sp
@@ -114,7 +155,7 @@ fun MovieItem(
                             color = MaterialTheme.colors.surface
                         )
                         Text(
-                            text = movie.releaseDate ?: "",
+                            text = releaseDate ?: "",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colors.surface
@@ -132,7 +173,7 @@ fun MovieItem(
             Text(
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp),
-                text = movie.title ?: "",
+                text = title ?: "",
                 style = MaterialTheme.typography.body1,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
@@ -151,13 +192,27 @@ fun MovieItem(
                         end = 8.dp,
                         bottom = 8.dp
                     ),
-                voteStar = movie.voteStar
+                voteStar = voteStar
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Placeholder")
+@Composable
+fun MovieItemPlaceHolder() {
+    MovieItem(
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .placeholder(
+                visible = true,
+                highlight = PlaceholderHighlight.shimmer()
+            ),
+        movie = Movie()
+    )
+}
+
+@Preview(name = "MovieItem")
 @Composable
 private fun MovieItemPreview() {
     MovieItem(

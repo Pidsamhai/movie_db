@@ -18,7 +18,7 @@ class UpComingDataSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val key = params.key ?: 1
-            when (val res = repository.getUpComing(key)) {
+            when (val res = repository.getUpcomingMovie(key)) {
                 is Response.Error<*> -> throw res.e
                 is Response.Success -> {
                     LoadResult.Page(
