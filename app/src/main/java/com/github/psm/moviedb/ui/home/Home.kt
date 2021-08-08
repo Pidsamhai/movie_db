@@ -27,6 +27,8 @@ import com.github.psm.moviedb.ui.widget.movie.MovieItem
 import com.github.psm.moviedb.ui.widget.movie.MovieItemPlaceHolder
 import com.github.psm.moviedb.ui.widget.movie.TvItem
 import com.github.psm.moviedb.utils.placeholder
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun Home(
@@ -40,155 +42,128 @@ fun Home(
     val searchValue = remember { mutableStateOf(TextFieldValue("")) }
     val listSate = rememberLazyListState()
     val mainScrollState = rememberScrollState()
-//    val genresScrollState = rememberScrollState()
     val popularMovie by homeViewModel.popularMovie.observeAsState()
     val popularTv by homeViewModel.popularTv.observeAsState()
-//    val context = LocalContext.current
-//    val genres by homeViewModel.genres.observeAsState()
     val upcomingMovie by homeViewModel.upComings.collectAsState(initial = null)
+    val isLoading by homeViewModel.isLoading.observeAsState(initial = true)
+    val swipeRefreshState = rememberSwipeRefreshState(isLoading)
 
     Column {
         CustomAppBar(
             scrollState = mainScrollState
         )
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .verticalScroll(mainScrollState),
-            horizontalAlignment = Alignment.CenterHorizontally
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = { homeViewModel.feedData() }
         ) {
-            OutlinedTextField(
-                modifier = Modifier
+            Column(
+                modifier = modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
-                    .onFocusChanged { focusState ->
-                        if (focusState.isFocused) {
-                            navigateToSearchPage.invoke()
+                    .verticalScroll(mainScrollState),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                        .onFocusChanged { focusState ->
+                            if (focusState.isFocused) {
+                                navigateToSearchPage.invoke()
+                            }
+                        }
+                        .clickable { navigateToSearchPage.invoke() },
+                    label = { Text(text = "Search") },
+                    placeholder = { Text(text = "Search") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = "Search"
+                        )
+                    },
+                    value = searchValue.value,
+                    onValueChange = { text -> searchValue.value = text },
+                    singleLine = true
+                )
+
+                HeaderItem(
+                    header = "Popular",
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    onEndTextClick = navigateToPopular
+                )
+
+                LazyRow(
+                    Modifier
+                        .fillMaxWidth(),
+                    state = listSate,
+                    contentPadding = PaddingValues(24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    placeholder(
+                        enable = { popularMovie == null },
+                        itemCount = 5
+                    ) {
+                        MovieItemPlaceHolder()
+                    }
+                    items(popularMovie ?: listOf()) {
+                        MovieItem(movie = it) { movieId ->
+                            selectMovie.invoke(movieId)
                         }
                     }
-                    .clickable { navigateToSearchPage.invoke() },
-                label = { Text(text = "Search") },
-                placeholder = { Text(text = "Search") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Search,
-                        contentDescription = "Search"
-                    )
-                },
-                value = searchValue.value,
-                onValueChange = { text -> searchValue.value = text },
-                singleLine = true
-            )
-
-//            // Category
-//
-//            HeaderItem(
-//                header = "Categories",
-//                modifier = Modifier
-//                    .padding(start = 24.dp, end = 24.dp),
-//                onEndTextClick = {
-//                    Toast.makeText(context, "See more", Toast.LENGTH_SHORT).show()
-//                }
-//            )
-//
-//            // Categories Items
-//
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(
-//                        start = 24.dp,
-//                        end = 24.dp,
-//                        top = 16.dp,
-//                        bottom = 16.dp
-//                    )
-//                    .horizontalScroll(state = genresScrollState),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.spacedBy(16.dp)
-//            ) {
-//                repeat(genres?.take(5)?.size ?: 0) {
-//                    GenreItem(text = genres?.get(it)?.name!!)
-//                }
-//            }
-
-            HeaderItem(
-                header = "Popular",
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-                onEndTextClick = navigateToPopular
-            )
-
-            LazyRow(
-                Modifier
-                    .fillMaxWidth(),
-                state = listSate,
-                contentPadding = PaddingValues(24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                placeholder(
-                    enable = { popularMovie == null },
-                    itemCount = 5
-                ) {
-                    MovieItemPlaceHolder()
                 }
-                items(popularMovie ?: listOf()) {
-                    MovieItem(movie = it) { movieId ->
-                        selectMovie.invoke(movieId)
+
+                // UpComing
+
+                HeaderItem(
+                    header = "Upcoming",
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    onEndTextClick = navigateToUpComing
+                )
+
+                LazyRow(
+                    Modifier
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    placeholder(
+                        enable = { popularMovie == null },
+                        itemCount = 5
+                    ) {
+                        MovieItemPlaceHolder()
+                    }
+                    items(upcomingMovie?.movies ?: listOf()) {
+                        MovieItem(movie = it) { movieId ->
+                            selectMovie.invoke(movieId)
+                        }
                     }
                 }
-            }
 
-            // UpComing
+                HeaderItem(
+                    header = "Tv Popular",
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    onEndTextClick = { }
+                )
 
-            HeaderItem(
-                header = "Upcoming",
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-                onEndTextClick = navigateToUpComing
-            )
-
-            LazyRow(
-                Modifier
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                placeholder(
-                    enable = { popularMovie == null },
-                    itemCount = 5
+                LazyRow(
+                    Modifier
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    MovieItemPlaceHolder()
-                }
-                items(upcomingMovie?.movies ?: listOf()) {
-                    MovieItem(movie = it) { movieId ->
-                        selectMovie.invoke(movieId)
+                    placeholder(
+                        enable = { popularMovie == null },
+                        itemCount = 5
+                    ) {
+                        MovieItemPlaceHolder()
                     }
-                }
-            }
-
-            HeaderItem(
-                header = "Tv Popular",
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-                onEndTextClick = { }
-            )
-
-            LazyRow(
-                Modifier
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                placeholder(
-                    enable = { popularMovie == null },
-                    itemCount = 5
-                ) {
-                    MovieItemPlaceHolder()
-                }
-                items(popularTv ?: listOf()) {
-                    TvItem(tv = it) { id ->
+                    items(popularTv ?: listOf()) {
+                        TvItem(tv = it) { id ->
 //                        selectMovie.invoke(id)
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
 }

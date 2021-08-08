@@ -120,6 +120,7 @@ dependencies {
     implementation(Libs.Accompanist.PlaceHolderMaterial)
     implementation(Libs.Accompanist.Pager)
     implementation(Libs.Accompanist.PagerIndicator)
+    implementation(Libs.Accompanist.SwipeRefresh)
     implementation(Libs.KotlinxDatetime)
 
     /**

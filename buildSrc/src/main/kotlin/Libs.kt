@@ -41,5 +41,6 @@ object Libs {
         const val Pager = "com.google.accompanist:accompanist-pager:${Versions.Accompanist}"
         const val PlaceHolderMaterial = "com.google.accompanist:accompanist-placeholder-material:${Versions.Accompanist}"
         const val PagerIndicator = "com.google.accompanist:accompanist-pager-indicators:${Versions.Accompanist}"
+        const val SwipeRefresh = "com.google.accompanist:accompanist-swiperefresh:${Versions.Accompanist}"
     }
 }
