@@ -66,6 +66,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+        allWarningsAsErrors = false
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
     buildFeatures {
         compose = true
@@ -73,7 +75,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.Compose
     }
-
     externalNativeBuild {
         cmake {
             path("CMakeLists.txt")

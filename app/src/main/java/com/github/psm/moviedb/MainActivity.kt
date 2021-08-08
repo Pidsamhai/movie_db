@@ -3,7 +3,6 @@ package com.github.psm.moviedb
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MovieAppBody() {
     val navController = rememberNavController()
