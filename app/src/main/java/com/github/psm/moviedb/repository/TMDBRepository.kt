@@ -1,7 +1,8 @@
 package com.github.psm.moviedb.repository
 
 import com.github.psm.moviedb.db.Response
-import com.github.psm.moviedb.db.model.BaseResponse
+import com.github.psm.moviedb.db.model.MovieResponse
+import com.github.psm.moviedb.db.model.TvResponse
 import com.github.psm.moviedb.db.model.genre.GenreResponse
 import com.github.psm.moviedb.db.model.tv.popular.TvPopularResponse
 import com.github.psm.moviedb.db.model.upcoming.UpComingResponse
@@ -10,11 +11,10 @@ import javax.inject.Singleton
 
 @Singleton
 interface TMDBRepository {
-    suspend fun getPopularMovie(page: Int): Response<BaseResponse>
+    suspend fun getPopularMovie(page: Int): Response<MovieResponse>
     suspend fun getMovieDetail(movieId: Long)
     suspend fun getGenreNormal()
     fun getGenres(): Flow<GenreResponse>
-    fun search(keyWord: String, page: Int = 1): Flow<BaseResponse>
     fun getUpcomingMovieFlow(): Flow<UpComingResponse>
     suspend fun getUpcomingMovie(page: Int): Response<UpComingResponse>
     suspend fun getMovieCredit(movieId: Long)
@@ -22,4 +22,6 @@ interface TMDBRepository {
     suspend fun getPersonTvCredit(personId: Long)
     suspend fun getPersonMovieCredit(personId: Long)
     suspend fun getPopularTv(page: Int): Response<TvPopularResponse>
+    suspend fun searchTv(keyWord: String, page: Int = 1): Response<TvResponse>
+    suspend fun searchMovie(keyWord: String, page: Int = 1): Response<MovieResponse>
 }

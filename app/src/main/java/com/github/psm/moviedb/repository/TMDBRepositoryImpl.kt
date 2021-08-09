@@ -2,7 +2,8 @@ package com.github.psm.moviedb.repository
 
 import com.github.psm.moviedb.db.BoxStore
 import com.github.psm.moviedb.db.Response
-import com.github.psm.moviedb.db.model.BaseResponse
+import com.github.psm.moviedb.db.model.MovieResponse
+import com.github.psm.moviedb.db.model.TvResponse
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.genre.GenreResponse
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
@@ -23,12 +24,12 @@ class TMDBRepositoryImpl @Inject constructor(
     private val apiServices: HttpClient
 ) : TMDBRepository {
 
-    override suspend fun getPopularMovie(page: Int): Response<BaseResponse> {
+    override suspend fun getPopularMovie(page: Int): Response<MovieResponse> {
         return try {
-            val result = apiServices.get<BaseResponse>(path = POPULAR_MOVIE_ROUTE) {
+            val result = apiServices.get<MovieResponse>(path = POPULAR_MOVIE_ROUTE) {
                 parameter("page", page)
             }
-            result.movies?.let { boxStore.movie.put(it) }
+            result.results?.let { boxStore.movie.put(it) }
             Response.Success(result)
         } catch (e: Exception) {
             Timber.e(e)
@@ -59,16 +60,17 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun search(keyWord: String, page: Int): Flow<BaseResponse> = flow {
-        try {
-            val result = apiServices.get<BaseResponse>(path = SEARCH_ROUTE) {
+    override suspend fun searchMovie(keyWord: String, page: Int): Response<MovieResponse> {
+        return try {
+            val result = apiServices.get<MovieResponse>(path = SEARCH_MOVIE_ROUTE) {
                 parameter("query", keyWord)
                 parameter("page", page)
                 parameter("include_adult", true)
             }
-            emit(result)
+            Response.Success(result)
         } catch (e: Exception) {
             Timber.e(e)
+            Response.Error(e)
         }
     }
 
@@ -149,16 +151,32 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
+
+    override suspend fun searchTv(keyWord: String, page: Int): Response<TvResponse> {
+        return try {
+            val result = apiServices.get<TvResponse>(path = SEARCH_TV_ROUTE) {
+                parameter("query", keyWord)
+                parameter("page", page)
+                parameter("include_adult", true)
+            }
+            Response.Success(result)
+        } catch (e: Exception) {
+            Timber.e(e)
+            Response.Error(e)
+        }
+    }
+
     companion object {
         private const val POPULAR_MOVIE_ROUTE = "/movie/popular"
         private const val MOVIE_DETAIL_ROUTE = "/movie"
         private const val GENRES_ROUTE = "/genre/movie/list"
-        private const val SEARCH_ROUTE = "/search/movie"
+        private const val SEARCH_MOVIE_ROUTE = "/search/movie"
         private const val UPCOMING_MOVIE_ROUTE = "/movie/upcoming"
         private const val MOVIE_CREDIT_ROUTE = "/movie/%s/credits"
         private const val PERSON = "/person/%s"
         private const val PERSON_MOVIE_CREDIT_ROUTE = "/person/%s/movie_credits"
         private const val PERSON_TV_CREDIT_ROUTE = "/person/%s/tv_credits"
         private const val POPULAR_TV_ROUTE = "/tv/popular"
+        private const val SEARCH_TV_ROUTE = "/search/tv"
     }
 }
