@@ -22,7 +22,7 @@ class PopularDataSource @Inject constructor(
                 is Response.Error<*> -> throw res.e
                 is Response.Success -> {
                     LoadResult.Page(
-                        data = res.value.movies ?: listOf(),
+                        data = res.value.results ?: listOf(),
                         nextKey = if (key == res.value.totalPages) null else res.value.page?.plus(1),
                         prevKey = if (key == 1) null else key.minus(1)
                     )

@@ -131,7 +131,7 @@ fun Home(
                     ) {
                         MovieItemPlaceHolder()
                     }
-                    items(upcomingMovie?.movies ?: listOf()) {
+                    items(upcomingMovie?.results ?: listOf()) {
                         MovieItem(movie = it) { movieId ->
                             selectMovie.invoke(movieId)
                         }

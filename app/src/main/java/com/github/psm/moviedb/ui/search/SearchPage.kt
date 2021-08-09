@@ -1,25 +1,26 @@
 package com.github.psm.moviedb.ui.search
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.params.SearchParams
+import com.github.psm.moviedb.db.model.tv.popular.Tv
 import com.github.psm.moviedb.ui.widget.BaseAppBar
-import com.github.psm.moviedb.ui.widget.NormalTextField
-import com.github.psm.moviedb.ui.widget.movie.MovieSearchItem
+import com.github.psm.moviedb.ui.widget.SearchTextField
 
 
 @Composable
@@ -28,13 +29,27 @@ fun SearchPage(
     onBackPress: () -> Unit = { },
     onItemClick: (movieId: Long) -> Unit = { }
 ) {
+    val searchMovieResult = viewModel.searchMovieResult.collectAsLazyPagingItems()
+    val searchTvResult = viewModel.searchTvResult.collectAsLazyPagingItems()
+    SearchPageContent(
+        searchMovieResult = searchMovieResult,
+        searchTvResult = searchTvResult,
+        onBackPress = onBackPress,
+        onItemClick = onItemClick,
+        onSearchChange = { viewModel.search(SearchParams(it)) }
+    )
+}
 
-    var searchValue by rememberSaveable { mutableStateOf("") }
+@Composable
+fun SearchPageContent(
+    searchMovieResult: LazyPagingItems<Movie>?,
+    searchTvResult: LazyPagingItems<Tv>?,
+    onBackPress: () -> Unit = { },
+    onItemClick: (movieId: Long) -> Unit = { },
+    onSearchChange: (keyword: String) -> Unit = { }
+) {
     val focusRequest = remember { FocusRequester() }
-    val searchResult by viewModel.searchResult.collectAsState(initial = null)
-    val listState = rememberLazyListState()
-
-    viewModel.search(SearchParams(searchValue))
+    var searchKeyword by remember { mutableStateOf("") }
 
     LaunchedEffect(
         key1 = focusRequest,
@@ -48,49 +63,46 @@ fun SearchPage(
     ) {
         BaseAppBar(
             startContent = {
-                IconButton(onClick = { onBackPress.invoke() }) {
+                IconButton(onClick = { onBackPress() }) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
                 }
             },
             centerContent = {
-                NormalTextField(
+                SearchTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(focusRequest),
-                    value = searchValue,
-                    onValueChange = { text ->  searchValue = text },
+                    onValueChange = {
+                        onSearchChange(it)
+                        searchKeyword = it
+                    },
                     placeholder = "Search"
                 )
             },
             endContent = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null
-                )
+                IconButton(onClick = { onSearchChange(searchKeyword) }) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null
+                    )
+                }
             }
         )
 
-        LazyColumn(
-            Modifier
-                .padding(
-                    start = 8.dp,
-                    end = 8.dp
-                ),
-            state = listState,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(searchResult?.movies ?: return@LazyColumn) {
-                MovieSearchItem(movie = it) { movieId ->
-                    onItemClick.invoke(movieId)
-                }
-            }
-        }
+        SearchResultTabs(
+            movieItems = searchMovieResult,
+            tvItems = searchTvResult,
+            modifier = Modifier.weight(1f),
+            onItemClick = onItemClick
+        )
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun SearchPagePreview() {
-    SearchPage()
+    SearchPageContent(
+        searchMovieResult = null,
+        searchTvResult = null
+    )
 }

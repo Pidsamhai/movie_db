@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -175,5 +176,27 @@ private fun BaseAppBarPreview() {
             }
         },
         title = "Base AppBar"
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BaseAppBarEndIconPreview() {
+    BaseAppBar(
+        enableShadow = false,
+        startContent = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+            }
+        },
+        title = "Base AppBar",
+        endContent = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null
+                )
+            }
+        }
     )
 }
