@@ -4,7 +4,9 @@ import com.github.psm.moviedb.db.Resource
 import com.github.psm.moviedb.db.Response
 import com.github.psm.moviedb.db.model.MovieResponse
 import com.github.psm.moviedb.db.model.TvResponse
+import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.genre.GenreResponse
+import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
 import com.github.psm.moviedb.db.model.tv.credits.TvCredit
 import com.github.psm.moviedb.db.model.tv.detail.TvDetail
 import com.github.psm.moviedb.db.model.tv.popular.TvPopularResponse
@@ -15,12 +17,12 @@ import javax.inject.Singleton
 @Singleton
 interface TMDBRepository {
     suspend fun getPopularMovie(page: Int): Response<MovieResponse>
-    suspend fun getMovieDetail(movieId: Long)
+    fun getMovieDetail(id: Long): Flow<Resource<MovieDetail>>
     suspend fun getGenreNormal()
     fun getGenres(): Flow<GenreResponse>
     fun getUpcomingMovieFlow(): Flow<UpComingResponse>
     suspend fun getUpcomingMovie(page: Int): Response<UpComingResponse>
-    suspend fun getMovieCredit(movieId: Long)
+    fun getMovieCredit(id: Long): Flow<Resource<MovieCredit>>
     suspend fun getPersonDetail(personId: Long)
     suspend fun getPersonTvCredit(personId: Long)
     suspend fun getPersonMovieCredit(personId: Long)
