@@ -52,6 +52,14 @@ jobs:
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
 
+      # create key.properties
+      - name: Create key.properties
+        run: |
+          echo $KEY_PROPERTIES > out.properties
+          base64 -di out.properties > key.properties
+        env:
+          KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
+
       # create native-lib.cpp
       - name: Create native-lib.cpp
         run: |
@@ -61,7 +69,7 @@ jobs:
           NATIVE_CPP: ${{ secrets.NATIVE_CPP }}
 
       - name: Build Apk
-        run: bash ./gradlew :app:assemble
+        run: bash ./gradlew :app:assembleRelease
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}

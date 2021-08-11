@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id(Plugins.AndroidApplication)
     id(Plugins.Android)
@@ -7,6 +9,12 @@ plugins {
     id(Plugins.Hilt)
     id(Plugins.GitVersion) version Versions.GitVersion
     id(Plugins.ObjectBox)
+}
+
+val properties = Properties()
+val propertiesFile = File("key.properties")
+propertiesFile.inputStream().use {
+    properties.load(it)
 }
 
 android {
@@ -38,9 +46,9 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
-            storePassword = System.getenv("STORE_PASSWORD")
+            keyAlias = properties["KEY_ALIAS"] as String?
+            keyPassword = properties["KEY_PASSWORD"] as String?
+            storePassword = properties["STORE_PASSWORD"] as String?
             storeFile = file("keystore.jks")
             enableV3Signing = true
             enableV4Signing = true
