@@ -1,26 +1,44 @@
 package com.github.psm.moviedb.ui.detail
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.github.psm.moviedb.db.Resource
+import com.github.psm.moviedb.db.model.detail.MovieDetail
+import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
 import com.github.psm.moviedb.ui.bookmark.BookmarkVM
 
 @Composable
 fun MovieDetailPage(
-    movieId: Long,
     navigateBack: () -> Unit,
     detailViewModel: DetailViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkVM = hiltViewModel(),
     navigateToPerson: (personId: Long) -> Unit
 ) {
-    val detail by detailViewModel.movieDetail.observeAsState()
-    val bookmarkState by detailViewModel.isBooked.observeAsState(false)
-    val credit by detailViewModel.movieCredit.observeAsState()
+    val isBooked by detailViewModel.isBooked.observeAsState(false)
+    val detailResource by detailViewModel.detail.collectAsState(initial = Resource.Loading)
+    val creditResource by detailViewModel.movieCredit.collectAsState(initial = Resource.Loading)
+    var detail: MovieDetail? = null
+    var credit: MovieCredit? = null
 
-    LaunchedEffect(key1 = movieId) {
-        detailViewModel.getMovieDetail(movieId)
+    when (detailResource) {
+        is Resource.Success -> {
+            detail = (detailResource as Resource.Success<MovieDetail>).data
+        }
+        is Resource.Error -> {
+            detail = (detailResource as Resource.Error<MovieDetail>).data
+        }
+    }
+
+    when (creditResource) {
+        is Resource.Success -> {
+            credit = (creditResource as Resource.Success<MovieCredit>).data
+        }
+        is Resource.Error -> {
+            credit = (creditResource as Resource.Error<MovieCredit>).data
+        }
     }
 
     DetailContent(
@@ -33,11 +51,12 @@ fun MovieDetailPage(
         genres = detail?.genres,
         overview = detail?.overview,
         credit = credit,
-        isBooked = bookmarkState,
+        isBooked = isBooked,
         onBookMarkClick = { booked ->
+            val id = detail?.id ?: return@DetailContent
             when {
-                booked -> bookmarkViewModel.booking(movieId, true)
-                else -> bookmarkViewModel.unBook(movieId)
+                booked -> bookmarkViewModel.booking(id, true)
+                else -> bookmarkViewModel.unBook(id)
             }
         },
         navigateToPerson = navigateToPerson,

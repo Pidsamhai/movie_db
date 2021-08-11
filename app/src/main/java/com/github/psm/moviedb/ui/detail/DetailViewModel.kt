@@ -1,43 +1,26 @@
 package com.github.psm.moviedb.ui.detail
 
-import androidx.lifecycle.*
-import com.github.psm.moviedb.db.BoxStore
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import com.github.psm.moviedb.db.Resource
 import com.github.psm.moviedb.db.model.detail.MovieDetail
-import com.github.psm.moviedb.db.model.detail.MovieDetail_
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
-import com.github.psm.moviedb.db.model.movie.credit.MovieCredit_
 import com.github.psm.moviedb.repository.BookmarkRepository
 import com.github.psm.moviedb.repository.TMDBRepository
-import com.github.psm.moviedb.utils.asFirstLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repository: TMDBRepository,
-    private val boxStore: BoxStore,
+    repository: TMDBRepository,
     bookmarkRepository: BookmarkRepository
-): ViewModel() {
+) : ViewModel() {
     private val id: Long = requireNotNull(savedStateHandle["id"])
     val isBooked: LiveData<Boolean> = bookmarkRepository.bookState(id)
-    private val movieId = MutableLiveData<Long?>(null)
+    val detail: Flow<Resource<MovieDetail>> = repository.getMovieDetail(id)
+    val movieCredit: Flow<Resource<MovieCredit>> = repository.getMovieCredit(id)
 
-    val movieDetail: LiveData<MovieDetail?> = movieId.switchMap { movieId ->
-        boxStore.movieDetail.query().equal(MovieDetail_.id, movieId ?: 0).asFirstLiveData()
-    }
-
-    val movieCredit: LiveData<MovieCredit?> = movieId.switchMap { movieId ->
-        boxStore.movieCredit.query().equal(MovieCredit_.id, movieId ?: 0).asFirstLiveData()
-    }
-
-    fun getMovieDetail(movieId: Long) {
-        this.movieId.value = movieId
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getMovieDetail(movieId)
-            repository.getMovieCredit(movieId)
-        }
-    }
 }

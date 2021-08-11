@@ -41,14 +41,11 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMovieDetail(movieId: Long) {
-        try {
-            val result = apiServices.get<MovieDetail>(path = "$MOVIE_DETAIL_ROUTE/$movieId")
-            boxStore.movieDetail.put(result)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
-    }
+    override fun getMovieDetail(id: Long): Flow<Resource<MovieDetail>> = networkBoundResource(
+        query = { flow { emit(boxStore.movieDetail[id]) } },
+        fetch = { apiServices.get<MovieDetail>(path = "$MOVIE_DETAIL_ROUTE/$id") },
+        saveFetchResult = { boxStore.movieDetail.put(it) }
+    )
 
     override fun getGenres(): Flow<GenreResponse> = flow {
         val result = apiServices.get<GenreResponse>(path = GENRES_ROUTE)
@@ -100,17 +97,11 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMovieCredit(movieId: Long) {
-        try {
-            val result = apiServices.get<MovieCredit>(path = MOVIE_CREDIT_ROUTE.format(movieId)) {
-                parameter("region", "US")
-            }
-            Timber.i(result.toString())
-            boxStore.movieCredit.put(result)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
-    }
+    override fun getMovieCredit(id: Long): Flow<Resource<MovieCredit>> = networkBoundResource(
+        query = { flow { emit(boxStore.movieCredit[id]) } },
+        fetch = { apiServices.get<MovieCredit>(path = MOVIE_CREDIT_ROUTE.format(id)) },
+        saveFetchResult = { boxStore.movieCredit.put(it) }
+    )
 
     override suspend fun getPersonDetail(personId: Long) {
         try {

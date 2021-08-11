@@ -13,7 +13,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.github.psm.moviedb.ui.about.About
 import com.github.psm.moviedb.ui.bookmark.BookmarkPage
-import com.github.psm.moviedb.ui.detail.DetailViewModel
 import com.github.psm.moviedb.ui.detail.MovieDetailPage
 import com.github.psm.moviedb.ui.detail.TvDetailPage
 import com.github.psm.moviedb.ui.home.Home
@@ -52,12 +51,8 @@ fun NavGraph(
             deepLinks = listOf(
                 navDeepLink { uriPattern = "$BASE_URL/movie/{id}-.*" },
             )
-        ) { backStackEntry ->
-            val viewModel = hiltViewModel<DetailViewModel>()
+        ) { _ ->
             MovieDetailPage(
-                movieId = backStackEntry.arguments?.getLong("id")!!,
-                detailViewModel = viewModel,
-                bookmarkViewModel = hiltViewModel(backStackEntry),
                 navigateBack = { actions.navigateUp() },
                 navigateToPerson = { actions.navigateToPerson(it) }
             )
