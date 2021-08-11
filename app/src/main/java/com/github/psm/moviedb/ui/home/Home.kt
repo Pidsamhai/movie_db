@@ -35,7 +35,8 @@ fun Home(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
     navigateToSearchPage: () -> Unit = { },
-    selectMovie: (movieId: Long) -> Unit,
+    selectMovie: (id: Long) -> Unit,
+    selectTv: (id: Long) -> Unit,
     navigateToPopular: () -> Unit = { },
     navigateToUpComing: () -> Unit = { }
 ) {
@@ -158,7 +159,7 @@ fun Home(
                     }
                     items(popularTv ?: listOf()) {
                         TvItem(tv = it) { id ->
-//                        selectMovie.invoke(id)
+                            selectTv(id)
                         }
                     }
                 }
@@ -171,5 +172,8 @@ fun Home(
 @Preview(showBackground = true)
 @Composable
 private fun HomePreView() {
-    Home(selectMovie = { })
+    Home(
+        selectMovie = { },
+        selectTv = { },
+    )
 }

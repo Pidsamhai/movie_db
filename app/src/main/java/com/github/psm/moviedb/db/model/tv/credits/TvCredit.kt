@@ -1,4 +1,4 @@
-package com.github.psm.moviedb.db.model.movie.credit
+package com.github.psm.moviedb.db.model.tv.credits
 
 
 import android.os.Parcelable
@@ -19,7 +19,7 @@ import kotlinx.serialization.Serializable
 @Keep
 @Serializable
 @Parcelize
-data class MovieCredit(
+data class TvCredit(
     @Convert(converter = CastListConverter::class, dbType = String::class)
     @SerialName("cast")
     override val cast: List<Cast>? = null,

@@ -15,7 +15,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,12 +27,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.R
-import com.github.psm.moviedb.db.model.detail.MovieDetail
-import com.github.psm.moviedb.db.model.movie.credit.Cast
-import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
-import com.github.psm.moviedb.ui.bookmark.BookmarkVM
+import com.github.psm.moviedb.db.model.genre.Genre
+import com.github.psm.moviedb.db.model.shared.credit.Credit
 import com.github.psm.moviedb.ui.home.HeaderItem
 import com.github.psm.moviedb.ui.theme.Stared
 import com.github.psm.moviedb.ui.widget.Chip
@@ -44,40 +40,24 @@ import com.github.psm.moviedb.ui.widget.movie.CastingItem
 import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
-fun Detail(
-    movieId: Long,
-    navigateBack: () -> Unit,
-    detailViewModel: DetailViewModel = hiltViewModel(),
-    bookmarkViewModel: BookmarkVM = hiltViewModel(),
-    navigateToPerson: (personId: Long) -> Unit
-) {
-    val movieDetail by detailViewModel.movieDetail.observeAsState()
-    val bookmarkState by bookmarkViewModel.bookState(movieId).observeAsState(false)
-    val movieCredit by detailViewModel.movieCredit.observeAsState()
-
-    LaunchedEffect(key1 = movieId) {
-        detailViewModel.getMovieDetail(movieId)
-    }
-
-    DetailContent(
-        movieDetail = movieDetail,
-        isBooked = bookmarkState,
-        navigateBack = navigateBack,
-        movieCredit = movieCredit,
-        onBookMarkClick = { booked ->
-            when {
-                booked -> bookmarkViewModel.booking(movieId)
-                else -> bookmarkViewModel.unBook(movieId)
-            }
-        },
-        navigateToPerson = navigateToPerson
-    )
-}
-
-@Composable
 fun DetailContent(
-    movieDetail: MovieDetail?,
-    movieCredit: MovieCredit?,
+    appBarTitle: String,
+    /**
+     * Detail
+     */
+    title: String?,
+    posterPath: String?,
+    backDropPath: String?,
+    voteAverage: Double?,
+    runtime: Int?,
+    overview: String?,
+    genres: List<Genre>?,
+
+    /**
+     * Credits
+     */
+    credit: Credit?,
+
     isBooked: Boolean,
     navigateBack: () -> Unit = { },
     onBookMarkClick: (booked: Boolean) -> Unit = { },
@@ -94,6 +74,7 @@ fun DetailContent(
     ) {
 
         DetailAppBar(
+            title = appBarTitle,
             onBackClick = navigateBack,
             scrollState = scrollState,
             onBookMarkClick = onBookMarkClick,
@@ -104,24 +85,42 @@ fun DetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
-            Card(
+
+            Box(
                 modifier = Modifier
-                    .padding(top = 8.dp),
-                elevation = 8.dp,
-                shape = RoundedCornerShape(16.dp)
+                    .aspectRatio(16f/9),
+                contentAlignment = Alignment.BottomStart
             ) {
+
                 Image(
                     modifier = Modifier
-                        .width(250.dp)
-                        .aspectRatio(2f / 3),
-                    data = movieDetail?.posterPath?.toImgUrl(),
+                        .fillMaxSize(),
+                    data = backDropPath?.toImgUrl(),
                     contentScale = ContentScale.FillBounds,
-                    fadeIn = true,
-                    fadeInDurationMs = 2000,
-                    enablePlaceHolder = true,
+                    enablePlaceHolder = true
                 )
+
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .height(150.dp)
+                        .aspectRatio(2f/3),
+                    elevation = 8.dp,
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        data = posterPath?.toImgUrl(),
+                        contentScale = ContentScale.FillBounds,
+                        fadeIn = true,
+                        fadeInDurationMs = 2000,
+                        enablePlaceHolder = true,
+                    )
+                }
+
             }
 
             Row(
@@ -137,7 +136,7 @@ fun DetailContent(
                         .size(60.dp)
                         .padding(4.dp)
                         .clip(CircleShape),
-                    value = ((movieDetail?.voteAverage ?: 0.0) * 0.1).toFloat(),
+                    value = ((voteAverage ?: 0.0) * 0.1).toFloat(),
                     bgColor = Color.Black,
                     strokeSize = 8f,
                     fontSize = 12.sp,
@@ -148,7 +147,7 @@ fun DetailContent(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = movieDetail?.title ?: "",
+                        text = title ?: "",
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.onSurface,
                         style = MaterialTheme.typography.body1
@@ -158,7 +157,7 @@ fun DetailContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "${movieDetail?.voteAverage ?: ""}",
+                            text = "${voteAverage ?: ""}",
                             modifier = Modifier.alpha(0.8f),
                             color = MaterialTheme.colors.onSurface,
                             style = MaterialTheme.typography.body2
@@ -185,7 +184,7 @@ fun DetailContent(
                         .weight(1f),
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    movieCredit?.crew?.find { it.department?.contains("Directing", true) == true }
+                    credit?.crew?.find { it.department?.contains("Directing", true) == true }
                         ?.let {
                             Text(
                                 text = it.name ?: "",
@@ -207,7 +206,7 @@ fun DetailContent(
                         .padding(start = 8.dp, end = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    movieDetail?.runtime?.let {
+                    runtime?.let {
                         Icon(
                             modifier = Modifier.size(14.dp),
                             painter = painterResource(id = R.drawable.ic_round_access_time),
@@ -217,7 +216,7 @@ fun DetailContent(
                         Spacer(modifier = Modifier.size(8.dp))
 
                         Text(
-                            text = "${movieDetail.runtime} min",
+                            text = "$runtime min",
                             style = MaterialTheme.typography.body2,
                             color = MaterialTheme.colors.onSurface
                         )
@@ -238,12 +237,12 @@ fun DetailContent(
                     .horizontalScroll(genreScrollState),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                movieDetail?.genres?.forEach { genre ->
+                genres?.forEach { genre ->
                     Chip(text = genre.name!!, bgColor = Color.Black.copy(alpha = 0.4f))
                 }
             }
 
-            movieDetail?.overview?.let {
+            overview?.let {
 
                 HeaderItem(
                     modifier = Modifier.padding(8.dp),
@@ -259,7 +258,7 @@ fun DetailContent(
                             indication = null
                         ) { expandedOverView = !expandedOverView }
                         .animateContentSize(),
-                    text = movieDetail.overview,
+                    text = overview,
                     maxLines = if (expandedOverView) Int.MAX_VALUE else 5,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -276,7 +275,7 @@ fun DetailContent(
                     .padding(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(movieCredit?.cast?.take(10) ?: listOf()) {
+                items(credit?.cast?.take(10) ?: listOf()) {
                     CastingItem(
                         modifier = Modifier.width(150.dp),
                         cast = it,
@@ -295,22 +294,15 @@ fun DetailContent(
 private fun DetailPreview() {
     Scaffold {
         DetailContent(
-            movieDetail = MovieDetail(
-                title = "Title",
-                overview = "Hardened ramen can be made thin by soaking with peanut sauce."
-            ),
-            movieCredit = MovieCredit(
-                cast = listOf(
-                    Cast(
-                        name = "A",
-                        character = "Z"
-                    ),
-                    Cast(
-                        name = "A",
-                        character = "Z"
-                    )
-                )
-            ),
+            appBarTitle = "Tv",
+            title = "Title",
+            voteAverage = 100.0,
+            posterPath = null,
+            backDropPath = null,
+            credit = null,
+            genres = listOf(),
+            overview = "Raptus visus sed mire imitaris sensorem est.",
+            runtime = 150,
             isBooked = true
         )
     }

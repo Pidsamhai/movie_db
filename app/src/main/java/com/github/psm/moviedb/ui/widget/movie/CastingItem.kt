@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.psm.moviedb.db.model.movie.credit.Cast
+import com.github.psm.moviedb.db.model.shared.credit.Cast
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.utils.toImgUrl
 

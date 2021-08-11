@@ -18,7 +18,7 @@ object Versions {
     const val KotlinxSerialization = "1.2.1"
     const val Okhttp = "4.7.2"
     const val GitVersion = "0.4.13"
-    const val ObjectBox = "2.9.2-RC"
+    const val ObjectBox = "2.9.2-RC3"
 
     const val Timber = "4.7.1"
     const val Kotlin = "1.5.21"

@@ -50,7 +50,8 @@ fun SearchResultTabs(
     modifier: Modifier = Modifier,
     movieItems: LazyPagingItems<Movie>? = null,
     tvItems: LazyPagingItems<Tv>? = null,
-    onItemClick: (id: Long) -> Unit = { }
+    selectedMovie: (id: Long) -> Unit = { },
+    selectedTv: (id: Long) -> Unit = { }
 ) {
     val pageState = rememberPagerState(pageCount = 2)
     val coroutineScope = rememberCoroutineScope()
@@ -97,7 +98,7 @@ fun SearchResultTabs(
                         items = movieItems,
                     ) {
                         SearchItem(movie = it) { id ->
-                            onItemClick(id)
+                            selectedMovie(id)
                         }
                     }
                 }
@@ -105,7 +106,9 @@ fun SearchResultTabs(
                     SearchResult(
                         items = tvItems,
                     ) {
-                        SearchItem(tv = it)
+                        SearchItem(tv = it) { id ->
+                            selectedTv(id)
+                        }
                     }
                 }
             }

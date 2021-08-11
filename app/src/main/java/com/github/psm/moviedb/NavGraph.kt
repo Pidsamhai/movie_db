@@ -13,8 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.github.psm.moviedb.ui.about.About
 import com.github.psm.moviedb.ui.bookmark.BookmarkPage
-import com.github.psm.moviedb.ui.detail.Detail
 import com.github.psm.moviedb.ui.detail.DetailViewModel
+import com.github.psm.moviedb.ui.detail.MovieDetailPage
+import com.github.psm.moviedb.ui.detail.TvDetailPage
 import com.github.psm.moviedb.ui.home.Home
 import com.github.psm.moviedb.ui.movielist.MovieListPage
 import com.github.psm.moviedb.ui.person.PersonPage
@@ -38,24 +39,25 @@ fun NavGraph(
         composable(NavigationRoutes.Home.route) {
             Home(
                 navigateToSearchPage = { actions.navigateToSearch() },
-                selectMovie = { movieId -> actions.navigateToDetail(movieId) },
+                selectMovie = { id -> actions.navigateToMovieDetail(id) },
+                selectTv = { id -> actions.navigateToTvDetail(id) },
                 navigateToPopular = { actions.navigateToPopular() },
                 navigateToUpComing = { actions.navigateToUpComing() }
             )
         }
 
         composable(
-            route = "${NavigationRoutes.Detail.route}/{movieId}",
-            arguments = listOf(navArgument("movieId") { type = NavType.LongType }),
+            route = "${NavigationRoutes.Detail.route}/movie/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.LongType }),
             deepLinks = listOf(
-                navDeepLink { uriPattern = "$BASE_URL/movie/{movieId}-.*" },
-//                navDeepLink { uriPattern = "$BASE_URL/tv/{movieId}-.*" },
+                navDeepLink { uriPattern = "$BASE_URL/movie/{id}-.*" },
             )
-        ) { backStack ->
+        ) { backStackEntry ->
             val viewModel = hiltViewModel<DetailViewModel>()
-            Detail(
-                movieId = backStack.arguments?.getLong("movieId")!!,
+            MovieDetailPage(
+                movieId = backStackEntry.arguments?.getLong("id")!!,
                 detailViewModel = viewModel,
+                bookmarkViewModel = hiltViewModel(backStackEntry),
                 navigateBack = { actions.navigateUp() },
                 navigateToPerson = { actions.navigateToPerson(it) }
             )
@@ -66,7 +68,8 @@ fun NavGraph(
         composable(route = NavigationRoutes.SearchPage.route) {
             SearchPage(
                 onBackPress = { actions.navigateUp() },
-                onItemClick = { movieId -> actions.navigateToDetail(movieId) }
+                selectedMovie = { id -> actions.navigateToMovieDetail(id) },
+                selectedTv = { id -> actions.navigateToTvDetail(id) }
             )
         }
 
@@ -75,7 +78,7 @@ fun NavGraph(
                 title = NavigationRoutes.Popular.label,
                 viewModel = hiltViewModel<PopularVM>(),
                 onBackClick = { actions.navigateUp() },
-                selectedMovie = { movieId -> actions.navigateToDetail(movieId) }
+                selectedMovie = { movieId -> actions.navigateToMovieDetail(movieId) }
             )
         }
 
@@ -84,13 +87,13 @@ fun NavGraph(
                 title = NavigationRoutes.UpComing.label,
                 viewModel = hiltViewModel<UpComingVM>(),
                 onBackClick = { actions.navigateUp() },
-                selectedMovie = { movieId -> actions.navigateToDetail(movieId) }
+                selectedMovie = { movieId -> actions.navigateToMovieDetail(movieId) }
             )
         }
 
         composable(route = NavigationRoutes.BookmarkPage.route) {
             BookmarkPage(
-                navigateToDetailPage = { movieId -> actions.navigateToDetail(movieId) }
+                navigateToDetailPage = { movieId -> actions.navigateToMovieDetail(movieId) }
             )
         }
 
@@ -102,7 +105,20 @@ fun NavGraph(
             PersonPage(
                 viewModel = hiltViewModel(),
                 navigateBack = { actions.navigateUp() },
-                navigateToMovieDetail = { actions.navigateToDetail(it) }
+                navigateToMovieDetail = { actions.navigateToMovieDetail(it) }
+            )
+        }
+
+        composable(
+            route = "${NavigationRoutes.Detail.route}/tv/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.LongType }),
+            deepLinks = listOf(
+                navDeepLink { uriPattern = "$BASE_URL/tv/{id}" },
+            )
+        ) { _ ->
+            TvDetailPage(
+                navigateBack = { actions.navigateUp() },
+                navigateToPerson = { actions.navigateToPerson(it) }
             )
         }
     }

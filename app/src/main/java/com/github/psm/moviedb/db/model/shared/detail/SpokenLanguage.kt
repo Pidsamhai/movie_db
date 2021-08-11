@@ -1,4 +1,4 @@
-package com.github.psm.moviedb.db.model.detail
+package com.github.psm.moviedb.db.model.shared.detail
 
 
 import android.os.Parcelable
@@ -10,9 +10,11 @@ import kotlinx.serialization.Serializable
 @Keep
 @Serializable
 @Parcelize
-data class ProductionCountry(
-    @SerialName("iso_3166_1")
-    val iso31661: String? = "",
+data class SpokenLanguage(
+    @SerialName("english_name")
+    val englishName: String? = "",
+    @SerialName("iso_639_1")
+    val iso6391: String? = "",
     @SerialName("name")
     val name: String? = ""
 ) : Parcelable

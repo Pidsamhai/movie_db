@@ -16,6 +16,7 @@ import com.github.psm.moviedb.R
 
 @Composable
 fun DetailAppBar(
+    title: String,
     onBackClick: () -> Unit = {  },
     onBookMarkClick: (booked:Boolean) -> Unit = {  },
     scrollState: ScrollState? = null,
@@ -36,7 +37,8 @@ fun DetailAppBar(
 
         Text(
             modifier = Modifier.weight(1f),
-            text = "Detail Movie", fontWeight = FontWeight.Bold,
+            text = title,
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
 
@@ -60,5 +62,7 @@ fun DetailAppBar(
 @Preview(showBackground = true)
 @Composable
 private fun DetailAppBarPreview() {
-    DetailAppBar()
+    DetailAppBar(
+        title = "TV"
+    )
 }

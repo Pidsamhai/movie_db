@@ -1,6 +1,6 @@
 package com.github.psm.moviedb.db.converter
 
-import com.github.psm.moviedb.db.model.movie.credit.Cast
+import com.github.psm.moviedb.db.model.shared.credit.Cast
 import com.github.psm.moviedb.utils.JsonX
 import io.objectbox.converter.PropertyConverter
 import kotlinx.serialization.decodeFromString

@@ -14,15 +14,51 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.psm.moviedb.db.model.VoteStar
 import com.github.psm.moviedb.db.model.detail.MovieDetail
+import com.github.psm.moviedb.db.model.tv.detail.TvDetail
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
 
 @Composable
-fun MovieBookmarkItem(
-    movieDetail: MovieDetail,
-    onClick: (movieId: Long) -> Unit = { }
+fun BookmarkItem(
+    detail: MovieDetail,
+    onClick: (id: Long) -> Unit = { }
+) {
+    BookMarkItemContent(
+        title = detail.title,
+        posterPath = detail.posterPath,
+        voteStar = detail.voteStar,
+        voteAvg = detail.voteAverage,
+        overview = detail.overview,
+        onClick = { onClick(detail.id) }
+    )
+}
+
+@Composable
+fun BookmarkItem(
+    detail: TvDetail,
+    onClick: (id: Long) -> Unit = { }
+) {
+    BookMarkItemContent(
+        title = detail.name,
+        posterPath = detail.posterPath,
+        voteStar = detail.voteStar,
+        voteAvg = detail.voteAverage,
+        overview = detail.overview,
+        onClick = { onClick(detail.id) }
+    )
+}
+
+@Composable
+private fun BookMarkItemContent(
+    title: String?,
+    posterPath: String?,
+    voteStar: VoteStar,
+    voteAvg: Double?,
+    overview: String?,
+    onClick: () -> Unit = { }
 ) {
     Card(
         modifier = Modifier
@@ -34,7 +70,7 @@ fun MovieBookmarkItem(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    onClick(movieDetail.id)
+                    onClick()
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -42,7 +78,7 @@ fun MovieBookmarkItem(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(60.dp),
-                data = movieDetail.posterPath?.toImgUrl(),
+                data = posterPath?.toImgUrl(),
                 contentScale = ContentScale.FillBounds,
                 enablePlaceHolder = true
             )
@@ -53,23 +89,23 @@ fun MovieBookmarkItem(
                     .padding(8.dp)
             ) {
                 Text(
-                    text = movieDetail.title ?: "",
+                    text = title ?: "",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Row {
-                    Rating(voteStar = movieDetail.voteStar)
+                    Rating(voteStar = voteStar)
                     Spacer(modifier = Modifier.size(8.dp))
                     Text(
-                        text = movieDetail.voteAverage?.toString() ?: "",
+                        text = voteAvg?.toString() ?: "",
                         fontSize = 12.sp
                     )
                 }
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = movieDetail.overview ?: "",
+                    text = overview ?: "",
                     fontSize = 12.sp,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -83,7 +119,7 @@ fun MovieBookmarkItem(
 @Preview(showBackground = true)
 @Composable
 private fun MovieBookmarkItemPreview() {
-    MovieBookmarkItem(
+    BookmarkItem(
         MovieDetail(
             voteAverage = 8.9,
             title = "Command me scallywag, ye wet anchor!",
