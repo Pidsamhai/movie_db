@@ -1,4 +1,4 @@
-package com.github.psm.moviedb.db.model.detail
+package com.github.psm.moviedb.db.model.shared.detail
 
 
 import android.os.Parcelable

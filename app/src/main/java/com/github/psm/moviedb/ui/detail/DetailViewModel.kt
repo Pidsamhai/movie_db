@@ -6,6 +6,7 @@ import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.detail.MovieDetail_
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit_
+import com.github.psm.moviedb.repository.BookmarkRepository
 import com.github.psm.moviedb.repository.TMDBRepository
 import com.github.psm.moviedb.utils.asFirstLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,9 +16,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: TMDBRepository,
-    private val boxStore: BoxStore
+    private val boxStore: BoxStore,
+    bookmarkRepository: BookmarkRepository
 ): ViewModel() {
+    private val id: Long = requireNotNull(savedStateHandle["id"])
+    val isBooked: LiveData<Boolean> = bookmarkRepository.bookState(id)
     private val movieId = MutableLiveData<Long?>(null)
 
     val movieDetail: LiveData<MovieDetail?> = movieId.switchMap { movieId ->

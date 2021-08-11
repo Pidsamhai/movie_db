@@ -27,7 +27,8 @@ import com.github.psm.moviedb.ui.widget.SearchTextField
 fun SearchPage(
     viewModel: SearchPageViewModel = hiltViewModel(),
     onBackPress: () -> Unit = { },
-    onItemClick: (movieId: Long) -> Unit = { }
+    selectedMovie: (id: Long) -> Unit = { },
+    selectedTv: (id: Long) -> Unit = { }
 ) {
     val searchMovieResult = viewModel.searchMovieResult.collectAsLazyPagingItems()
     val searchTvResult = viewModel.searchTvResult.collectAsLazyPagingItems()
@@ -35,7 +36,8 @@ fun SearchPage(
         searchMovieResult = searchMovieResult,
         searchTvResult = searchTvResult,
         onBackPress = onBackPress,
-        onItemClick = onItemClick,
+        selectedMovie = selectedMovie,
+        selectedTv = selectedTv,
         onSearchChange = { viewModel.search(SearchParams(it)) }
     )
 }
@@ -45,7 +47,8 @@ fun SearchPageContent(
     searchMovieResult: LazyPagingItems<Movie>?,
     searchTvResult: LazyPagingItems<Tv>?,
     onBackPress: () -> Unit = { },
-    onItemClick: (movieId: Long) -> Unit = { },
+    selectedMovie: (id: Long) -> Unit = { },
+    selectedTv: (id: Long) -> Unit = { },
     onSearchChange: (keyword: String) -> Unit = { }
 ) {
     val focusRequest = remember { FocusRequester() }
@@ -93,7 +96,8 @@ fun SearchPageContent(
             movieItems = searchMovieResult,
             tvItems = searchTvResult,
             modifier = Modifier.weight(1f),
-            onItemClick = onItemClick
+            selectedMovie = selectedMovie,
+            selectedTv = selectedTv
         )
     }
 }

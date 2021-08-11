@@ -1,9 +1,6 @@
 package com.github.psm.moviedb.ui.bookmark
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -12,22 +9,23 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.NavigationRoutes
+import com.github.psm.moviedb.db.model.BookMarkType
 import com.github.psm.moviedb.db.model.detail.MovieDetail
+import com.github.psm.moviedb.db.model.tv.detail.TvDetail
 import com.github.psm.moviedb.ui.widget.BaseAppBar
-import com.github.psm.moviedb.ui.widget.movie.MovieBookmarkItem
+import com.github.psm.moviedb.ui.widget.SwipeToDismissItem
+import com.github.psm.moviedb.ui.widget.movie.BookmarkItem
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,8 +57,8 @@ fun BookmarkPage(
                 viewModel.unBook(movieId)
                 coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        "Removed ${ title ?: movieId }", "Undo"
-                    ).also {  snackResult ->
+                        "Removed ${title ?: movieId}", "Undo"
+                    ).also { snackResult ->
                         when (snackResult) {
                             SnackbarResult.Dismissed -> Unit
                             SnackbarResult.ActionPerformed -> undoUnBookmark()
@@ -85,10 +83,10 @@ fun BookmarkPage(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BookmarkPageContent(
-    bookmarks: List<MovieDetail>? = null,
+    bookmarks: List<BookMarkType>? = null,
     scrollState: ScrollState = rememberScrollState(),
     listState: LazyListState = rememberLazyListState(),
-    unBookCallback: (movieId: Long, title: String?) -> Unit = {_, _ -> },
+    unBookCallback: (movieId: Long, title: String?) -> Unit = { _, _ -> },
     navigateToDetailPage: (movieId: Long) -> Unit = { }
 ) {
     Column(
@@ -110,63 +108,29 @@ fun BookmarkPageContent(
             state = listState
         ) {
             items(bookmarks ?: listOf()) {
-                var removeItem by remember { mutableStateOf(false) }
-                if (removeItem) {
-                    it.id.let { movieId ->
-                        unBookCallback(movieId, it.title)
-                        removeItem = !removeItem
-                    }
-                }
-                val dismissState = rememberDismissState(
-                    confirmStateChange = { dismissValue ->
-                        if (dismissValue == DismissValue.DismissedToStart) removeItem = !removeItem
-                        dismissValue != DismissValue.DismissedToStart
-                    }
-                )
-                SwipeToDismiss(
-                    state = dismissState,
-                    directions = setOf(DismissDirection.EndToStart),
-                    background = {
-                        val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
-
-                        val color by animateColorAsState(
-                            when (dismissState.targetValue) {
-                                DismissValue.Default -> MaterialTheme.colors.error.copy(alpha = 0.7f)
-                                DismissValue.DismissedToStart -> MaterialTheme.colors.error
-                                DismissValue.DismissedToEnd -> Color.Green
-                            }
-                        )
-                        val alignment = when (direction) {
-                            DismissDirection.StartToEnd -> Alignment.CenterStart
-                            DismissDirection.EndToStart -> Alignment.CenterEnd
-                        }
-                        val icon = when (direction) {
-                            DismissDirection.StartToEnd -> Icons.Default.Done
-                            DismissDirection.EndToStart -> Icons.Default.Delete
-                        }
-                        val scale by animateFloatAsState(
-                            if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
-                        )
-
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .background(color)
-                                .padding(horizontal = 20.dp),
-                            contentAlignment = alignment
-                        ) {
-                            Icon(
-                                icon,
-                                contentDescription = "Localized description",
-                                modifier = Modifier.scale(scale)
+                when (it) {
+                    is BookMarkType.Movie -> {
+                        SwipeToDismissItem(
+                            item = it.data,
+                            unBookCallback = { unBookCallback(it.data.id, it.data.title) }
+                        ) { item ->
+                            BookmarkItem(
+                                detail = item,
+                                onClick = navigateToDetailPage
                             )
                         }
                     }
-                ) {
-                    MovieBookmarkItem(
-                        movieDetail = it,
-                        onClick = navigateToDetailPage
-                    )
+                    is BookMarkType.Tv -> {
+                        SwipeToDismissItem(
+                            item = it.data,
+                            unBookCallback = { unBookCallback(it.data.id, it.data.name) }
+                        ) { item ->
+                            BookmarkItem(
+                                detail = item,
+                                onClick = navigateToDetailPage
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -177,10 +141,19 @@ fun BookmarkPageContent(
 @Composable
 private fun BookmarkPagePreview() {
     val items = listOf(
-        MovieDetail(
-            title = "Marvel Avenger",
-            voteAverage = 8.9,
-            overview = "What’s the secret to rich and tender squid? Always use sweet thyme."
+        BookMarkType.Movie(
+            MovieDetail(
+                title = "Marvel Avenger",
+                voteAverage = 8.9,
+                overview = "What’s the secret to rich and tender squid? Always use sweet thyme."
+            )
+        ),
+        BookMarkType.Tv(
+            TvDetail(
+                name = "Forest",
+                voteAverage = 5.0,
+                overview = "Try whisking the chickpeas juice chilis with salty kefir and vinaigrette, refrigerated.."
+            )
         )
     )
     BookmarkPageContent(
