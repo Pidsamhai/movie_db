@@ -98,7 +98,6 @@ fun NavGraph(
             deepLinks = listOf(navDeepLink { uriPattern = "$BASE_URL/person/{personId}-.*" })
         ) { _ ->
             PersonPage(
-                viewModel = hiltViewModel(),
                 navigateBack = { actions.navigateUp() },
                 navigateToMovieDetail = { actions.navigateToMovieDetail(it) }
             )
