@@ -21,7 +21,7 @@ class BookmarkRepositoryImpl @Inject constructor(
 ) : BookmarkRepository {
 
     override fun book(id: Long, isMovie: Boolean) {
-        val bookmark = Bookmark(movieId = id, isMovie = isMovie)
+        val bookmark = Bookmark(uid = id, isMovie = isMovie)
         bookmark.movieDetail.target = boxStore.movieDetail[id]
         bookmark.tvDetail.target = boxStore.tvDetail[id]
         boxStore.bookmark.put(bookmark)
@@ -37,7 +37,7 @@ class BookmarkRepositoryImpl @Inject constructor(
 
     override fun undoUnBookmark() {
         val item = getLatestRemoveItem() ?: return
-        book(item.movieId, item.isMovie)
+        book(item.uid, item.isMovie)
         removeLatestRemoveItem()
         Timber.i("Undo: $item")
     }
@@ -62,7 +62,7 @@ class BookmarkRepositoryImpl @Inject constructor(
         return boxStore
             .bookmark
             .query()
-            .equal(Bookmark_.movieId, id)
+            .equal(Bookmark_.uid, id)
             .asLiveData()
             .map {
                 it.firstOrNull() != null

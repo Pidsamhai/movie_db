@@ -226,17 +226,9 @@
     },
     {
       "id": "6:3557313817673175365",
-      "lastPropertyId": "5:8759638553365380698",
+      "lastPropertyId": "6:5696251001754144238",
       "name": "Bookmark",
       "properties": [
-        {
-          "id": "2:3648157587812691264",
-          "name": "id",
-          "indexId": "6:9081441212362409227",
-          "type": 11,
-          "flags": 520,
-          "relationTarget": "MovieDetail"
-        },
         {
           "id": "3:7593354813093938104",
           "name": "movieId",
@@ -255,6 +247,14 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "TvDetail"
+        },
+        {
+          "id": "6:5696251001754144238",
+          "name": "movieDetailId",
+          "indexId": "8:4673607162807181592",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "MovieDetail"
         }
       ],
       "relations": []
@@ -634,11 +634,14 @@
     }
   ],
   "lastEntityId": "13:8029487280651073096",
-  "lastIndexId": "7:9167723779968356588",
+  "lastIndexId": "8:4673607162807181592",
   "lastRelationId": "1:1953269119860202481",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
+  "newUidPool": [
+    8355562043702497778
+  ],
   "retiredEntityUids": [
     6963478850476750788,
     9082346317282487321
@@ -646,7 +649,8 @@
   "retiredIndexUids": [
     4845755199031261367,
     8886318143173131975,
-    1356605714859824641
+    1356605714859824641,
+    9081441212362409227
   ],
   "retiredPropertyUids": [
     6428360326250210027,
@@ -672,7 +676,8 @@
     725888679214412569,
     7532952686054144810,
     9095137901711499321,
-    3469895257520418265
+    3469895257520418265,
+    3648157587812691264
   ],
   "retiredRelationUids": [
     1953269119860202481
