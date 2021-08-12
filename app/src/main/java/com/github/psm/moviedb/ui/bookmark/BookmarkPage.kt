@@ -31,7 +31,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookmarkPage(
     viewModel: BookmarkVM = hiltViewModel(),
-    navigateToDetailPage: (movieId: Long) -> Unit
+    navigateToMovieDetail: (id: Long) -> Unit,
+    navigateToTvDetail: (id: Long) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -52,7 +53,8 @@ fun BookmarkPage(
             bookmarks = bookmarks,
             scrollState = scrollState,
             listState = listState,
-            navigateToDetailPage = navigateToDetailPage,
+            navigateToMovieDetail = navigateToMovieDetail,
+            navigateToTvDetail = navigateToTvDetail,
             unBookCallback = { movieId, title ->
                 viewModel.unBook(movieId)
                 coroutineScope.launch {
@@ -87,7 +89,8 @@ fun BookmarkPageContent(
     scrollState: ScrollState = rememberScrollState(),
     listState: LazyListState = rememberLazyListState(),
     unBookCallback: (movieId: Long, title: String?) -> Unit = { _, _ -> },
-    navigateToDetailPage: (movieId: Long) -> Unit = { }
+    navigateToMovieDetail: (id: Long) -> Unit = { },
+    navigateToTvDetail: (id: Long) -> Unit = { }
 ) {
     Column(
         modifier = Modifier
@@ -116,7 +119,7 @@ fun BookmarkPageContent(
                         ) { item ->
                             BookmarkItem(
                                 detail = item,
-                                onClick = navigateToDetailPage
+                                onClick = navigateToMovieDetail
                             )
                         }
                     }
@@ -127,7 +130,7 @@ fun BookmarkPageContent(
                         ) { item ->
                             BookmarkItem(
                                 detail = item,
-                                onClick = navigateToDetailPage
+                                onClick = navigateToTvDetail
                             )
                         }
                     }

@@ -88,7 +88,8 @@ fun NavGraph(
 
         composable(route = NavigationRoutes.BookmarkPage.route) {
             BookmarkPage(
-                navigateToDetailPage = { movieId -> actions.navigateToMovieDetail(movieId) }
+                navigateToMovieDetail = { id -> actions.navigateToMovieDetail(id) },
+                navigateToTvDetail = { id -> actions.navigateToTvDetail(id) },
             )
         }
 
