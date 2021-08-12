@@ -11,11 +11,13 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -62,8 +64,12 @@ fun SearchTextField(
     placeholder: String = "",
     backGroundColor: Color = Color(0xFFEEEEEE)
 ) {
-    var textValue by remember { mutableStateOf(initialValue) }
     val textStyle = remember { TextStyle.Default.copy(fontWeight = FontWeight.Bold) }
+
+    val textValue = TextFieldValue(
+        text = initialValue,
+        selection = TextRange(index = initialValue.length)
+    )
 
     Box(
         modifier = modifier
@@ -74,19 +80,20 @@ fun SearchTextField(
 
     ) {
         BasicTextField(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .then(modifier)
+                .fillMaxWidth()
                 .padding(horizontal = 8.dp),
             value = textValue,
             onValueChange = {
-                textValue = it
-                onValueChange(it)
+                onValueChange(it.text)
             },
             textStyle = textStyle,
             maxLines = 1,
         )
         Text(
             modifier = Modifier.padding(start = 8.dp),
-            text = if (textValue.isEmpty()) placeholder else "",
+            text = if (initialValue.isEmpty()) placeholder else "",
             style = textStyle,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )

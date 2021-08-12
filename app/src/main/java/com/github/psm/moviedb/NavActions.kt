@@ -3,11 +3,20 @@ package com.github.psm.moviedb
 import androidx.navigation.NavHostController
 
 class NavActions(private val navController: NavHostController) {
-    fun navigateToMovieDetail(id: Long) = navController.navigate("${NavigationRoutes.Detail.route}/movie/$id")
-    fun navigateToTvDetail(id: Long) = navController.navigate("${NavigationRoutes.Detail.route}/tv/$id")
+    fun navigateToMovieDetail(id: Long) = baseNavigate("${NavigationRoutes.Detail.route}/movie/$id")
+    fun navigateToTvDetail(id: Long) = baseNavigate("${NavigationRoutes.Detail.route}/tv/$id")
     fun navigateUp() = navController.navigateUp()
-    fun navigateToSearch() = navController.navigate(NavigationRoutes.SearchPage.route)
-    fun navigateToUpComing() = navController.navigate(NavigationRoutes.UpComing.route)
-    fun navigateToPopular() = navController.navigate(NavigationRoutes.Popular.route)
-    fun navigateToPerson(personId: Long) = navController.navigate("${NavigationRoutes.Person.route}/$personId")
+    fun navigateToSearch() = baseNavigate(NavigationRoutes.SearchPage.route)
+    fun navigateToUpComing() = baseNavigate(NavigationRoutes.UpComing.route)
+    fun navigateToPopular() = baseNavigate(NavigationRoutes.Popular.route)
+    fun navigateToPerson(personId: Long) = baseNavigate("${NavigationRoutes.Person.route}/$personId")
+
+    private fun baseNavigate(
+        route: String
+    ) {
+        navController.navigate(route = route) {
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
 }
