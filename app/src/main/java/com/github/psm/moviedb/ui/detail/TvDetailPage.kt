@@ -13,7 +13,7 @@ import com.github.psm.moviedb.ui.bookmark.BookmarkVM
 @Composable
 fun TvDetailPage(
     navigateBack: () -> Unit,
-    viewModel: TvDetailViewModel = hiltViewModel(),
+    viewModel: TvDetailVm = hiltViewModel(),
     bookmarkViewModel: BookmarkVM = hiltViewModel(),
     navigateToPerson: (personId: Long) -> Unit
 ) {
@@ -57,7 +57,7 @@ fun TvDetailPage(
             val id = detail?.id ?: return@DetailContent
             when {
                 booked -> bookmarkViewModel.booking(id, false)
-                else -> bookmarkViewModel.unBook(id)
+                else -> bookmarkViewModel.unBook(id, false)
             }
         },
         navigateToPerson = navigateToPerson

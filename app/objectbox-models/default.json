@@ -226,7 +226,7 @@
     },
     {
       "id": "6:3557313817673175365",
-      "lastPropertyId": "6:5696251001754144238",
+      "lastPropertyId": "7:3714826150638432069",
       "name": "Bookmark",
       "properties": [
         {
@@ -255,6 +255,11 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "MovieDetail"
+        },
+        {
+          "id": "7:3714826150638432069",
+          "name": "id",
+          "type": 6
         }
       ],
       "relations": []

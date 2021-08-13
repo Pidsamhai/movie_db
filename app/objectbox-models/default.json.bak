@@ -226,12 +226,12 @@
     },
     {
       "id": "6:3557313817673175365",
-      "lastPropertyId": "6:5696251001754144238",
+      "lastPropertyId": "7:3714826150638432069",
       "name": "Bookmark",
       "properties": [
         {
           "id": "3:7593354813093938104",
-          "name": "movieId",
+          "name": "uid",
           "type": 6,
           "flags": 129
         },
@@ -255,6 +255,11 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "MovieDetail"
+        },
+        {
+          "id": "7:3714826150638432069",
+          "name": "_id",
+          "type": 6
         }
       ],
       "relations": []
@@ -639,9 +644,6 @@
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "newUidPool": [
-    8355562043702497778
-  ],
   "retiredEntityUids": [
     6963478850476750788,
     9082346317282487321

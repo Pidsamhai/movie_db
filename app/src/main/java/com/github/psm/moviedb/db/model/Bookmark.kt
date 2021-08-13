@@ -17,6 +17,9 @@ data class Bookmark(
     @Id(assignable = true)
     @SerialName("uid")
     var uid: Long = 0,
+    @Uid(3714826150638432069L)
+    @SerialName("id")
+    val id: Long? = null, // Set Default for old Data
     @SerialName("isMovie")
     val isMovie: Boolean = true
 ) {
@@ -28,6 +31,6 @@ data class Bookmark(
 }
 
 sealed class BookMarkType {
-    data class Movie(val data: MovieDetail): BookMarkType()
-    data class Tv(val data: TvDetail): BookMarkType()
+    data class Movie(val data: MovieDetail) : BookMarkType()
+    data class Tv(val data: TvDetail) : BookMarkType()
 }

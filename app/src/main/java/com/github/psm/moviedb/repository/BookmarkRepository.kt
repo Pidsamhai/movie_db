@@ -6,9 +6,9 @@ import com.github.psm.moviedb.db.model.Bookmark
 
 interface BookmarkRepository {
     fun book(id: Long, isMovie: Boolean)
-    fun unBook(id: Long)
+    fun unBook(id: Long, isMovie: Boolean)
     fun getBookmarks(): LiveData<List<BookMarkType>>
     fun getBookmark(id: Long): Bookmark?
-    fun bookState(id: Long): LiveData<Boolean>
+    fun bookState(id: Long, isMovie: Boolean): LiveData<Boolean>
     fun undoUnBookmark()
 }

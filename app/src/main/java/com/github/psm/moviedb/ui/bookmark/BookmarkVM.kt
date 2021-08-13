@@ -15,7 +15,6 @@ class BookmarkVM @Inject constructor(
         .getBookmarks()
 
     fun booking(id: Long, isMovie: Boolean) = repository.book(id, isMovie)
-    fun bookState(id: Long): LiveData<Boolean> = repository.bookState(id)
-    fun unBook(id: Long) = repository.unBook(id)
+    fun unBook(id: Long, isMovie: Boolean) = repository.unBook(id, isMovie)
     fun undoUnBookmark() = repository.undoUnBookmark()
 }

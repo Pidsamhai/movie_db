@@ -43,7 +43,7 @@ fun SettingItem(
 @Composable
 fun SettingItem(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) = SettingContent(
     modifier = modifier,
     content = content
@@ -52,7 +52,7 @@ fun SettingItem(
 @Composable
 private fun SettingContent(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
         elevation = 8.dp,

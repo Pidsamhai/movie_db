@@ -55,11 +55,11 @@ fun BookmarkPage(
             listState = listState,
             navigateToMovieDetail = navigateToMovieDetail,
             navigateToTvDetail = navigateToTvDetail,
-            unBookCallback = { movieId, title ->
-                viewModel.unBook(movieId)
+            unBookCallback = { id, title, isMovie ->
+                viewModel.unBook(id, isMovie)
                 coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        "Removed ${title ?: movieId}", "Undo"
+                        "Removed ${title ?: id}", "Undo"
                     ).also { snackResult ->
                         when (snackResult) {
                             SnackbarResult.Dismissed -> Unit
@@ -88,7 +88,7 @@ fun BookmarkPageContent(
     bookmarks: List<BookMarkType>? = null,
     scrollState: ScrollState = rememberScrollState(),
     listState: LazyListState = rememberLazyListState(),
-    unBookCallback: (movieId: Long, title: String?) -> Unit = { _, _ -> },
+    unBookCallback: (id: Long, title: String?, isMovie: Boolean) -> Unit = { _, _, _ -> },
     navigateToMovieDetail: (id: Long) -> Unit = { },
     navigateToTvDetail: (id: Long) -> Unit = { }
 ) {
@@ -115,7 +115,7 @@ fun BookmarkPageContent(
                     is BookMarkType.Movie -> {
                         SwipeToDismissItem(
                             item = it.data,
-                            unBookCallback = { unBookCallback(it.data.id, it.data.title) }
+                            unBookCallback = { unBookCallback(it.data.id, it.data.title, true) }
                         ) { item ->
                             BookmarkItem(
                                 detail = item,
@@ -126,7 +126,7 @@ fun BookmarkPageContent(
                     is BookMarkType.Tv -> {
                         SwipeToDismissItem(
                             item = it.data,
-                            unBookCallback = { unBookCallback(it.data.id, it.data.name) }
+                            unBookCallback = { unBookCallback(it.data.id, it.data.name, false) }
                         ) { item ->
                             BookmarkItem(
                                 detail = item,

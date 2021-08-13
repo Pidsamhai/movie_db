@@ -13,13 +13,13 @@ import com.github.psm.moviedb.ui.bookmark.BookmarkVM
 @Composable
 fun MovieDetailPage(
     navigateBack: () -> Unit,
-    detailViewModel: DetailViewModel = hiltViewModel(),
+    movieDetailVm: MovieDetailVm = hiltViewModel(),
     bookmarkViewModel: BookmarkVM = hiltViewModel(),
     navigateToPerson: (personId: Long) -> Unit
 ) {
-    val isBooked by detailViewModel.isBooked.observeAsState(false)
-    val detailResource by detailViewModel.detail.collectAsState(initial = Resource.Loading)
-    val creditResource by detailViewModel.movieCredit.collectAsState(initial = Resource.Loading)
+    val isBooked by movieDetailVm.isBooked.observeAsState(false)
+    val detailResource by movieDetailVm.detail.collectAsState(initial = Resource.Loading)
+    val creditResource by movieDetailVm.movieCredit.collectAsState(initial = Resource.Loading)
     var detail: MovieDetail? = null
     var credit: MovieCredit? = null
 
@@ -56,7 +56,7 @@ fun MovieDetailPage(
             val id = detail?.id ?: return@DetailContent
             when {
                 booked -> bookmarkViewModel.booking(id, true)
-                else -> bookmarkViewModel.unBook(id)
+                else -> bookmarkViewModel.unBook(id, true)
             }
         },
         navigateToPerson = navigateToPerson,

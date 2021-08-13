@@ -21,23 +21,34 @@ class BookmarkRepositoryImpl @Inject constructor(
 ) : BookmarkRepository {
 
     override fun book(id: Long, isMovie: Boolean) {
-        val bookmark = Bookmark(uid = id, isMovie = isMovie)
+        val exist = boxStore
+            .bookmark
+            .query()
+            .equal(Bookmark_.id, id)
+            .equal(Bookmark_.isMovie, isMovie)
+            .build()
+            .findFirst()
+        if (exist != null) return
+        val bookmark = Bookmark(id = id, isMovie = isMovie)
         bookmark.movieDetail.target = boxStore.movieDetail[id]
         bookmark.tvDetail.target = boxStore.tvDetail[id]
         boxStore.bookmark.put(bookmark)
-        val item = boxStore.bookmark[id]
-        Timber.d("Booked %s %s", item.movieDetail.target, item.tvDetail.target)
     }
 
-    override fun unBook(id: Long) {
-        val item = boxStore.bookmark[id]
+    override fun unBook(id: Long, isMovie: Boolean) {
+        val item = boxStore.bookmark
+            .query()
+            .equal(Bookmark_.id, id)
+            .equal(Bookmark_.isMovie, isMovie)
+            .build()
+            .findFirst() ?: return
         saveLatestRemoveItem(item)
-        boxStore.bookmark.remove(id)
+        boxStore.bookmark.remove(item)
     }
 
     override fun undoUnBookmark() {
         val item = getLatestRemoveItem() ?: return
-        book(item.uid, item.isMovie)
+        book(item.id ?: item.uid, item.isMovie)
         removeLatestRemoveItem()
         Timber.i("Undo: $item")
     }
@@ -45,6 +56,7 @@ class BookmarkRepositoryImpl @Inject constructor(
     override fun getBookmarks(): LiveData<List<BookMarkType>> {
         return boxStore.bookmark.query().asLiveData().map { items ->
             items.map { item ->
+                Timber.d(item.toString())
                 when {
                     item.isMovie -> {
                         BookMarkType.Movie(item.movieDetail.target!!)
@@ -58,11 +70,12 @@ class BookmarkRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun bookState(id: Long): LiveData<Boolean> {
+    override fun bookState(id: Long, isMovie: Boolean): LiveData<Boolean> {
         return boxStore
             .bookmark
             .query()
-            .equal(Bookmark_.uid, id)
+            .equal(Bookmark_.id, id)
+            .equal(Bookmark_.isMovie, isMovie)
             .asLiveData()
             .map {
                 it.firstOrNull() != null
