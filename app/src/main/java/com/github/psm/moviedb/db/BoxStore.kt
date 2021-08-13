@@ -12,6 +12,7 @@ import com.github.psm.moviedb.db.model.tv.credits.TvCredit
 import com.github.psm.moviedb.db.model.tv.detail.TvDetail
 import com.github.psm.moviedb.db.model.tv.popular.Tv
 import io.objectbox.Box
+import io.objectbox.BoxStore
 
 interface BoxStore {
     val movie: Box<Movie>
@@ -25,4 +26,5 @@ interface BoxStore {
     val tv: Box<Tv>
     val tvDetail: Box<TvDetail>
     val tvCredit: Box<TvCredit>
+    val store: BoxStore
 }

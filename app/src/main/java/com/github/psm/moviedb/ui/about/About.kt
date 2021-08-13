@@ -2,13 +2,18 @@ package com.github.psm.moviedb.ui.about
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -32,11 +37,17 @@ fun About(
 ) {
     val language by aboutViewModel.language.observeAsState()
     val region by aboutViewModel.region.observeAsState()
+    val context = LocalContext.current
+
     AboutPageContent(
         language = language,
         region = region,
         saveLanguage = { aboutViewModel.saveLanguage(it) },
         saveRegion = { aboutViewModel.saveRegion(it) },
+        clearDataBase = {
+            aboutViewModel.clearDataBase()
+            Toast.makeText(context, "Clear success", Toast.LENGTH_SHORT).show()
+        }
     )
 }
 
@@ -46,9 +57,11 @@ fun AboutPageContent(
     region: String?,
     saveRegion: (region: String) -> Unit = { },
     saveLanguage: (language: String) -> Unit = { },
+    clearDataBase: () -> Unit = { }
 ) {
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showRegionDialog by remember { mutableStateOf(false) }
+    var showConfirmDialog by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val context = LocalContext.current
 
@@ -64,6 +77,30 @@ fun AboutPageContent(
             onClose = { showRegionDialog = false },
             onSelected = { saveRegion(it) },
             languagePickerMode = LanguagePickerMode.REGION
+        )
+    }
+    if (showConfirmDialog) {
+        AlertDialog(
+            title = { Text(text = "Confirm clear database") },
+            text = { Text(text = "All data will be lost. You can't undo it.") },
+            onDismissRequest = { showConfirmDialog = false },
+            dismissButton = {
+                TextButton(
+                    onClick = { showConfirmDialog = false }
+                ) {
+                    Text(text = "CANCEL")
+                }           
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        clearDataBase()
+                        showConfirmDialog = false
+                    }
+                ) {
+                    Text(text = "OK")
+                }
+            }
         )
     }
 
@@ -141,15 +178,29 @@ fun AboutPageContent(
                 modifier = Modifier
                     .clickable {
                         context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("${BuildConfig.REPOSITORY}/releases"))
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("${BuildConfig.REPOSITORY}/releases")
+                            )
                         )
                     }
                     .size(100.dp),
                 title = "Version",
                 value = BuildConfig.VERSION_NAME
             )
-            repeat(1) {
-                Box(modifier = Modifier.size(100.dp))
+            SettingItem(
+                modifier = Modifier
+                    .clickable {
+                        showConfirmDialog = true
+                    }
+                    .size(100.dp),
+            ) {
+                Text(text = "Clear Database")
+                Spacer(modifier = Modifier.size(8.dp))
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null
+                )
             }
         }
     }

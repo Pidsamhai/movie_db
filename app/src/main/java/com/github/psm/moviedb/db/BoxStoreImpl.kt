@@ -37,4 +37,6 @@ class BoxStoreImpl : BoxStore {
         get() = ObjectBox.store.boxFor()
     override val tvCredit: Box<TvCredit>
         get() = ObjectBox.store.boxFor()
+    override val store: io.objectbox.BoxStore
+        get() = ObjectBox.store
 }
