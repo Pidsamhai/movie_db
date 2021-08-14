@@ -1,6 +1,5 @@
 package com.github.psm.moviedb.ui.widget.movie
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -13,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.tv.popular.Tv
-import com.github.psm.moviedb.ui.theme.TripleE
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.utils.toImgUrl
 
@@ -56,7 +54,6 @@ private fun SearchItemContent(
 ) {
     Card(
         modifier = Modifier
-            .background(TripleE)
             .height(150.dp),
         elevation = 4.dp
     ) {

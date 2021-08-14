@@ -152,13 +152,13 @@ fun MovieItemContent(
                             text = "Release Date",
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp,
-                            color = MaterialTheme.colors.surface
+                            color = Color.White
                         )
                         Text(
                             text = releaseDate ?: "",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colors.surface
+                            color = Color.White
                         )
                     }
                 }

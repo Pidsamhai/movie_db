@@ -16,13 +16,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+private val SearchTextFieldBackground: Color
+    @Composable get() = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)
+
+private val SearchTextFieldTextStyle: TextStyle
+    @Composable get() = TextStyle.Default.copy(
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colors.onSurface
+    )
 
 
 @Composable
@@ -61,9 +72,8 @@ fun SearchTextField(
     value: String = "",
     onValueChange: (value: String) -> Unit,
     placeholder: String = "",
-    backGroundColor: Color = Color(0xFFEEEEEE)
+    backGroundColor: Color = SearchTextFieldBackground
 ) {
-    val textStyle = remember { TextStyle.Default.copy(fontWeight = FontWeight.Bold) }
 
     var textValueState by remember {
         mutableStateOf(
@@ -96,19 +106,20 @@ fun SearchTextField(
                     onValueChange(it.text)
                 }
             },
-            textStyle = textStyle,
+            textStyle = SearchTextFieldTextStyle,
+            cursorBrush = SolidColor(MaterialTheme.colors.onSurface),
             maxLines = 1
         )
         Text(
             modifier = Modifier.padding(start = 8.dp),
             text = if (value.isEmpty()) placeholder else "",
-            style = textStyle,
+            style = SearchTextFieldTextStyle,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = Devices.DEFAULT)
 @Composable
 fun NormalTextFieldPreview() {
     SearchTextField(
