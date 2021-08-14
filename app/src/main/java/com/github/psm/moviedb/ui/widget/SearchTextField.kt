@@ -11,8 +11,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,17 +58,23 @@ fun SearchTextField(
 @Composable
 fun SearchTextField(
     modifier: Modifier,
-    initialValue: String = "",
+    value: String = "",
     onValueChange: (value: String) -> Unit,
     placeholder: String = "",
     backGroundColor: Color = Color(0xFFEEEEEE)
 ) {
     val textStyle = remember { TextStyle.Default.copy(fontWeight = FontWeight.Bold) }
 
-    val textValue = TextFieldValue(
-        text = initialValue,
-        selection = TextRange(index = initialValue.length)
-    )
+    var textValueState by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = value,
+                selection = TextRange(index = value.length)
+            )
+        )
+    }
+
+    val textValue = textValueState.copy(text = value)
 
     Box(
         modifier = modifier
@@ -86,14 +91,17 @@ fun SearchTextField(
                 .padding(horizontal = 8.dp),
             value = textValue,
             onValueChange = {
-                onValueChange(it.text)
+                textValueState = it
+                if (value != it.text) {
+                    onValueChange(it.text)
+                }
             },
             textStyle = textStyle,
-            maxLines = 1,
+            maxLines = 1
         )
         Text(
             modifier = Modifier.padding(start = 8.dp),
-            text = if (initialValue.isEmpty()) placeholder else "",
+            text = if (value.isEmpty()) placeholder else "",
             style = textStyle,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )
@@ -107,7 +115,7 @@ fun NormalTextFieldPreview() {
         modifier = Modifier
             .fillMaxWidth(),
         placeholder = "Placeholder",
-        initialValue = "Hello",
+        value = "Hello",
         onValueChange = { }
     )
 }

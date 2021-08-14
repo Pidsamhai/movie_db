@@ -75,7 +75,7 @@ fun SearchPageContent(
             },
             centerContent = {
                 SearchTextField(
-                    initialValue = searchKeyWord,
+                    value = searchKeyWord,
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(focusRequest),
