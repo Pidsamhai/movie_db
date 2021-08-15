@@ -3,7 +3,9 @@ package com.github.psm.moviedb.repository
 import com.github.psm.moviedb.db.BoxStore
 import com.github.psm.moviedb.db.Resource
 import com.github.psm.moviedb.db.Response
+import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.MovieResponse
+import com.github.psm.moviedb.db.model.Movie_
 import com.github.psm.moviedb.db.model.TvResponse
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.genre.GenreResponse
@@ -13,27 +15,55 @@ import com.github.psm.moviedb.db.model.person.movie.PersonMovieCredit
 import com.github.psm.moviedb.db.model.person.tv.PersonTvCredit
 import com.github.psm.moviedb.db.model.tv.credits.TvCredit
 import com.github.psm.moviedb.db.model.tv.detail.TvDetail
+import com.github.psm.moviedb.db.model.tv.popular.Tv
 import com.github.psm.moviedb.db.model.tv.popular.TvPopularResponse
+import com.github.psm.moviedb.db.model.tv.popular.Tv_
 import com.github.psm.moviedb.db.model.upcoming.UpComingResponse
 import com.github.psm.moviedb.db.networkBoundResource
 import io.ktor.client.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import io.objectbox.kotlin.flow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TMDBRepositoryImpl @Inject constructor(
     private val boxStore: BoxStore,
     private val apiServices: HttpClient
 ) : TMDBRepository {
+
+    override fun getPopularMovieFlow(page: Int, refresh: Boolean): Flow<Resource<List<Movie>>> =
+        networkBoundResource(
+            query = {
+                boxStore.movie
+                    .query()
+                    .orderDesc(Movie_.popularity)
+                    .orderDesc(Movie_.releaseDate)
+                    .orderDesc(Movie_.voteCount)
+                    .orderDesc(Movie_.voteAverage)
+                    .build()
+                    .flow()
+                    .map {
+                        it.take(LIMIT_LIST_ITEM)
+                    }
+            },
+            fetch = {
+                apiServices.get<MovieResponse>(path = POPULAR_MOVIE_ROUTE) {
+                    parameter("page", page)
+                }
+            },
+            saveFetchResult = { boxStore.movie.put(it.results) },
+            shouldFetch = { refresh }
+        ).flowOn(Dispatchers.IO).distinctUntilChanged()
 
     override suspend fun getPopularMovie(page: Int): Response<MovieResponse> {
         return try {
             val result = apiServices.get<MovieResponse>(path = POPULAR_MOVIE_ROUTE) {
                 parameter("page", page)
             }
-            result.results?.let { boxStore.movie.put(it) }
             Response.Success(result)
         } catch (e: Exception) {
             Timber.e(e)
@@ -148,6 +178,29 @@ class TMDBRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getPopularTvFlow(page: Int, refresh: Boolean): Flow<Resource<List<Tv>>> =
+        networkBoundResource(
+            query = {
+                boxStore.tv
+                    .query()
+                    .orderDesc(Tv_.popularity)
+                    .orderDesc(Tv_.firstAirDate)
+                    .orderDesc(Tv_.voteCount)
+                    .orderDesc(Tv_.voteAverage)
+                    .build()
+                    .flow()
+                    .map {
+                        it.take(LIMIT_LIST_ITEM)
+                    }
+            },
+            fetch = {
+                apiServices.get<TvPopularResponse>(path = POPULAR_TV_ROUTE) {
+                    parameter("page", page)
+                }
+            },
+            saveFetchResult = { boxStore.tv.put(it.tvs) },
+            shouldFetch = { refresh }
+        ).flowOn(Dispatchers.IO).distinctUntilChanged()
 
     override suspend fun searchTv(keyWord: String, page: Int): Response<TvResponse> {
         return try {
@@ -189,5 +242,6 @@ class TMDBRepositoryImpl @Inject constructor(
         private const val SEARCH_TV_ROUTE = "/search/tv"
         private const val TV_DETAIL_ROUTE = "/tv/%s"
         private const val TV_CREDIT_ROUTE = "/tv/%s/credits"
+        private const val LIMIT_LIST_ITEM = 15
     }
 }

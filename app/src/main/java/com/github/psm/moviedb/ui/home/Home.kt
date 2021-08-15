@@ -13,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -22,10 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.psm.moviedb.ui.widget.CustomAppBar
-//import com.github.psm.moviedb.ui.widget.GenreItem
 import com.github.psm.moviedb.ui.widget.movie.MovieItem
 import com.github.psm.moviedb.ui.widget.movie.MovieItemPlaceHolder
 import com.github.psm.moviedb.ui.widget.movie.TvItem
+import com.github.psm.moviedb.utils.getValue
+import com.github.psm.moviedb.utils.isLoadings
 import com.github.psm.moviedb.utils.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -43,10 +43,15 @@ fun Home(
     val searchValue = remember { mutableStateOf(TextFieldValue("")) }
     val listSate = rememberLazyListState()
     val mainScrollState = rememberScrollState()
-    val popularMovie by homeViewModel.popularMovie.observeAsState()
-    val popularTv by homeViewModel.popularTv.observeAsState()
+    val popularMovieResource by homeViewModel.popularMovie.collectAsState(initial = null)
+    val popularTvResource by homeViewModel.popularTv.collectAsState(initial = null)
+    val popularMovie by popularMovieResource
+    val popularTv by popularTvResource
+    val isLoading = isLoadings(
+        popularMovieResource,
+        popularTvResource
+    )
     val upcomingMovie by homeViewModel.upComings.collectAsState(initial = null)
-    val isLoading by homeViewModel.isLoading.observeAsState(initial = true)
     val swipeRefreshState = rememberSwipeRefreshState(isLoading)
 
     Column {
@@ -55,7 +60,7 @@ fun Home(
         )
         SwipeRefresh(
             state = swipeRefreshState,
-            onRefresh = { homeViewModel.feedData() }
+            onRefresh = { homeViewModel.refresh(true) }
         ) {
             Column(
                 modifier = modifier
@@ -152,7 +157,7 @@ fun Home(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     placeholder(
-                        enable = { popularMovie == null },
+                        enable = { popularTv == null },
                         itemCount = 5
                     ) {
                         MovieItemPlaceHolder()
@@ -163,7 +168,6 @@ fun Home(
                         }
                     }
                 }
-
             }
         }
     }
