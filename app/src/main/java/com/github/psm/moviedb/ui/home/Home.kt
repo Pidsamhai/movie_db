@@ -1,22 +1,16 @@
 package com.github.psm.moviedb.ui.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,7 +34,7 @@ fun Home(
     navigateToPopular: () -> Unit = { },
     navigateToUpComing: () -> Unit = { }
 ) {
-    val searchValue = remember { mutableStateOf(TextFieldValue("")) }
+    val contentPadding = 16.dp
     val listSate = rememberLazyListState()
     val mainScrollState = rememberScrollState()
     val popularMovieResource by homeViewModel.popularMovie.collectAsState(initial = null)
@@ -56,7 +50,8 @@ fun Home(
 
     Column {
         CustomAppBar(
-            scrollState = mainScrollState
+            scrollState = mainScrollState,
+            searchClick = { navigateToSearchPage() }
         )
         SwipeRefresh(
             state = swipeRefreshState,
@@ -68,32 +63,9 @@ fun Home(
                     .verticalScroll(mainScrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
-                        .onFocusChanged { focusState ->
-                            if (focusState.isFocused) {
-                                navigateToSearchPage.invoke()
-                            }
-                        }
-                        .clickable { navigateToSearchPage.invoke() },
-                    label = { Text(text = "Search") },
-                    placeholder = { Text(text = "Search") },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Rounded.Search,
-                            contentDescription = "Search"
-                        )
-                    },
-                    value = searchValue.value,
-                    onValueChange = { text -> searchValue.value = text },
-                    singleLine = true
-                )
-
                 HeaderItem(
                     header = "Popular",
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    modifier = Modifier.padding(horizontal = contentPadding),
                     onEndTextClick = navigateToPopular
                 )
 
@@ -101,7 +73,7 @@ fun Home(
                     Modifier
                         .fillMaxWidth(),
                     state = listSate,
-                    contentPadding = PaddingValues(24.dp),
+                    contentPadding = PaddingValues(contentPadding),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     placeholder(
@@ -121,14 +93,14 @@ fun Home(
 
                 HeaderItem(
                     header = "Upcoming",
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    modifier = Modifier.padding(horizontal = contentPadding),
                     onEndTextClick = navigateToUpComing
                 )
 
                 LazyRow(
                     Modifier
                         .fillMaxWidth(),
-                    contentPadding = PaddingValues(24.dp),
+                    contentPadding = PaddingValues(contentPadding),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     placeholder(
@@ -146,14 +118,14 @@ fun Home(
 
                 HeaderItem(
                     header = "Tv Popular",
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    modifier = Modifier.padding(horizontal = contentPadding),
                     onEndTextClick = { }
                 )
 
                 LazyRow(
                     Modifier
                         .fillMaxWidth(),
-                    contentPadding = PaddingValues(24.dp),
+                    contentPadding = PaddingValues(contentPadding),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     placeholder(

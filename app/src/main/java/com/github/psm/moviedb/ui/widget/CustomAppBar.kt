@@ -2,68 +2,96 @@ package com.github.psm.moviedb.ui.widget
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.psm.moviedb.ui.theme.MovieGrey
+import com.github.psm.moviedb.ui.theme.LogoFont
+
+private object DefaultProfileSize {
+    val collapse = 30.dp
+    val expanded = 45.dp
+}
+
+private object DefaultLogoText {
+    val collapse = LogoFont.copy(fontSize = 24.sp)
+    val expanded = LogoFont.copy(fontSize = 40.sp)
+}
+
+private object DefaultElevation {
+    val collapse = 8.dp
+    val expanded = 0.dp
+}
+
+private const val DefaultAppbarScrollOffset = 50
 
 @Composable
 fun CustomAppBar(
     scrollState: ScrollState? = null,
+    searchClick: () -> Unit = { }
 ) {
-    var profileSize by remember { mutableStateOf(58.dp) }
-    var appBarPadding by remember { mutableStateOf(24.dp) }
+    var profileSize by remember { mutableStateOf(DefaultProfileSize.expanded) }
+    var textStyle by remember { mutableStateOf(DefaultLogoText.expanded) }
+    var elevation by remember { mutableStateOf(DefaultElevation.expanded) }
+    val scrollOffset = scrollState?.value ?: 0
 
-    var isBigTitleText by remember { mutableStateOf(true) }
-    if (scrollState?.value ?: 0 > 50) {
-        profileSize = 30.dp
-        isBigTitleText = false
-        appBarPadding = 16.dp
+    if (scrollOffset > DefaultAppbarScrollOffset) {
+        profileSize = DefaultProfileSize.collapse
+        textStyle = DefaultLogoText.collapse
+        elevation = DefaultElevation.collapse
     } else {
-        profileSize = 58.dp
-        isBigTitleText = true
-        appBarPadding = 24.dp
+        profileSize = DefaultProfileSize.expanded
+        textStyle = DefaultLogoText.expanded
+        elevation = DefaultElevation.expanded
     }
 
     val profileAnimState = animateDpAsState(targetValue = profileSize)
-    val appbarPaddingAnimState = animateDpAsState(targetValue = appBarPadding)
 
     Surface(
-        elevation = if (isBigTitleText) 0.dp else 8.dp
+        elevation = elevation
     ) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(appbarPaddingAnimState.value),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Hi Edward",
-                style = if (isBigTitleText) MaterialTheme.typography.h6.copy(fontSize = 32.sp)
-                else MaterialTheme.typography.h6.copy(fontSize = 20.sp),
                 modifier = Modifier
                     .defaultMinSize(minWidth = 100.dp)
-//                .animateContentSize()
-                ,
-                textAlign = TextAlign.Right
+                    .weight(1f),
+                text = "MOVIE DB",
+                style = textStyle,
+                textAlign = TextAlign.Left
             )
-            Surface(
-                Modifier
+
+            IconButton(
+                modifier = Modifier
                     .size(profileAnimState.value),
-                shape = CircleShape,
+                onClick = { searchClick() }
             ) {
-                Box(modifier = Modifier.background(MovieGrey))
+                Icon(
+                    imageVector = Icons.Rounded.Search,
+                    contentDescription = null
+                )
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun CustomAppBar() {
+    CustomAppBar()
 }
