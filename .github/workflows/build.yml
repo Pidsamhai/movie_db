@@ -52,7 +52,7 @@ jobs:
           echo $PLAYKEY_STORE > app/playKey.out
           base64 -di app/playKey.out > app/plaKeystore.jks
         env:
-          KEY_STORE: ${{ secrets.PLAYKEY_STORE }}
+          PLAYKEY_STORE: ${{ secrets.PLAYKEY_STORE }}
 
       # create key.properties
       - name: Create key.properties
@@ -68,7 +68,7 @@ jobs:
           echo $PLAYKEY_PROPERTIES > playOut.properties
           base64 -di playOut.properties > playKey.properties
         env:
-          KEY_PROPERTIES: ${{ secrets.PLAYKEY_PROPERTIES }}
+          PLAYKEY_PROPERTIES: ${{ secrets.PLAYKEY_PROPERTIES }}
 
       # create serviceAccountJson
       - name: Create serviceAccountJson
@@ -76,7 +76,7 @@ jobs:
           echo $SERVICES_ACCOUNT > app/services_account.out
           base64 -di app/services_account.out > app/services_account.json
         env:
-          NATIVE_CPP: ${{ secrets.SERVICES_ACCOUNT }}
+          SERVICES_ACCOUNT: ${{ secrets.SERVICES_ACCOUNT }}
 
       # create native-lib.cpp
       - name: Create native-lib.cpp
@@ -85,9 +85,6 @@ jobs:
           base64 -di app/src/main/cpp/native-lib.out > app/src/main/cpp/native-lib.cpp
         env:
           NATIVE_CPP: ${{ secrets.NATIVE_CPP }}
-
-      - name: Download Playstore Listing
-        run: bash ./gradlew app:bootstrapListing
 
       - name: Build Apk
         run: bash ./gradlew app:assembleRelease
@@ -101,6 +98,9 @@ jobs:
             app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download Playstore Listing
+        run: bash ./gradlew app:bootstrapListing
 
       - name: Upload Bubnle to Playconsole
         run: ./gradlew app:publishGooglePlayBundle
