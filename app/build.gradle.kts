@@ -23,11 +23,6 @@ File("playKey.properties").inputStream().use {
 }
 
 android {
-
-    androidGitVersion {
-        codeFormat = "MNNPPPRR"
-    }
-
     compileSdk = Android.compileSdk
     buildToolsVersion = Android.buildToolsVersion
 
@@ -35,10 +30,7 @@ android {
         applicationId = DefaultConfig.applicationId
         minSdk = DefaultConfig.minSdk
         targetSdk = DefaultConfig.targetSdk
-        versionCode = when (val code = androidGitVersion.code()) {
-            0 -> 1
-            else -> code
-        }
+        versionCode = Versions.versionCode()
         versionName = androidGitVersion.name()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -1,3 +1,6 @@
+import java.time.LocalDateTime
+import java.time.ZoneId
+
 object Versions {
     const val Compose = "1.0.1"
     const val Hilt = "2.36"
@@ -28,4 +31,14 @@ object Versions {
     const val ConstraintLayoutCompose = "1.0.0-beta02"
     const val KotlinxDatetime = "0.2.1"
     const val Coil = "1.3.2"
+
+    fun versionCode(): Int {
+        val now = LocalDateTime.now(ZoneId.of("Asia/Bangkok"))
+        return "%s%02d%02d%02d".format(
+            now.year,
+            now.monthValue,
+            now.hour,
+            now.minute
+        ).toInt()
+    }
 }
