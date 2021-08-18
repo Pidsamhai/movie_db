@@ -15,3 +15,8 @@
 .cxx
 local.properties
 /key.properties
+/playKey.properties
+/app/src/main/play/
+/app/services_account.json
+**/**/**.aab
+**/**/**.apk

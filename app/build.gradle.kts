@@ -1,3 +1,4 @@
+import com.github.triplet.gradle.androidpublisher.ReleaseStatus
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
@@ -9,20 +10,19 @@ plugins {
     id(Plugins.Hilt)
     id(Plugins.GitVersion) version Versions.GitVersion
     id(Plugins.ObjectBox)
+    id("com.github.triplet.play") version "3.6.0"
 }
 
 val properties = Properties()
-val propertiesFile = File("key.properties")
-propertiesFile.inputStream().use {
+val playProperties = Properties()
+File("key.properties").inputStream().use {
     properties.load(it)
+}
+File("playKey.properties").inputStream().use {
+    playProperties.load(it)
 }
 
 android {
-
-    androidGitVersion {
-        codeFormat = "MNNPPPRR"
-    }
-
     compileSdk = Android.compileSdk
     buildToolsVersion = Android.buildToolsVersion
 
@@ -30,10 +30,7 @@ android {
         applicationId = DefaultConfig.applicationId
         minSdk = DefaultConfig.minSdk
         targetSdk = DefaultConfig.targetSdk
-        versionCode = when (val code = androidGitVersion.code()) {
-            0 -> 1
-            else -> code
-        }
+        versionCode = Versions.versionCode()
         versionName = androidGitVersion.name()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -53,6 +50,14 @@ android {
             enableV3Signing = true
             enableV4Signing = true
         }
+        create("googlePlay") {
+            keyAlias = playProperties["KEY_ALIAS"] as String?
+            keyPassword = playProperties["KEY_PASSWORD"] as String?
+            storePassword = playProperties["STORE_PASSWORD"] as String?
+            storeFile = file("playKeystore.jks")
+            enableV3Signing = true
+            enableV4Signing = true
+        }
     }
 
     buildTypes {
@@ -63,6 +68,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("googlePlay") {
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("googlePlay")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            isDebuggable = false
         }
         getByName("debug") {
             applicationIdSuffix = ".debug"
@@ -86,6 +100,17 @@ android {
     externalNativeBuild {
         cmake {
             path("CMakeLists.txt")
+        }
+    }
+
+    playConfigs {
+        register("googlePlay") {
+            serviceAccountCredentials.fileValue(File("services_account.json"))
+            track.set("beta")
+            userFraction.set(1.0)
+            updatePriority.set(2)
+            releaseStatus.set(ReleaseStatus.DRAFT)
+            defaultToAppBundles.set(true)
         }
     }
 }
