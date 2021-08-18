@@ -73,10 +73,10 @@ jobs:
       # create serviceAccountJson
       - name: Create serviceAccountJson
         run: |
-          echo $SERVICE > services_account.out
+          echo $SERVICES_ACCOUNT > services_account.out
           base64 -di services_account.out > app/services_account.json
         env:
-          NATIVE_CPP: ${{ secrets.SERVICE }}
+          NATIVE_CPP: ${{ secrets.SERVICES_ACCOUNT }}
 
       # create native-lib.cpp
       - name: Create native-lib.cpp
@@ -89,7 +89,7 @@ jobs:
       - name: Build Apk
         run: bash ./gradlew :app:assembleRelease
 
-      - name: upload apk
+      - name: Create Github release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
