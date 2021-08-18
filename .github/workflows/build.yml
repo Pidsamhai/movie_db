@@ -73,10 +73,10 @@ jobs:
       # create serviceAccountJson
       - name: Create serviceAccountJson
         run: |
-          echo $SERVICE > services_account.out
-          base64 -di services_account.out > app/services_account.json
+          echo $SERVICES_ACCOUNT > app/services_account.out
+          base64 -di app/services_account.out > app/services_account.json
         env:
-          NATIVE_CPP: ${{ secrets.SERVICE }}
+          NATIVE_CPP: ${{ secrets.SERVICES_ACCOUNT }}
 
       # create native-lib.cpp
       - name: Create native-lib.cpp
@@ -86,10 +86,13 @@ jobs:
         env:
           NATIVE_CPP: ${{ secrets.NATIVE_CPP }}
 
-      - name: Build Apk
-        run: bash ./gradlew :app:assembleRelease
+      - name: Download Playstore Listing
+        run: bash ./gradlew app:bootstrapListing
 
-      - name: upload apk
+      - name: Build Apk
+        run: bash ./gradlew app:assembleRelease
+
+      - name: Create Github release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
@@ -98,9 +101,6 @@ jobs:
             app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download Playstore AppData
-        run: ./gradlew bootstrapListing
 
       - name: Upload Bubnle to Playconsole
         run: ./gradlew app:publishGooglePlayBundle
