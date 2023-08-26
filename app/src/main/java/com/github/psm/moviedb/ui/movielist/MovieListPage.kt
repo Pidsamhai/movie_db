@@ -4,6 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,9 +21,7 @@ import com.github.psm.moviedb.ui.widget.BaseAppBar
 import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.LoaderStyle
 import com.github.psm.moviedb.ui.widget.movie.MovieItem
-import com.github.psm.moviedb.utils.items
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MovieListPage(
     title: String,
@@ -32,7 +32,7 @@ fun MovieListPage(
     val movies = viewModel.movies.collectAsLazyPagingItems()
     val ifRetry = movies.loadState.source.refresh is LoadState.Loading
     val ifFail = movies.loadState.source.refresh is LoadState.Error
-    val listState = rememberLazyListState()
+//    val listState = rememberLazyGridState()
 
     Column {
         BaseAppBar(
@@ -47,7 +47,7 @@ fun MovieListPage(
             centerContent = {
                 Text(text = title, fontWeight = FontWeight.Bold)
             },
-            listState = listState
+//            listState = listState
         )
 
         Box(
@@ -61,13 +61,13 @@ fun MovieListPage(
                 contentAlignment = Alignment.Center
             ) {
                 LazyVerticalGrid(
-                    cells = GridCells.Fixed(2),
-                    state = listState
+                    columns = GridCells.Fixed(2),
+//                    state = listState
                 ) {
-                    items(movies) { movie ->
+                    items(count = movies.itemCount) { index ->
                         MovieItem(
                             modifier = Modifier.padding(8.dp),
-                            movie = movie ?: return@items,
+                            movie = movies[index] ?: return@items,
                             onClick = selectedMovie
                         )
                     }

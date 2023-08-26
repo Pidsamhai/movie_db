@@ -1,7 +1,9 @@
 package com.github.psm.moviedb.ui.search
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -14,7 +16,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.tv.popular.Tv
 import com.github.psm.moviedb.ui.person.PersonContentPage
@@ -22,10 +23,8 @@ import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.LoaderStyle
 import com.github.psm.moviedb.ui.widget.movie.SearchItem
 import com.github.psm.moviedb.utils.TabPages
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
+import androidx.compose.foundation.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -43,7 +42,7 @@ private val tabPage = object : TabPages {
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun SearchResultTabs(
@@ -53,7 +52,9 @@ fun SearchResultTabs(
     selectedMovie: (id: Long) -> Unit = { },
     selectedTv: (id: Long) -> Unit = { }
 ) {
-    val pageState = rememberPagerState(pageCount = 2)
+    val pageState = rememberPagerState {
+        return@rememberPagerState 2;
+    }
     val coroutineScope = rememberCoroutineScope()
     val changePage: (index: Int) -> Unit = {
         coroutineScope.launch {
@@ -150,8 +151,8 @@ fun <T: Any>SearchResult(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
-                items(items ?: return@LazyColumn) {
-                    item(item = it ?: return@items)
+                items(items?.itemCount ?: return@LazyColumn) { index ->
+                    item(item = items[index] ?: return@items)
                 }
             }
         }

@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.konan.properties.Properties
-
 plugins {
     id(Plugins.AndroidApplication)
     id(Plugins.Android)
@@ -11,11 +9,11 @@ plugins {
     id(Plugins.ObjectBox)
 }
 
-val properties = Properties()
-val propertiesFile = File("key.properties")
-propertiesFile.inputStream().use {
-    properties.load(it)
-}
+//val properties = Properties()
+//val propertiesFile = File("key.properties")
+//propertiesFile.inputStream().use {
+//    properties.load(it)
+//}
 
 android {
 
@@ -24,7 +22,7 @@ android {
     }
 
     compileSdk = Android.compileSdk
-    buildToolsVersion = Android.buildToolsVersion
+//    buildToolsVersion = Android.buildToolsVersion
 
     defaultConfig {
         applicationId = DefaultConfig.applicationId
@@ -45,20 +43,20 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            keyAlias = properties["KEY_ALIAS"] as String?
-            keyPassword = properties["KEY_PASSWORD"] as String?
-            storePassword = properties["STORE_PASSWORD"] as String?
-            storeFile = file("keystore.jks")
-            enableV3Signing = true
-            enableV4Signing = true
-        }
+//        create("release") {
+//            keyAlias = properties["KEY_ALIAS"] as String?
+//            keyPassword = properties["KEY_PASSWORD"] as String?
+//            storePassword = properties["STORE_PASSWORD"] as String?
+//            storeFile = file("keystore.jks")
+//            enableV3Signing = true
+//            enableV4Signing = true
+//        }
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("release")
+//            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -69,11 +67,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
         allWarningsAsErrors = false
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
@@ -88,16 +86,25 @@ android {
             path("CMakeLists.txt")
         }
     }
+    namespace = "com.github.psm.moviedb"
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
     implementation(Libs.CoreKtx)
     implementation(Libs.AppCompat)
     implementation(Libs.Material)
-    implementation(Libs.ComposeUi)
-    implementation(Libs.ComposeMaterial)
-    implementation(Libs.ComposeUiTool)
-    debugImplementation(Libs.ComposeUiToolPreView)
+//    implementation(Libs.ComposeUi)
+//    implementation(Libs.ComposeMaterial)
+//    implementation(Libs.ComposeUiTool)
+//    debugImplementation(Libs.ComposeUiToolPreView)
+    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
     implementation(Libs.LifecycleKtx)
     implementation(Libs.LiveDataKtx)
     implementation(Libs.ComposeLiveData)
@@ -136,4 +143,8 @@ dependencies {
      */
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
     compileOnly("com.github.pengrad:jdk9-deps:22e725c32e")
+}
+
+kapt {
+    correctErrorTypes = true
 }

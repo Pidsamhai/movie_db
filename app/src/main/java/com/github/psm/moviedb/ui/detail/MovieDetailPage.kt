@@ -30,6 +30,8 @@ fun MovieDetailPage(
         is Resource.Error -> {
             detail = (detailResource as Resource.Error<MovieDetail>).data
         }
+
+        else -> {}
     }
 
     when (creditResource) {
@@ -39,6 +41,8 @@ fun MovieDetailPage(
         is Resource.Error -> {
             credit = (creditResource as Resource.Error<MovieCredit>).data
         }
+
+        else -> {}
     }
 
     DetailContent(

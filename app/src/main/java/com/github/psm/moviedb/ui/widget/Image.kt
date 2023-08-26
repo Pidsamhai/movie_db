@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import coil.drawable.CrossfadeDrawable
 import coil.size.Scale
@@ -26,19 +27,20 @@ fun Image(
     contentScale: ContentScale = ContentScale.FillBounds,
     enablePlaceHolder: Boolean = false
 ) {
-    val painter = rememberImagePainter(data = data) {
-        data(data)
-        crossfade(fadeIn)
-        crossfade(fadeInDurationMs)
-        scale(Scale.FILL)
-        error(R.drawable.ic_round_broken_image)
-    }
+    val painter = rememberAsyncImagePainter(data)
+//    {
+////        model(data)
+////        crossfade(fadeIn)
+////        crossfade(fadeInDurationMs)
+////        scale(Scale.FILL)
+//        error(R.drawable.ic_round_broken_image)
+//    }
 
     val enableShimmer = if (enablePlaceHolder)
-        painter.state is ImagePainter.State.Loading
+        painter.state is AsyncImagePainter.State.Loading
     else false
 
-    val isError = painter.state is ImagePainter.State.Error
+    val isError = painter.state is AsyncImagePainter.State.Error
 
     BaseImage(
         modifier = modifier
