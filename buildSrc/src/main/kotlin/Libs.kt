@@ -31,6 +31,7 @@ object Libs {
     const val ComposeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.ComposeLib}"
 
     const val ObjectBoxKotlin = "io.objectbox:objectbox-kotlin:${Versions.ObjectBox}"
+    const val ObjectBoxBrowser = "io.objectbox:objectbox-android-objectbrowser:${Versions.ObjectBox}"
     const val Timber = "com.jakewharton.timber:timber:${Versions.Timber}"
     const val ComposePaging = "androidx.paging:paging-compose:${Versions.ComposePaging}"
     const val LottieCompose = "com.airbnb.android:lottie-compose:${Versions.LottieCompose}"

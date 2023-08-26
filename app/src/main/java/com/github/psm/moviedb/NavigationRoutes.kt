@@ -13,7 +13,7 @@ sealed class NavigationRoutes(
     val label: String,
     val isTopLevel: Boolean = false
 ) {
-    object Home: NavigationRoutes(
+    data object Home: NavigationRoutes(
         route = "home",
         icon = {
             Icon(

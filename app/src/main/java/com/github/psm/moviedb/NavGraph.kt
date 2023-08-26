@@ -21,6 +21,7 @@ import com.github.psm.moviedb.ui.person.PersonPage
 import com.github.psm.moviedb.ui.popular.PopularVM
 import com.github.psm.moviedb.ui.search.SearchPage
 import com.github.psm.moviedb.ui.upcoming.UpComingVM
+import timber.log.Timber
 
 private const val BASE_URL = "https://www.themoviedb.org"
 
@@ -38,8 +39,13 @@ fun NavGraph(
         composable(NavigationRoutes.Home.route) {
             Home(
                 navigateToSearchPage = { actions.navigateToSearch() },
-                selectMovie = { id -> actions.navigateToMovieDetail(id) },
-                selectTv = { id -> actions.navigateToTvDetail(id) },
+                selectMovie = { id ->
+                    Timber.d("Movie Id", id)
+                    actions.navigateToMovieDetail(id) },
+                selectTv = { id ->
+                    Timber.d("TV Id", id)
+                    actions.navigateToTvDetail(id)
+                },
                 navigateToPopular = { actions.navigateToPopular() },
                 navigateToUpComing = { actions.navigateToUpComing() }
             )

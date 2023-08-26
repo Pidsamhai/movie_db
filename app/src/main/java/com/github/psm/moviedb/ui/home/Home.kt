@@ -1,5 +1,6 @@
 package com.github.psm.moviedb.ui.home
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -23,6 +24,7 @@ import com.github.psm.moviedb.utils.isLoadings
 import com.github.psm.moviedb.utils.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import timber.log.Timber
 
 @Composable
 fun Home(

@@ -83,7 +83,7 @@ class BookmarkRepositoryImpl @Inject constructor(
     }
 
     override fun getBookmark(id: Long): Bookmark? {
-        return boxStore.bookmark[id]
+        return boxStore.bookmark.query().equal(Bookmark_.id, id).build().findFirst()
     }
 
     private fun saveLatestRemoveItem(item: Bookmark) {

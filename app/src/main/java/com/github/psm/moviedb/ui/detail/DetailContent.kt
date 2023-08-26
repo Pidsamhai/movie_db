@@ -107,7 +107,7 @@ fun DetailContent(
                     modifier = Modifier
                         .padding(8.dp)
                         .height(150.dp)
-                        .aspectRatio(2f/3),
+                        .aspectRatio(2f / 3),
                     elevation = 8.dp,
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -184,21 +184,21 @@ fun DetailContent(
                         .weight(1f),
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    credit?.crew?.find { it.department?.contains("Directing", true) == true }
-                        ?.let {
-                            Text(
-                                text = it.name ?: "",
-                                style = MaterialTheme.typography.body1,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.onSurface
-                            )
-
-                            Text(
-                                text = it.job ?: "",
-                                style = MaterialTheme.typography.body2,
-                                color = MaterialTheme.colors.onSurface
-                            )
-                        }
+//                    credit?.crew?.find { it.department?.contains("Directing", true) == true }
+//                        ?.let {
+//                            Text(
+//                                text = it.name ?: "",
+//                                style = MaterialTheme.typography.body1,
+//                                fontWeight = FontWeight.Bold,
+//                                color = MaterialTheme.colors.onSurface
+//                            )
+//
+//                            Text(
+//                                text = it.job ?: "",
+//                                style = MaterialTheme.typography.body2,
+//                                color = MaterialTheme.colors.onSurface
+//                            )
+//                        }
                 }
 
                 Row(
