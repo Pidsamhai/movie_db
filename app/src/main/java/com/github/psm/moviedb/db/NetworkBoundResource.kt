@@ -11,24 +11,35 @@ inline fun <ResultType: Any, RequestType : Any> networkBoundResource(
     crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (RequestType) -> Unit,
     crossinline onFetchFailed: (Exception) -> Unit = {  },
-    crossinline shouldFetch: (ResultType) -> Boolean = { true }
+    crossinline shouldFetch: (ResultType?) -> Boolean = { true },
 ) = flow {
-    val data = query()
+    var cache = query().firstOrNull()
 
-    val flow = if (shouldFetch(data.first())) {
+    if (shouldFetch(cache)) {
         emit(Resource.Loading)
 
         try {
-            saveFetchResult(fetch())
-            query().map { Resource.Success(it) }
+            val res = fetch()
+            saveFetchResult(res)
+            cache = query().firstOrNull()
+            if(cache != null) {
+                emit(Resource.Success(cache))
+            }
         } catch (e: Exception) {
             Timber.e(e)
             onFetchFailed(e)
-            query().map { Resource.Error(e, it) }
+            if(cache != null) {
+                emit(Resource.Success(cache))
+            } else {
+                emit(Resource.Error(e))
+            }
         }
     } else {
-        data.map { Resource.Success(it) }
-    }
+        if(cache != null) {
+            emit(Resource.Success(cache))
+        } else {
+            emit(Resource.Error(Exception("Not Found")))
+        }
 
-    emitAll(flow)
+    }
 }

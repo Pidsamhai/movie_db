@@ -82,7 +82,6 @@ fun BookmarkPage(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BookmarkPageContent(
     bookmarks: List<BookMarkType>? = null,

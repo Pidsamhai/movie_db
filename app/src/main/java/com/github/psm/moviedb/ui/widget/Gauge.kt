@@ -35,18 +35,18 @@ fun Gauge(
     strokeSize: Float = 16f,
     animated: Boolean = false
 ) {
-    var guardValue by remember { mutableStateOf(0f) }
+    var guardValue by remember { mutableFloatStateOf(0f) }
 
     val animGuardState = animateFloatAsState(
         targetValue = guardValue,
-        animationSpec = tween(3000)
+        animationSpec = tween(3000), label = "Guard Animation"
     )
 
-    var textValue by remember { mutableStateOf(value.toInt()) }
+    var textValue by remember { mutableIntStateOf(value.toInt()) }
 
     val animTextSate = animateIntAsState(
         targetValue = textValue,
-        animationSpec = tween(3000)
+        animationSpec = tween(3000), label = "Text Animation"
     )
 
 

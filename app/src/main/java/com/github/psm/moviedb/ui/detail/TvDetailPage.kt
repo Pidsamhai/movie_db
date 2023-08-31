@@ -28,8 +28,9 @@ fun TvDetailPage(
             detail = (detailResource as Resource.Success<TvDetail>).data
         }
         is Resource.Error -> {
-            detail = (detailResource as Resource.Error<TvDetail>).data
         }
+
+        else -> {}
     }
 
     when (creditResource) {
@@ -37,8 +38,9 @@ fun TvDetailPage(
             credit = (creditResource as Resource.Success<TvCredit>).data
         }
         is Resource.Error -> {
-            credit = (creditResource as Resource.Error<TvCredit>).data
         }
+
+        else -> {}
     }
 
     DetailContent(
@@ -60,6 +62,7 @@ fun TvDetailPage(
                 else -> bookmarkViewModel.unBook(id, false)
             }
         },
-        navigateToPerson = navigateToPerson
+        navigateToPerson = navigateToPerson,
+        state = detailResource
     )
 }

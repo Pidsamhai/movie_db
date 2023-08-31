@@ -1,5 +1,6 @@
 package com.github.psm.moviedb.ui.person
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,10 +24,9 @@ import com.github.psm.moviedb.ui.widget.InnerScaffold
 import com.github.psm.moviedb.utils.ButtonIcons
 import com.github.psm.moviedb.utils.toAge
 import com.github.psm.moviedb.utils.toImgUrl
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
+import androidx.compose.foundation.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -49,7 +49,7 @@ fun PersonPage(
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PersonPageContent(
     person: Person? = null,
@@ -58,7 +58,9 @@ private fun PersonPageContent(
     personTvCredit: PersonTvCredit? = null,
     personMovieCredit: PersonMovieCredit? = null
 ) {
-    val pagerState = rememberPagerState(pageCount = PersonContentPage.PageCount)
+    val pagerState = rememberPagerState {
+        return@rememberPagerState PersonContentPage.PageCount
+    }
     val currentPage = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
@@ -179,14 +181,14 @@ private fun PersonPageContent(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PersonPagePreview() {
-    Scaffold {
-        PersonPageContent(
-            person = Person(
-                name = "Name"
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PersonPagePreview() {
+//    Scaffold {
+//        PersonPageContent(
+//            person = Person(
+//                name = "Name"
+//            )
+//        )
+//    }
+//}

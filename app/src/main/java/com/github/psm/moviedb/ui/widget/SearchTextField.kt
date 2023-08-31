@@ -26,10 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val SearchTextFieldBackground: Color
+private val searchTextFieldBackground: Color
     @Composable get() = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)
 
-private val SearchTextFieldTextStyle: TextStyle
+private val searchTextFieldTextStyle: TextStyle
     @Composable get() = TextStyle.Default.copy(
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colors.onSurface
@@ -72,7 +72,7 @@ fun SearchTextField(
     value: String = "",
     onValueChange: (value: String) -> Unit,
     placeholder: String = "",
-    backGroundColor: Color = SearchTextFieldBackground
+    backGroundColor: Color = searchTextFieldBackground
 ) {
 
     var textValueState by remember {
@@ -106,14 +106,14 @@ fun SearchTextField(
                     onValueChange(it.text)
                 }
             },
-            textStyle = SearchTextFieldTextStyle,
+            textStyle = searchTextFieldTextStyle,
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface),
             maxLines = 1
         )
         Text(
             modifier = Modifier.padding(start = 8.dp),
             text = if (value.isEmpty()) placeholder else "",
-            style = SearchTextFieldTextStyle,
+            style = searchTextFieldTextStyle,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )
     }

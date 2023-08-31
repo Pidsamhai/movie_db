@@ -8,13 +8,17 @@ import com.github.psm.moviedb.db.model.MovieResponse
 import com.github.psm.moviedb.db.model.Movie_
 import com.github.psm.moviedb.db.model.TvResponse
 import com.github.psm.moviedb.db.model.detail.MovieDetail
+import com.github.psm.moviedb.db.model.detail.MovieDetail_
 import com.github.psm.moviedb.db.model.genre.GenreResponse
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
+import com.github.psm.moviedb.db.model.movie.credit.MovieCredit_
 import com.github.psm.moviedb.db.model.person.Person
 import com.github.psm.moviedb.db.model.person.movie.PersonMovieCredit
 import com.github.psm.moviedb.db.model.person.tv.PersonTvCredit
 import com.github.psm.moviedb.db.model.tv.credits.TvCredit
+import com.github.psm.moviedb.db.model.tv.credits.TvCredit_
 import com.github.psm.moviedb.db.model.tv.detail.TvDetail
+import com.github.psm.moviedb.db.model.tv.detail.TvDetail_
 import com.github.psm.moviedb.db.model.tv.popular.Tv
 import com.github.psm.moviedb.db.model.tv.popular.TvPopularResponse
 import com.github.psm.moviedb.db.model.tv.popular.Tv_
@@ -72,9 +76,18 @@ class TMDBRepositoryImpl @Inject constructor(
     }
 
     override fun getMovieDetail(id: Long): Flow<Resource<MovieDetail>> = networkBoundResource(
-        query = { flow { emit(boxStore.movieDetail[id]) } },
+        query = {
+            flow {
+                boxStore.movieDetail.query()
+                    .equal(MovieDetail_.id, id)
+                    .build()
+                    .findFirst()?.let {
+                        emit(it)
+                    }
+            }
+        },
         fetch = { apiServices.get<MovieDetail>(path = "$MOVIE_DETAIL_ROUTE/$id") },
-        saveFetchResult = { boxStore.movieDetail.put(it) }
+        saveFetchResult = { boxStore.movieDetail.put(it) },
     )
 
     override fun getGenres(): Flow<GenreResponse> = flow {
@@ -128,8 +141,21 @@ class TMDBRepositoryImpl @Inject constructor(
     }
 
     override fun getMovieCredit(id: Long): Flow<Resource<MovieCredit>> = networkBoundResource(
-        query = { flow { emit(boxStore.movieCredit[id]) } },
-        fetch = { apiServices.get<MovieCredit>(path = MOVIE_CREDIT_ROUTE.format(id)) },
+        query = {
+            flow {
+                boxStore.movieCredit.query().equal(MovieCredit_.id, id).build().findFirst()?.let {
+                    emit(it)
+                }
+            }
+        },
+        fetch = {
+            apiServices.get<MovieCredit>(
+                path = MOVIE_CREDIT_ROUTE.format(
+                    id
+                )
+            )
+
+        },
         saveFetchResult = { boxStore.movieCredit.put(it) }
     )
 
@@ -217,13 +243,28 @@ class TMDBRepositoryImpl @Inject constructor(
     }
 
     override fun getTvDetail(id: Long): Flow<Resource<TvDetail>> = networkBoundResource(
-        query = { flow { emit(boxStore.tvDetail[id]) } },
+        query = {
+            flow {
+                boxStore.tvDetail.query().equal(TvDetail_.id, id).build().findFirst()?.let {
+                    emit(it)
+                }
+            }
+        },
         fetch = { apiServices.get<TvDetail>(path = TV_DETAIL_ROUTE.format(id)) },
-        saveFetchResult = { boxStore.tvDetail.put(it) }
+        saveFetchResult = {
+            Timber.i("On Save")
+            boxStore.tvDetail.put(it)
+        },
     )
 
     override fun getTvCredit(id: Long): Flow<Resource<TvCredit>> = networkBoundResource(
-        query = { flow { emit(boxStore.tvCredit[id]) } },
+        query = {
+            flow {
+                boxStore.tvCredit.query().equal(TvCredit_.id, id).build().findFirst()?.let {
+                    emit(it)
+                }
+            }
+        },
         fetch = { apiServices.get<TvCredit>(path = TV_CREDIT_ROUTE.format(id)) },
         saveFetchResult = { boxStore.tvCredit.put(it) }
     )

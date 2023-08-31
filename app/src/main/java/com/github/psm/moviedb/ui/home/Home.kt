@@ -1,11 +1,16 @@
 package com.github.psm.moviedb.ui.home
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,7 +28,9 @@ import com.github.psm.moviedb.utils.isLoadings
 import com.github.psm.moviedb.utils.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import timber.log.Timber
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
@@ -46,17 +53,14 @@ fun Home(
         popularTvResource
     )
     val upcomingMovie by homeViewModel.upComings.collectAsState(initial = null)
-    val swipeRefreshState = rememberSwipeRefreshState(isLoading)
+    val pullRefreshState = rememberPullRefreshState(isLoading, { homeViewModel.refresh(true) })
 
     Column {
         CustomAppBar(
             scrollState = mainScrollState,
             searchClick = { navigateToSearchPage() }
         )
-        SwipeRefresh(
-            state = swipeRefreshState,
-            onRefresh = { homeViewModel.refresh(true) }
-        ) {
+        Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
             Column(
                 modifier = modifier
                     .fillMaxWidth()
@@ -141,6 +145,8 @@ fun Home(
                     }
                 }
             }
+
+            PullRefreshIndicator(isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter))
         }
     }
 }

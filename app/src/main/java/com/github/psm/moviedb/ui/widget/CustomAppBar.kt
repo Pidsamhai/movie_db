@@ -33,7 +33,7 @@ private object DefaultElevation {
     val expanded = 0.dp
 }
 
-private const val DefaultAppbarScrollOffset = 50
+private const val DEFAULT_APPBAR_SCROLL_OFFSET = 50
 
 @Composable
 fun CustomAppBar(
@@ -45,7 +45,7 @@ fun CustomAppBar(
     var elevation by remember { mutableStateOf(DefaultElevation.expanded) }
     val scrollOffset = scrollState?.value ?: 0
 
-    if (scrollOffset > DefaultAppbarScrollOffset) {
+    if (scrollOffset > DEFAULT_APPBAR_SCROLL_OFFSET) {
         profileSize = DefaultProfileSize.collapse
         textStyle = DefaultLogoText.collapse
         elevation = DefaultElevation.collapse

@@ -4,9 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -28,10 +31,8 @@ fun SettingItem(
         Text(
             text = title
         )
-        Spacer(modifier = Modifier.size(8.dp))
         value?.let {
             Text(
-                modifier = Modifier.padding(8.dp),
                 text = it,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -43,7 +44,7 @@ fun SettingItem(
 @Composable
 fun SettingItem(
     modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable RowScope.() -> Unit
 ) = SettingContent(
     modifier = modifier,
     content = content
@@ -52,16 +53,17 @@ fun SettingItem(
 @Composable
 private fun SettingContent(
     modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable RowScope.() -> Unit
 ) {
     Card(
         elevation = 8.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Row(
+            modifier = modifier
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             CompositionLocalProvider(
                 LocalTextStyle provides MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
@@ -77,8 +79,24 @@ private fun SettingContent(
 private fun SettingItemPreview() {
     SettingItem(
         modifier = Modifier
-            .size(100.dp)
-            .clickable { },
-        title = "Region"
+            .fillMaxWidth(),
+        title = "Title",
+        value = "Value"
     )
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun SettingItemPreviewWithContent() {
+    SettingItem(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
+        Text(text = "Clear Database")
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = null
+        )
+    }
+}
+

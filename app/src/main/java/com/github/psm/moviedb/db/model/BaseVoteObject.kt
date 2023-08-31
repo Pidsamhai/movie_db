@@ -15,12 +15,12 @@ class VoteStar(voteAverage: Double?) {
 
     init {
         val realVote = (voteAverage ?: 0.0) / 2.0
-        val _starCount = floor(realVote).toInt()
-        val _hasHalf = (realVote - _starCount) >= 0.5 && realVote != MAX_STAR.toDouble()
-        val _emptyStar = if (_hasHalf && _starCount == 4) 1 else MAX_STAR - _starCount
-        starCount = _starCount
-        hasHalf = _hasHalf
-        emptyStar = if (hasHalf) _emptyStar - 1 else _emptyStar
+        val starCount = floor(realVote).toInt()
+        val hasHalf = (realVote - starCount) >= 0.5 && realVote != MAX_STAR.toDouble()
+        val emptyStar = if (hasHalf && starCount == 4) 1 else MAX_STAR - starCount
+        this.starCount = starCount
+        this.hasHalf = hasHalf
+        this.emptyStar = if (this.hasHalf) emptyStar - 1 else emptyStar
     }
 
     companion object {

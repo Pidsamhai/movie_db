@@ -15,8 +15,8 @@ import com.airbnb.lottie.compose.*
 import com.github.psm.moviedb.R
 
 sealed class LoaderStyle {
-    object Dot: LoaderStyle()
-    object Circular: LoaderStyle()
+    data object Dot: LoaderStyle()
+    data object Circular: LoaderStyle()
 }
 
 @Composable

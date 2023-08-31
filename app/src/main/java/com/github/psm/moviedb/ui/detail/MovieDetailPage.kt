@@ -9,6 +9,8 @@ import com.github.psm.moviedb.db.Resource
 import com.github.psm.moviedb.db.model.detail.MovieDetail
 import com.github.psm.moviedb.db.model.movie.credit.MovieCredit
 import com.github.psm.moviedb.ui.bookmark.BookmarkVM
+import com.github.psm.moviedb.ui.widget.ErrorContent
+import timber.log.Timber
 
 @Composable
 fun MovieDetailPage(
@@ -26,9 +28,14 @@ fun MovieDetailPage(
     when (detailResource) {
         is Resource.Success -> {
             detail = (detailResource as Resource.Success<MovieDetail>).data
+            Timber.d("Load State Success %s" , detail.id )
         }
         is Resource.Error -> {
-            detail = (detailResource as Resource.Error<MovieDetail>).data
+            Timber.d("Load State Error %s", (detailResource as Resource.Error).error)
+        }
+
+        else -> {
+            Timber.d("Load State Unknown %s", detailResource)
         }
     }
 
@@ -37,8 +44,9 @@ fun MovieDetailPage(
             credit = (creditResource as Resource.Success<MovieCredit>).data
         }
         is Resource.Error -> {
-            credit = (creditResource as Resource.Error<MovieCredit>).data
         }
+
+        else -> {}
     }
 
     DetailContent(
@@ -60,6 +68,10 @@ fun MovieDetailPage(
             }
         },
         navigateToPerson = navigateToPerson,
-        navigateBack = navigateBack
+        navigateBack = navigateBack,
+        state = detailResource,
+        onRetry = {
+            movieDetailVm.refresh()
+        }
     )
 }

@@ -53,7 +53,7 @@ fun BaseAppBar(
     title = title,
     startContent = startContent,
     endContent = endContent,
-    isScrolled = scrollState?.value ?: 0 > 10
+    isScrolled = (scrollState?.value ?: 0) > 10
 )
 
 @Composable
@@ -110,7 +110,7 @@ fun BaseAppBar(
         startContent = startContent,
         centerContent = centerContent,
         endContent = endContent,
-        isScrolled = scrollState?.value ?: 0 > 10
+        isScrolled = (scrollState?.value ?: 0) > 10
     )
 }
 

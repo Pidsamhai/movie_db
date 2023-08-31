@@ -3,19 +3,15 @@ package com.github.psm.moviedb.ui.widget
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.drawable.CrossfadeDrawable
-import coil.size.Scale
-import com.github.psm.moviedb.R
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
+import coil.request.ImageRequest
 import androidx.compose.foundation.Image as BaseImage
 
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun Image(
     modifier: Modifier = Modifier,
@@ -26,26 +22,22 @@ fun Image(
     contentScale: ContentScale = ContentScale.FillBounds,
     enablePlaceHolder: Boolean = false
 ) {
-    val painter = rememberImagePainter(data = data) {
-        data(data)
-        crossfade(fadeIn)
-        crossfade(fadeInDurationMs)
-        scale(Scale.FILL)
-        error(R.drawable.ic_round_broken_image)
-    }
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(data)
+            .crossfade(fadeIn)
+            .crossfade(fadeInDurationMs)
+            .build(),
+    )
 
     val enableShimmer = if (enablePlaceHolder)
-        painter.state is ImagePainter.State.Loading
+        painter.state is AsyncImagePainter.State.Loading
     else false
 
-    val isError = painter.state is ImagePainter.State.Error
+    val isError = painter.state is AsyncImagePainter.State.Error
 
     BaseImage(
-        modifier = modifier
-            .placeholder(
-                visible = enableShimmer,
-                highlight = PlaceholderHighlight.fade(),
-            ),
+        modifier = modifier,
         painter = painter,
         contentDescription = contentDescription,
         contentScale = if (isError) ContentScale.None else contentScale

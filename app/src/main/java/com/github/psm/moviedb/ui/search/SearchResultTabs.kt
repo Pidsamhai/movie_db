@@ -1,7 +1,9 @@
 package com.github.psm.moviedb.ui.search
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -14,7 +16,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.tv.popular.Tv
 import com.github.psm.moviedb.ui.person.PersonContentPage
@@ -22,12 +23,11 @@ import com.github.psm.moviedb.ui.widget.Loader
 import com.github.psm.moviedb.ui.widget.LoaderStyle
 import com.github.psm.moviedb.ui.widget.movie.SearchItem
 import com.github.psm.moviedb.utils.TabPages
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 private val tabPage = object : TabPages {
@@ -43,7 +43,7 @@ private val tabPage = object : TabPages {
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun SearchResultTabs(
@@ -53,7 +53,9 @@ fun SearchResultTabs(
     selectedMovie: (id: Long) -> Unit = { },
     selectedTv: (id: Long) -> Unit = { }
 ) {
-    val pageState = rememberPagerState(pageCount = 2)
+    val pageState = rememberPagerState {
+        return@rememberPagerState 2
+    }
     val coroutineScope = rememberCoroutineScope()
     val changePage: (index: Int) -> Unit = {
         coroutineScope.launch {
@@ -92,7 +94,7 @@ fun SearchResultTabs(
         }
 
         HorizontalPager(state = pageState) { page ->
-            when(page) {
+            when (page) {
                 tabPage.MovieResult -> {
                     SearchResult(
                         items = movieItems,
@@ -102,6 +104,7 @@ fun SearchResultTabs(
                         }
                     }
                 }
+
                 tabPage.TvResult -> {
                     SearchResult(
                         items = tvItems,
@@ -116,15 +119,16 @@ fun SearchResultTabs(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun <T: Any>SearchResult(
+fun <T : Any> SearchResult(
     items: LazyPagingItems<T>?,
     item: @Composable (item: T) -> Unit
 ) {
     val ifRetry = items?.loadState?.source?.refresh is LoadState.Loading
     val ifFail = items?.loadState?.source?.refresh is LoadState.Error
     val isLoading = items?.loadState?.append is LoadState.Loading
-    val refreshState = rememberSwipeRefreshState(isRefreshing = false)
+    val pullRefreshState = rememberPullRefreshState(isLoading, { items?.refresh() })
 
     Column(
         modifier = Modifier
@@ -140,21 +144,20 @@ fun <T: Any>SearchResult(
                 Text(text = "Retry")
             }
         }
-        SwipeRefresh(
-            modifier = Modifier
-                .weight(1f),
-            state = refreshState,
-            onRefresh = { items?.refresh() }
-        ) {
+
+        Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
-                items(items ?: return@LazyColumn) {
-                    item(item = it ?: return@items)
+                items(items?.itemCount ?: return@LazyColumn) { index ->
+                    item(item = items[index] ?: return@items)
                 }
             }
+
+            PullRefreshIndicator(isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter))
         }
+        
         if (isLoading || ifRetry) {
             Loader(
                 modifier = Modifier

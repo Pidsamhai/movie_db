@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.widget.Placeholder
 import com.github.psm.moviedb.db.model.Movie
 import com.github.psm.moviedb.db.model.VoteStar
 import com.github.psm.moviedb.db.model.tv.popular.Tv
@@ -27,9 +28,7 @@ import com.github.psm.moviedb.ui.widget.Gauge
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
+import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun MovieItem(
@@ -204,10 +203,8 @@ fun MovieItemPlaceHolder() {
     MovieItem(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
-            .placeholder(
-                visible = true,
-                highlight = PlaceholderHighlight.shimmer()
-            ),
+            .background(Color.Gray.copy(alpha = 0.8f))
+            .shimmer(),
         movie = Movie()
     )
 }
