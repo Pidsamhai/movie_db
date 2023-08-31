@@ -201,7 +201,7 @@ fun DetailContentShimmer(
                 .horizontalScroll(genreScrollState),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            arrayOfNulls<Int>(10).forEach {
+            arrayOfNulls<Int>(10).forEach { _ ->
 
                 Box(
                     modifier = Modifier

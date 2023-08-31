@@ -23,8 +23,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 sealed class LanguagePickerMode {
-    object LANGUAGE : LanguagePickerMode()
-    object REGION : LanguagePickerMode()
+    data object LANGUAGE : LanguagePickerMode()
+    data object REGION : LanguagePickerMode()
 }
 
 @Preview(showBackground = true)
@@ -40,7 +40,7 @@ fun LanguagePickerDialog(
     val tile = if (languagePickerMode is LanguagePickerMode.LANGUAGE) "Language"
     else "Region"
 
-    val _onSelected: (language: String) -> Unit = {
+    val onSelected: (language: String) -> Unit = {
         when (languagePickerMode) {
             LanguagePickerMode.LANGUAGE -> onSelected(it)
             LanguagePickerMode.REGION -> {
@@ -93,7 +93,7 @@ fun LanguagePickerDialog(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        _onSelected(it.code)
+                                        onSelected(it.code)
                                         onClose()
                                     }
                                     .padding(8.dp),

@@ -45,7 +45,7 @@ fun SplashContent(
     val minScale = 0.5f
     val defaultScale = 1f
     val maxScale = 50f
-    var scale by remember { mutableStateOf(defaultScale) }
+    var scale by remember { mutableFloatStateOf(defaultScale) }
     val animScale by animateFloatAsState(
         targetValue = scale,
         animationSpec = tween(
@@ -57,7 +57,7 @@ fun SplashContent(
                 maxScale -> end()
                 minScale -> scale = maxScale
             }
-        }
+        }, label = "Logo Animation"
     )
 
     LaunchedEffect(key1 = Unit) {

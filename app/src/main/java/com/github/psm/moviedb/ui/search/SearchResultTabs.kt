@@ -24,9 +24,10 @@ import com.github.psm.moviedb.ui.widget.LoaderStyle
 import com.github.psm.moviedb.ui.widget.movie.SearchItem
 import com.github.psm.moviedb.utils.TabPages
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 private val tabPage = object : TabPages {
@@ -53,7 +54,7 @@ fun SearchResultTabs(
     selectedTv: (id: Long) -> Unit = { }
 ) {
     val pageState = rememberPagerState {
-        return@rememberPagerState 2;
+        return@rememberPagerState 2
     }
     val coroutineScope = rememberCoroutineScope()
     val changePage: (index: Int) -> Unit = {
@@ -93,7 +94,7 @@ fun SearchResultTabs(
         }
 
         HorizontalPager(state = pageState) { page ->
-            when(page) {
+            when (page) {
                 tabPage.MovieResult -> {
                     SearchResult(
                         items = movieItems,
@@ -103,6 +104,7 @@ fun SearchResultTabs(
                         }
                     }
                 }
+
                 tabPage.TvResult -> {
                     SearchResult(
                         items = tvItems,
@@ -117,15 +119,16 @@ fun SearchResultTabs(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun <T: Any>SearchResult(
+fun <T : Any> SearchResult(
     items: LazyPagingItems<T>?,
     item: @Composable (item: T) -> Unit
 ) {
     val ifRetry = items?.loadState?.source?.refresh is LoadState.Loading
     val ifFail = items?.loadState?.source?.refresh is LoadState.Error
     val isLoading = items?.loadState?.append is LoadState.Loading
-    val refreshState = rememberSwipeRefreshState(isRefreshing = false)
+    val pullRefreshState = rememberPullRefreshState(isLoading, { items?.refresh() })
 
     Column(
         modifier = Modifier
@@ -141,12 +144,8 @@ fun <T: Any>SearchResult(
                 Text(text = "Retry")
             }
         }
-        SwipeRefresh(
-            modifier = Modifier
-                .weight(1f),
-            state = refreshState,
-            onRefresh = { items?.refresh() }
-        ) {
+
+        Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(8.dp)
@@ -155,7 +154,10 @@ fun <T: Any>SearchResult(
                     item(item = items[index] ?: return@items)
                 }
             }
+
+            PullRefreshIndicator(isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter))
         }
+        
         if (isLoading || ifRetry) {
             Loader(
                 modifier = Modifier

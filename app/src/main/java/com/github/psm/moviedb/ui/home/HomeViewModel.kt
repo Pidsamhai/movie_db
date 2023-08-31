@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: TMDBRepository

@@ -7,12 +7,13 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 
-@OptIn(ExperimentalSerializationApi::class)
 class CrewListConverter : PropertyConverter<List<Crew>, String> {
+    @OptIn(ExperimentalSerializationApi::class)
     override fun convertToEntityProperty(databaseValue: String?): List<Crew> {
         return JsonX.decodeFromString(databaseValue ?: return emptyList())
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     override fun convertToDatabaseValue(entityProperty: List<Crew>?): String {
         return JsonX.encodeToString(entityProperty)
     }

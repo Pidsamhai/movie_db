@@ -59,7 +59,7 @@ private fun PersonPageContent(
     personMovieCredit: PersonMovieCredit? = null
 ) {
     val pagerState = rememberPagerState {
-        return@rememberPagerState PersonContentPage.PageCount;
+        return@rememberPagerState PersonContentPage.PageCount
     }
     val currentPage = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()

@@ -24,8 +24,8 @@ sealed class NavigationRoutes(
         label = "Home",
         isTopLevel = true
     )
-    object Detail: NavigationRoutes(route = "detail", label = "Detail")
-    object About: NavigationRoutes(
+    data object Detail: NavigationRoutes(route = "detail", label = "Detail")
+    data object About: NavigationRoutes(
         route = "about",
         icon = {
             Icon(
@@ -35,10 +35,10 @@ sealed class NavigationRoutes(
         },
         label = "About"
     )
-    object SearchPage: NavigationRoutes(route = "search", label = "Search")
-    object Popular: NavigationRoutes(route = "popular", label = "Popular")
-    object UpComing: NavigationRoutes(route = "upcoming", label = "Up Coming")
-    object BookmarkPage: NavigationRoutes(
+    data object SearchPage: NavigationRoutes(route = "search", label = "Search")
+    data object Popular: NavigationRoutes(route = "popular", label = "Popular")
+    data object UpComing: NavigationRoutes(route = "upcoming", label = "Up Coming")
+    data object BookmarkPage: NavigationRoutes(
         route = "bookmark",
         label = "Bookmark",
         icon = {
@@ -48,5 +48,5 @@ sealed class NavigationRoutes(
             )
         }
     )
-    object Person: NavigationRoutes(route = "person", label = "Person")
+    data object Person: NavigationRoutes(route = "person", label = "Person")
 }
