@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.github.psm.moviedb.R
 import com.github.psm.moviedb.db.model.Country
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -27,6 +28,7 @@ sealed class LanguagePickerMode {
     data object REGION : LanguagePickerMode()
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun LanguagePickerDialog(

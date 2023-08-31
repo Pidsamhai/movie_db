@@ -28,11 +28,6 @@ import com.github.psm.moviedb.ui.widget.Gauge
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.Rating
 import com.github.psm.moviedb.utils.toImgUrl
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
-import com.valentinilk.shimmer.Shimmer
-import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
 
 @Composable

@@ -10,6 +10,7 @@ import com.github.psm.moviedb.db.model.Bookmark
 import com.github.psm.moviedb.db.model.Bookmark_
 import com.github.psm.moviedb.utils.JsonX
 import com.github.psm.moviedb.utils.asLiveData
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import timber.log.Timber
@@ -93,6 +94,7 @@ class BookmarkRepositoryImpl @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     private fun getLatestRemoveItem(): Bookmark? {
         val itemJson = pref.getString(LATEST_REMOVE_ID, null) ?: return null
         return try {
