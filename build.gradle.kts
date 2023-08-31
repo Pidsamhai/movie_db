@@ -5,10 +5,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-//        classpath(Dependencies.AGT)
         classpath(Dependencies.KotlinGradlePlugin)
         classpath(Dependencies.KotlinSerialization)
-//        classpath(Dependencies.Hilt)
         classpath(Dependencies.ObjectBox)
 
         // NOTE: Do not place your application dependencies here; they belong

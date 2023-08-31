@@ -84,7 +84,6 @@ class TMDBRepositoryImpl @Inject constructor(
             } }},
         fetch = { apiServices.get<MovieDetail>(path = "$MOVIE_DETAIL_ROUTE/$id") },
         saveFetchResult = {boxStore.movieDetail.put(it)},
-        formatResponse = { it }
     )
 
     override fun getGenres(): Flow<GenreResponse> = flow {
@@ -248,9 +247,6 @@ class TMDBRepositoryImpl @Inject constructor(
             Timber.i("On Save")
             boxStore.tvDetail.put(it)
         },
-        formatResponse = {
-            return@networkBoundResource it
-        }
     )
 
     override fun getTvCredit(id: Long): Flow<Resource<TvCredit>> = networkBoundResource(

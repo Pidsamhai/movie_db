@@ -18,8 +18,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -107,6 +110,7 @@ fun AboutPageContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = 8.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
@@ -115,14 +119,15 @@ fun AboutPageContent(
             title = NavigationRoutes.About.label,
             scrollState = scrollState
         )
-        Row(
+
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SettingItem(
                 modifier = Modifier
                     .clickable { showLanguageDialog = !showLanguageDialog }
-                    .size(100.dp),
+                    .fillMaxWidth(),
                 title = "Language",
                 value = language
             )
@@ -130,7 +135,7 @@ fun AboutPageContent(
             SettingItem(
                 modifier = Modifier
                     .clickable { showRegionDialog = !showRegionDialog }
-                    .size(100.dp),
+                    .fillMaxWidth(),
                 title = "Region",
                 value = region
             )
@@ -138,7 +143,7 @@ fun AboutPageContent(
             SettingItem(
                 modifier = Modifier
                     .clickable {}
-                    .size(100.dp)
+                    .fillMaxWidth()
             ) {
                 val iconRes: Int = when(getDefaultNightMode()) {
                     MODE_NIGHT_YES -> R.drawable.ic_round_dark_mode
@@ -153,27 +158,7 @@ fun AboutPageContent(
                     contentDescription = null
                 )
             }
-        }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            SettingItem(
-                modifier = Modifier
-                    .clickable {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.REPOSITORY))
-                        )
-                    }
-                    .size(100.dp),
-             ) {
-                Icon(
-                    modifier = Modifier.size(80.dp),
-                    painter = painterResource(id = R.drawable.ic_github_logo),
-                    contentDescription = null
-                )
-            }
             SettingItem(
                 modifier = Modifier
                     .clickable {
@@ -184,25 +169,74 @@ fun AboutPageContent(
                             )
                         )
                     }
-                    .size(100.dp),
+                    .fillMaxWidth(),
                 title = "Version",
-                value = BuildConfig.VERSION_NAME
+                value = "%s(%s)".format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
             )
+
+            SettingItem(
+                modifier = Modifier
+                    .clickable {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("${BuildConfig.REPOSITORY}/releases")
+                            )
+                        )
+                    }
+                    .fillMaxWidth(),
+                title = "Build On",
+                value = BuildConfig.BUILD_ON
+            )
+
+            SettingItem(
+                modifier = Modifier
+                    .clickable {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("${BuildConfig.REPOSITORY}/releases")
+                            )
+                        )
+                    }
+                    .fillMaxWidth(),
+                title = "Build Date",
+                value = BuildConfig.BUILD_DATE
+            )
+
+            SettingItem(
+                modifier = Modifier
+                    .clickable {
+                        context.startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.REPOSITORY))
+                        )
+                    }
+                    .fillMaxWidth(),
+
+            ) {
+                Text(text = "Repository")
+                Icon(painter = painterResource(id = R.drawable.ic_round_public), contentDescription = "public" )
+            }
+
             SettingItem(
                 modifier = Modifier
                     .clickable {
                         showConfirmDialog = true
                     }
-                    .size(100.dp),
+                    .fillMaxWidth(),
             ) {
-                Text(text = "Clear Database")
+                Text(text = "Clear Database",
+                    color = Color.Red,
+                )
                 Spacer(modifier = Modifier.size(8.dp))
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = Color.Red
                 )
             }
         }
+
     }
 }
 

@@ -28,16 +28,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.psm.moviedb.R
+import com.github.psm.moviedb.db.Resource
 import com.github.psm.moviedb.db.model.genre.Genre
 import com.github.psm.moviedb.db.model.shared.credit.Credit
 import com.github.psm.moviedb.ui.home.HeaderItem
 import com.github.psm.moviedb.ui.theme.Stared
 import com.github.psm.moviedb.ui.widget.Chip
 import com.github.psm.moviedb.ui.widget.DetailAppBar
+import com.github.psm.moviedb.ui.widget.ErrorContent
 import com.github.psm.moviedb.ui.widget.Gauge
 import com.github.psm.moviedb.ui.widget.Image
 import com.github.psm.moviedb.ui.widget.movie.CastingItem
+import com.github.psm.moviedb.utils.isError
+import com.github.psm.moviedb.utils.isLoading
 import com.github.psm.moviedb.utils.toImgUrl
+import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun DetailContent(
@@ -59,18 +64,24 @@ fun DetailContent(
     credit: Credit?,
 
     isBooked: Boolean,
+    state: Resource<Any>,
     navigateBack: () -> Unit = { },
     onBookMarkClick: (booked: Boolean) -> Unit = { },
-    navigateToPerson: (personId: Long) -> Unit = { }
+    navigateToPerson: (personId: Long) -> Unit = { },
+    onRetry: () -> Unit = { }
 ) {
     var expandedOverView by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val genreScrollState = rememberScrollState()
 
+    if (state.isError()) {
+        return ErrorContent(onRetry = onRetry)
+    } else if(state.isLoading()) {
+        return DetailContentShimmer(appBarTitle = appBarTitle)
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         DetailAppBar(
@@ -90,9 +101,7 @@ fun DetailContent(
         ) {
 
             Box(
-                modifier = Modifier
-                    .aspectRatio(16f/9),
-                contentAlignment = Alignment.BottomStart
+                modifier = Modifier.aspectRatio(16f / 9), contentAlignment = Alignment.BottomStart
             ) {
 
                 Image(
@@ -100,7 +109,7 @@ fun DetailContent(
                         .fillMaxSize(),
                     data = backDropPath?.toImgUrl(),
                     contentScale = ContentScale.FillBounds,
-                    enablePlaceHolder = true
+                    enablePlaceHolder = false
                 )
 
                 Card(
@@ -112,7 +121,8 @@ fun DetailContent(
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Image(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize(),
                         data = posterPath?.toImgUrl(),
                         contentScale = ContentScale.FillBounds,
                         fadeIn = true,
@@ -143,8 +153,7 @@ fun DetailContent(
                     animated = true
                 )
                 Column(
-                    modifier = Modifier.padding(start = 8.dp),
-                    horizontalAlignment = Alignment.Start
+                    modifier = Modifier.padding(start = 8.dp), horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = title ?: "",
@@ -202,8 +211,7 @@ fun DetailContent(
                 }
 
                 Row(
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp),
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     runtime?.let {
@@ -245,28 +253,22 @@ fun DetailContent(
             overview?.let {
 
                 HeaderItem(
-                    modifier = Modifier.padding(8.dp),
-                    header = "Overview",
-                    end = ""
+                    modifier = Modifier.padding(8.dp), header = "Overview", end = ""
                 )
 
-                Text(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable(
-                            interactionSource = MutableInteractionSource(),
-                            indication = null
-                        ) { expandedOverView = !expandedOverView }
-                        .animateContentSize(),
+                Text(modifier = Modifier
+                    .padding(8.dp)
+                    .clickable(
+                        interactionSource = MutableInteractionSource(), indication = null
+                    ) { expandedOverView = !expandedOverView }
+                    .animateContentSize(),
                     text = overview,
                     maxLines = if (expandedOverView) Int.MAX_VALUE else 5,
-                    overflow = TextOverflow.Ellipsis
-                )
+                    overflow = TextOverflow.Ellipsis)
             }
 
             HeaderItem(
-                modifier = Modifier.padding(8.dp),
-                header = "Cast", end = ""
+                modifier = Modifier.padding(8.dp), header = "Cast", end = ""
             )
 
             LazyRow(
@@ -277,9 +279,7 @@ fun DetailContent(
             ) {
                 items(credit?.cast?.take(10) ?: listOf()) {
                     CastingItem(
-                        modifier = Modifier.width(150.dp),
-                        cast = it,
-                        onCastClick = navigateToPerson
+                        modifier = Modifier.width(150.dp), cast = it, onCastClick = navigateToPerson
                     )
                 }
             }
@@ -293,17 +293,22 @@ fun DetailContent(
 @Composable
 private fun DetailPreview() {
     Scaffold {
-        DetailContent(
-            appBarTitle = "Tv",
-            title = "Title",
-            voteAverage = 100.0,
-            posterPath = null,
-            backDropPath = null,
-            credit = null,
-            genres = listOf(),
-            overview = "Raptus visus sed mire imitaris sensorem est.",
-            runtime = 150,
-            isBooked = true
-        )
+        Column(modifier = Modifier
+            .padding(it)
+            .fillMaxSize()) {
+            DetailContent(
+                appBarTitle = "Tv",
+                title = "Title",
+                voteAverage = 100.0,
+                posterPath = null,
+                backDropPath = null,
+                credit = null,
+                genres = listOf(),
+                overview = "Raptus visus sed mire imitaris sensorem est.",
+                runtime = 150,
+                isBooked = true,
+                state = Resource.Initial
+            )
+        }
     }
 }

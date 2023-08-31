@@ -4,7 +4,8 @@ object Plugins {
     const val KotlinXSerialization = "kotlinx-serialization"
     const val Parcelize = "kotlin-parcelize"
     const val Kapt = "kapt"
-    const val Hilt = "com.google.dagger.hilt.android"
+    const val Hilt = "dagger.hilt.android.plugin"
     const val GitVersion = "com.gladed.androidgitversion"
     const val ObjectBox = "io.objectbox"
+    const val KotlinKapt = "kotlin-kapt"
 }

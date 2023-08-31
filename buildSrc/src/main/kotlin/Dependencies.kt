@@ -1,5 +1,4 @@
 object Dependencies {
-    const val AGT = "com.android.tools.build:gradle:${Versions.AGT}"
     const val KotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Kotlin}"
     const val KotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${Versions.Kotlin}"
     const val Hilt = "com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt}"
