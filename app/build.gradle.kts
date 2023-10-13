@@ -179,6 +179,7 @@ dependencies {
     implementation(Libs.Accompanist.PagerIndicator)
     implementation(Libs.Accompanist.SwipeRefresh)
     implementation(Libs.KotlinxDatetime)
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 }
 
 kapt {
